@@ -1,0 +1,62 @@
+Check,Result,Expected,Status,Severity
+Unique users,1000,1000,PASS,ERROR
+Dataset contains rows,464687,> 0,PASS,ERROR
+Duplicate user-day records,0,0,PASS,ERROR
+Null values: user,0,0,PASS,ERROR
+Null values: day,0,0,PASS,ERROR
+Null values: email_count,0,0,PASS,ERROR
+Null values: external_email_events,0,0,PASS,ERROR
+Null values: usb_connect_count,0,0,PASS,ERROR
+Null values: files_copied_to_usb,0,0,PASS,ERROR
+Null values: http_request_count,0,0,PASS,ERROR
+Null values: unique_domains,0,0,PASS,ERROR
+Null values: logon_count,0,0,PASS,ERROR
+Null values: baseline_workdays,0,0,PASS,ERROR
+Null values: usb_files_p95,0,0,PASS,ERROR
+Null values: external_email_p95,0,0,PASS,ERROR
+Null values: http_requests_p95,0,0,PASS,ERROR
+Negative values: email_count,0,0,PASS,ERROR
+Negative values: external_email_events,0,0,PASS,ERROR
+Negative values: total_email_bytes,0,0,PASS,ERROR
+Negative values: attachment_count,0,0,PASS,ERROR
+Negative values: usb_connect_count,0,0,PASS,ERROR
+Negative values: usb_disconnect_count,0,0,PASS,ERROR
+Negative values: files_copied_to_usb,0,0,PASS,ERROR
+Negative values: unique_file_extensions,0,0,PASS,ERROR
+Negative values: http_request_count,0,0,PASS,ERROR
+Negative values: unique_domains,0,0,PASS,ERROR
+Negative values: logon_count,0,0,PASS,ERROR
+Negative values: early_logon_minutes,0,0,PASS,ERROR
+Negative values: late_logoff_minutes,0,0,PASS,ERROR
+Negative values: daily_abnormal_feature_count,0,0,PASS,ERROR
+Negative values: external_emails_7d,0,0,PASS,ERROR
+Negative values: usb_files_7d,0,0,PASS,ERROR
+Negative values: http_requests_7d,0,0,PASS,ERROR
+Negative values: abnormal_days_7d,0,0,PASS,ERROR
+Negative values: external_emails_14d,0,0,PASS,ERROR
+Negative values: usb_files_14d,0,0,PASS,ERROR
+Negative values: http_requests_14d,0,0,PASS,ERROR
+Negative values: abnormal_days_14d,0,0,PASS,ERROR
+Negative values: usb_files_30d,0,0,PASS,ERROR
+Negative values: external_emails_30d,0,0,PASS,ERROR
+Negative values: abnormal_days_30d,0,0,PASS,ERROR
+External email <= total email,0,0 invalid rows,PASS,ERROR
+Unique file extensions <= copied files,0,0 invalid rows,PASS,ERROR
+Weekend flag validity,0,0 invalid rows,PASS,ERROR
+Binary flag validity: email_above_p95,0,0 invalid rows,PASS,ERROR
+Binary flag validity: external_email_above_p95,0,0 invalid rows,PASS,ERROR
+Binary flag validity: usb_connect_above_p95,0,0 invalid rows,PASS,ERROR
+Binary flag validity: usb_files_above_p95,0,0 invalid rows,PASS,ERROR
+Binary flag validity: http_above_p95,0,0 invalid rows,PASS,ERROR
+Binary flag validity: domains_above_p95,0,0 invalid rows,PASS,ERROR
+Binary flag validity: abnormal_day,0,0 invalid rows,PASS,ERROR
+Baseline users,1000,1000,PASS,ERROR
+Minimum baseline history,23,>= 20 workdays,PASS,ERROR
+Ground-truth incidents,70,70,PASS,ERROR
+Unique malicious users,70,70,PASS,ERROR
+Exfiltration-relevant incidents,60,60,PASS,ERROR
+Ground-truth users present in behavioral dataset,0,0 missing users,PASS,ERROR
+Attack dates within dataset period,0,0 outside range,PASS,ERROR
+External email percentage,48.06,Between 0% and 100%,PASS,ERROR
+Known malicious behavior sanity check,AAF0535 / 2010-08-10,"11 files, P95=5, above_p95=1",PASS,ERROR
+Baseline consistent with current behavioral data,AAF0535 baseline values,Calculated values = saved baseline values,PASS,ERROR

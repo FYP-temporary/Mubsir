@@ -1,0 +1,11 @@
+# SQL analytics and large CSV/Parquet processing
+duckdb==1.5.5
+
+# Data manipulation and tabular processing
+pandas
+
+# Parquet read/write support for pandas
+pyarrow
+
+# Excel file generation for the data dictionary
+openpyxl
