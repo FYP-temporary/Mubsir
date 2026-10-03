@@ -1,0 +1,12 @@
+dataset;rows;columns;file_path
+email_daily_r62;1381557;13;C:\Users\HP\Documents\FYP\DATA_ENGINEERING_R62\data\processed\email_daily_r62.parquet
+usb_daily_r62;308647;11;C:\Users\HP\Documents\FYP\DATA_ENGINEERING_R62\data\processed\usb_daily_r62.parquet
+http_daily_r62;1391239;8;C:\Users\HP\Documents\FYP\DATA_ENGINEERING_R62\data\processed\http_daily_r62.parquet
+logon_daily_r62;1394010;6;C:\Users\HP\Documents\FYP\DATA_ENGINEERING_R62\data\processed\logon_daily_r62.parquet
+user_day_r62_v1;1394010;34;C:\Users\HP\Documents\FYP\DATA_ENGINEERING_R62\data\processed\user_day_r62_v1.parquet
+user_baseline_r62_v1;3995;36;C:\Users\HP\Documents\FYP\DATA_ENGINEERING_R62\data\features\user_baseline_r62_v1.parquet
+behavior_features_r62_v1;387162;85;C:\Users\HP\Documents\FYP\DATA_ENGINEERING_R62\data\features\behavior_features_r62_v1.parquet
+attack_host_eligibility_r62;3995;9;C:\Users\HP\Documents\FYP\DATA_ENGINEERING_R62\data\features\attack_host_eligibility_r62.parquet
+ground_truth_users_r62;5;12;C:\Users\HP\Documents\FYP\DATA_ENGINEERING_R62\data\processed\ground_truth_users_r62.parquet
+ground_truth_events_r62;470;23;C:\Users\HP\Documents\FYP\DATA_ENGINEERING_R62\data\processed\ground_truth_events_r62.parquet
+malicious_pre_attack_baseline_r62;5;36;C:\Users\HP\Documents\FYP\DATA_ENGINEERING_R62\data\features\malicious_pre_attack_baseline_r62.parquet
