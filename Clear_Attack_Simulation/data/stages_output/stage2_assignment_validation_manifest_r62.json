@@ -1,0 +1,58 @@
+{
+  "project": "CERT r6.2 Cross-Channel Data Exfiltration",
+  "stage": "Stage 2 — User Eligibility & Scenario Assignment",
+  "status": "APPROVED_WITH_TARGET_SHORTFALL",
+  "generated_at_utc": "2026-10-23T01:28:46.030525+00:00",
+  "target_attacks": 1000,
+  "validated_assignments": 995,
+  "target_shortfall": 5,
+  "unique_users": 995,
+  "unique_templates": 490,
+  "unique_assignment_records": 490,
+  "reused_assignment_records": 505,
+  "duration_distribution": {
+    "5": 176,
+    "10": 176,
+    "20": 177,
+    "30": 177,
+    "40": 144,
+    "50": 145
+  },
+  "stealth_distribution": {
+    "High": 332,
+    "Medium": 332,
+    "Low": 331
+  },
+  "maximum_template_usage": 20,
+  "catalog_scenarios": 1143,
+  "catalog_columns": 15,
+  "structural_patterns": 1143,
+  "structural_pattern_column": "structural_pattern_id",
+  "validation": {
+    "7.1": {
+      "total_checks": 59,
+      "passed": 59,
+      "failed": 0
+    },
+    "7.2": {
+      "total_checks": 26,
+      "passed": 26,
+      "failed": 0
+    },
+    "7.3": {
+      "total_checks": 31,
+      "passed": 31,
+      "failed": 0
+    }
+  },
+  "limitations": [
+    "Five attacks remain below the original 1000-attack target.",
+    "Scenario assignment does not prove detailed scheduling feasibility.",
+    "Attack injection and feature recalculation are not yet performed.",
+    "Detection performance has not been evaluated."
+  ],
+  "assignment_file": "validated_scenario_assignments_r62.parquet",
+  "assignment_sha256": "039c15f15d6a8bad9010a35a91ead6fe6053e38664261ecbb712389c3462d8f2",
+  "catalog_file": "approved_scenario_catalog_r62.parquet",
+  "catalog_sha256": "13b815102abe1b1d53195f23fc0ffe6a78e6ddb99dc5b4e082f7c4db32f219f2"
+}

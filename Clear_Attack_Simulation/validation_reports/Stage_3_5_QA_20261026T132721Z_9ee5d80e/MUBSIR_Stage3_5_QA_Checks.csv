@@ -1,0 +1,20 @@
+Stage,Check,Passed,Evidence
+3.5.1,Channel-Day injection reconciliation,True,All saved channel-day quantities match independent calculations
+3.5.1,Daily channel-count reconciliation,True,"69,634 user-days compared for Email, USB and HTTP"
+3.5.2,Scenario catalog mathematics,True,"1,143 approved scenarios checked"
+3.5.2,Scheduling and channel validity,True,670 independently checked user schedules
+3.5.2,Day-type totals,True,"Off, Single, Two and Three-Channel totals"
+3.5.3,Original feature values,True,"5,779,622 value comparisons"
+3.5.3,Original feature null placement,True,All 83 non-key columns
+3.5.3,Aggregate event-count identities,True,"Email, File and HTTP event identities"
+3.5.4,Thirty new feature values,True,"2,089,020 value comparisons"
+3.5.4,New feature null placement,True,"5, 10, 20 and 30 WD completeness"
+3.5.5,Ground Truth row and field values,True,"888,344 non-key comparisons"
+3.5.5,Ground Truth null placement,True,All three Ground Truth tables
+3.5.5,Ground Truth logical invariants,True,All cross-table relationships and label checks
+3.5.6,Historical baseline provenance,True,"12,730 historical comparisons"
+3.5.6,Frozen byte-related context,True,Original email-byte measurements unchanged
+3.5.6,Past-only feature recalculation,True,"1,620 prefix comparisons"
+3.5.6,Intentional corruption detection,True,5/5 faults detected
+3.5.6,Final statistical QA checks,True,"Historical, temporal and stealth diagnostics"
+3.5.7,Input/output file integrity,True,SHA-256 matches the initial Stage 3.5 fingerprints
