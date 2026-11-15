@@ -20,6 +20,8 @@
 | 12 | `33_cv_fixed_bands.py` (متغير `ALGO`) | `results/cv75_fixed_bands_*` (CV 5×3) |
 | 13 | `34_save_final_split.py` | `results/final_split.csv`: **التقسيم الفعلي** (796 تطوير / 199 اختبار) المعرَّف في الكود (`StratifiedGroupKFold` مجمَّعًا بـ`scenario_id`، أول طية من 5، البذرة 42) |
 | 14 | `verify_release.py` | فحوص الإصدار الكاملة (تحتاج `data/`)، راجع `../docs/VERIFICATION.md` |
+| 15 | `verify_feature_contract.py` | يتحقق أن تعريفات الميزات الـ27 المضافة (`../docs/FEATURE_GENERATION_CONTRACT.md`) تعيد القيم المخزنة (تحتاج `data/`) |
+| 16 | `35_write_release_hashes.py` | يكتب `../model/SHA256SUMS.txt` و`../docs/RELEASE_HASHES.md` (يُشغَّل آخرًا بعد تثبيت السجلات) |
 
 سكربتات قرارات التصميم (للمرجعية): `22_final_model.py` (خط الأساس بـ74 ميزة)، `24_tune_lightgbm.py` (Optuna، لم تُعتمد)، `26_eval_gap_alt.py` (تقييم nr_gap_alt).
 

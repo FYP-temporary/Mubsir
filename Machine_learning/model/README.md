@@ -1,6 +1,6 @@
 # MUBSIR inference bundle (stage 1, FINAL75)
 
-Files: `manifest.json` (feature order per window, calibration, thresholds), `lgbm_w{5,10,20}.txt` (LightGBM native models), `mubsir_infer.py` (scoring + SHAP), `example_input.parquet` (3 test users, 77 input columns).
+Files: `SHA256SUMS.txt` + `verify_bundle.py` (integrity check), `manifest.json` (feature order per window, calibration, thresholds), `lgbm_w{5,10,20}.txt` (LightGBM native models), `mubsir_infer.py` (scoring + SHAP), `example_input.parquet` (3 test users, 77 input columns).
 Dependencies: numpy, pandas, lightgbm. No pickles, no scalers/encoders (trees; NaN is handled natively).
 
 ```python
@@ -21,3 +21,6 @@ CLI: `python mubsir_infer.py example_input.parquet --explain 4`
 - **Risk and levels**: `risk` is a calibrated probability x 100 that the user-day lies inside an exfiltration window (not a direct deviation magnitude; deviation enters via the features, mainly `cumulative_deviation_*`). Fixed thresholds **60 and 85**: Low `risk <= 60`; Medium `60 < risk <= 85`; High `risk > 85`; alert = High. A user's level uses his peak risk over the period (max over windows). On the 199 held-out users, High rows are true attack rows 98-99% of the time, Low rows 3-6%, Medium 72-78%.
 - **SHAP**: TreeSHAP in log-odds of the raw score; positive = raises risk.
 - **Limits**: models trained on 796 development users of the simulated CERT r6.2 data; the 199 test users were never used for training, calibration or thresholds. Not validated on other datasets.
+
+## Integrity (run before loading)
+`python verify_bundle.py --root-hash <pinned sha256>` checks every file in this folder against `SHA256SUMS.txt` and fails on a missing, modified or unlisted file; `from verify_bundle import verify_bundle; verify_bundle("model", expected_root_sha256=...)` does the same in code. The root hash (sha256 of `SHA256SUMS.txt`) must be stored where the writers of the model files cannot edit it (deployment config, signed tag, approval ticket): a `version` field in `manifest.json` or a hash list next to the files proves nothing on its own. Hashes of this release: `../docs/RELEASE_HASHES.md`.

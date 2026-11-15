@@ -16,7 +16,7 @@ Each per-window model (5, 10, 20 workdays) uses **75 features** = the 74 agreed 
 | `unique_external_recipients`, `unique_external_domains`, `unique_upload_domains`, `unique_domains`, `emails_with_attachments`, `attachment_count` | daily context counts (team columns) |
 
 ## 2. Accumulation and shift (12): `{cumulative_deviation, consecutive_elevated_days, channel_distribution_shift}_{5,10,20,30}wd`
-- `cumulative_deviation_w` = Σ_{d∈W_t} Σ_c E_c(d)  (verified equal to the team column).
+- `cumulative_deviation_w` = Σ_{d∈W_t} Σ_c E_c(d)  (equals the team column wherever that column is non-NaN: 0 mismatches on 99,415 / 94,444 / 84,518 rows for w = 5 / 10 / 20; the team column is NaN for the first w−1 workdays of 2011, ours is warm-started from 2010; see `FEATURE_GENERATION_CONTRACT.md` §6).
 - `consecutive_elevated_days_w` = longest run of days in W_t with x_c > P50_c in at least one channel.
 - `channel_distribution_shift_w` = total variation distance between the user's historical channel shares and the shares in W_t.
 
