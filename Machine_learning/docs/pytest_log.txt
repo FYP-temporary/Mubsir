@@ -1,0 +1,12 @@
+test_manifest_structure PASSED                     [  9%]
+test_no_label_or_static_baseline_columns_used_as_features PASSED [ 18%]
+test_level_boundaries PASSED                       [ 27%]
+test_thresholds_map_back_to_risk_scale PASSED      [ 36%]
+test_score_shape_ranges_and_consistency PASSED     [ 45%]
+test_expected_user_results_on_example PASSED       [ 54%]
+test_column_order_and_extra_columns_do_not_matter PASSED [ 63%]
+test_missing_column_raises PASSED                  [ 72%]
+test_nan_is_accepted PASSED                        [ 81%]
+test_shap_additivity_and_risk_match PASSED         [ 90%]
+test_explain_empty_input PASSED                    [100%]
+============================== 11 passed in 1.39s ==============================

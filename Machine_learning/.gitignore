@@ -1,0 +1,12 @@
+__pycache__/
+*.pyc
+.pytest_cache/
+.venv/
+catboost_info/
+.DS_Store
+# training data (see pipeline/data/README.md): kept out of git; SHA256SUMS.txt and README.md stay tracked
+pipeline/data/Clear_Attack_Simulation/
+pipeline/data/work/
+
+# keep the evidence logs (the repository root .gitignore ignores *.log)
+!pipeline/results/*.log
