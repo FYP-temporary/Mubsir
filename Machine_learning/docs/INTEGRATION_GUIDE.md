@@ -1,112 +1,112 @@
-# دليل الدمج: النموذج المدرَّب داخل النظام + مخرجاته للداشبورد
+# Integration guide: the trained model inside the system + its outputs for the dashboard
 
-كل ما في هذا الدليل مبني على الملفات الفعلية في `model/` وعلى تشغيل فعلي لها من نسخة نظيفة (316 صفًا من `example_input.parquet` في 0.018 ثانية).
+Everything in this guide is based on the actual files in `model/` and on an actual run of them from a clean copy (316 rows of `example_input.parquet` in 0.018 seconds).
 
 ---
 
-## الجزء الأول: كيف تضع النموذج كـ pre-trained في النظام
+## Part 1: How to place the model as a pre-trained model in the system
 
-### ما هو «ملف النموذج»
-مجلد `model/` كله وحدة واحدة (3.4 ميغابايت):
+### What the "model file" is
+The whole `model/` folder is one unit (3.4 MB):
 
-| الملف | الدور |
+| File | Role |
 |---|---|
-| `lgbm_w5.txt` / `lgbm_w10.txt` / `lgbm_w20.txt` | ثلاثة نماذج LightGBM بصيغتها الأصلية النصية (لا pickle ولا joblib) |
-| `manifest.json` | الإصدار، **ترتيب الميزات الـ75 لكل نموذج**، معاملات المعايرة (Platt)، العتبات 60/85 |
-| `mubsir_infer.py` | الصنف `MubsirScorer`: يحمّل ما سبق ويُنتج الدرجات والمستويات وSHAP |
+| `lgbm_w5.txt` / `lgbm_w10.txt` / `lgbm_w20.txt` | Three LightGBM models in their native text format (no pickle, no joblib) |
+| `manifest.json` | The version, **the order of the 75 features of each model**, the calibration coefficients (Platt), the 60/85 thresholds |
+| `mubsir_infer.py` | The class `MubsirScorer`: loads the above and produces the scores, levels and SHAP |
 
-الاعتماديات: numpy وpandas وlightgbm فقط (`model/requirements.txt`، مُختبَرة بإصدارات 2.5.3 / 3.0.5 / 4.7.0). لا scaler ولا encoder لأن الأشجار لا تحتاجهما، وNaN تُعالَج داخليًا.
+Dependencies: only numpy, pandas and lightgbm (`model/requirements.txt`, tested with versions 2.5.3 / 3.0.5 / 4.7.0). There is no scaler and no encoder because trees do not need them, and NaN is handled internally.
 
-### الخطوات
+### Steps
 
-1. **انسخ `model/` إلى خدمة التحليل** (مثلًا `/opt/mubsir/model`) وثبّت المتطلبات.
-2. **تحقق من سلامة الملفات ثم حمّله مرة واحدة عند تشغيل الخدمة**، لا عند كل طلب (القيمة `PINNED_ROOT_HASH` تُخزَّن في إعدادات النشر أو تذكرة الاعتماد، وهي مثبتة في `docs/RELEASE_HASHES.md`؛ وجود `version` في manifest وحده لا يثبت السلامة):
+1. **Copy `model/` to the analysis service** (for example `/opt/mubsir/model`) and install the requirements.
+2. **Verify the integrity of the files, then load the model once when the service starts**, not on every request (the value `PINNED_ROOT_HASH` is stored in the deployment configuration or the approval ticket, and it is recorded in `docs/RELEASE_HASHES.md`; the presence of `version` in the manifest alone does not prove integrity):
    ```python
    import sys; sys.path.insert(0, "/opt/mubsir/model")
    from verify_bundle import verify_bundle
-   verify_bundle("/opt/mubsir/model", expected_root_sha256=PINNED_ROOT_HASH)   # يرفع BundleIntegrityError عند أي ملف ناقص أو معدَّل أو زائد
+   verify_bundle("/opt/mubsir/model", expected_root_sha256=PINNED_ROOT_HASH)   # raises BundleIntegrityError on any missing, modified or extra file
    from mubsir_infer import MubsirScorer
-   scorer = MubsirScorer("/opt/mubsir/model")      # يقرأ manifest + النماذج الثلاثة
+   scorer = MubsirScorer("/opt/mubsir/model")      # reads the manifest + the three models
    ```
-3. **جهّز المدخل:** جدول واحد صف لكل (مستخدم، يوم عمل) فيه عمودا `user` و`day` والأعمدة الـ77 المذكورة في `manifest["input_columns_all"]` (كل نموذج يستخدم 75 منها). الترتيب غير مهم، والأعمدة الزائدة تُهمَل، والناقص يرفع خطأً واضحًا.
-4. **استدعِ:**
+3. **Prepare the input:** one table with one row per (user, workday) containing the columns `user` and `day` and the 77 columns listed in `manifest["input_columns_all"]` (each model uses 75 of them). The order does not matter, extra columns are ignored, and a missing column raises a clear error.
+4. **Call:**
    ```python
-   rows  = scorer.score(features_df)               # مستوى (مستخدم، يوم)
-   users = scorer.score_users(rows)                # مستوى المستخدم (الذروة)
-   why   = scorer.explain(features_df.iloc[[i]], window=10, top_k=5)   # SHAP لصف
+   rows  = scorer.score(features_df)               # (user, day) level
+   users = scorer.score_users(rows)                # user level (peak)
+   why   = scorer.explain(features_df.iloc[[i]], window=10, top_k=5)   # SHAP for one row
    ```
-5. **اكتب النتائج في قاعدة البيانات** (التعيين في الجزء الثاني)، وخزّن إصدار النموذج مع كل تنبؤ، ويمكن بناؤه من `manifest["version"]` ورقم النافذة (مثل `mubsir-1.0-w10`).
-6. **عند استبدال النموذج لاحقًا:** ضع مجلدًا جديدًا بنفس الواجهة؛ العتبات والمعايرة وترتيب الميزات تأتي كلها من `manifest.json` فلا تعدّل الكود.
+5. **Write the results to the database** (the mapping is in Part 2), and store the model version with every prediction; it can be built from `manifest["version"]` and the window number (for example `mubsir-1.0-w10`).
+6. **When the model is replaced later:** put a new folder with the same interface; the thresholds, the calibration and the feature order all come from `manifest.json`, so do not modify the code.
 
-### شروط لا يعمل النموذج بدونها
+### Conditions without which the model does not work
 
-| الشرط | لماذا |
+| Condition | Why |
 |---|---|
-| **الميزات يجب أن تُحسب بنفس طريقة التدريب** (نوافذ متدحرجة على آخر 30 يوم عمل، وخط الأساس P50/P90/P95 من 2010) | النموذج يرى الأرقام فقط؛ ميزة محسوبة بشكل مختلف تعطي درجة بلا معنى دون أي خطأ ظاهر |
-| **مستخرج الميزات من السجلات الخام** | ليس ضمن هذا التسليم. الـ27 ميزة التي أضفتها معرَّفة بدقة في `FEATURE_GENERATION_CONTRACT.md` مع منفّذ مرجعي (`pipeline/verify_feature_contract.py`) وحالات اختبار ذهبية (`docs/golden_feature_cases.json`)؛ الـ36 ميزة للفريق تحتاج كودهم. يُختبر المستخرج بمقارنة ناتجه بقيم الميزات المخزنة |
-| أيام العمل | الميزات تعتمد على تسلسل أيام العمل (تسجيل دخول)، فيجب أن يعرفها المستخرج |
-| `unique_usb_extensions` | **ليس مدخلًا للنموذج** (صفر دائمًا في بيانات الفريق بسبب خطأ regex، وتم استبعاده)، فلا يحتاجه المستخرج |
-| حدود الصلاحية | تدرّب على بيانات محاكاة CERT r6.2 (796 مستخدمًا)، ولم يُجرَّب على بيانات أخرى |
+| **The features must be computed in the same way as in training** (rolling windows over the last 30 workdays, and the P50/P90/P95 baseline from 2010) | The model sees only the numbers; a feature computed differently gives a meaningless score with no visible error |
+| **A feature extractor from the raw logs** | It is not part of this delivery. The 27 features I added are precisely defined in `FEATURE_GENERATION_CONTRACT.md` with a reference implementation (`pipeline/verify_feature_contract.py`) and golden test cases (`docs/golden_feature_cases.json`); the team's 36 features need their code. The extractor is tested by comparing its output with the stored feature values |
+| Workdays | The features depend on the sequence of workdays (logon), so the extractor must know them |
+| `unique_usb_extensions` | **Not a model input** (always zero in the team's data because of a regex bug, and it was excluded), so the extractor does not need it |
+| Validity limits | Trained on CERT r6.2 simulation data (796 users), and not tested on other data |
 
 ---
 
-## الجزء الثاني: مخرجات النموذج التي يمكن تمريرها للداشبورد
+## Part 2: Model outputs that can be passed to the dashboard
 
-### أ) مستوى (مستخدم، يوم): `scorer.score(...)`
+### A) (user, day) level: `scorer.score(...)`
 
-| العمود | المعنى | استخدام مقترح في الداشبورد |
+| Column | Meaning | Suggested use in the dashboard |
 |---|---|---|
-| `user`, `day` | المعرّفات | مفتاح الصف |
-| `risk_5`, `risk_10`, `risk_20` | الخطر 0–100 لكل نافذة | منحنى الخطر عبر الزمن لكل نافذة |
-| `level_5`, `level_10`, `level_20` | Low / Medium / High لكل نافذة | شارة لكل نافذة |
-| `score_raw_5/10/20` | الاحتمال الخام قبل المعايرة | للتدقيق فقط |
-| `risk` | أعلى خطر بين النوافذ | الرقم الرئيسي لليوم |
-| `level` | مستوى اليوم | لون الصف |
-| `alert` | صحيح إذا كان `risk > 85` | يولّد تنبيهًا |
-| `alert_windows` | النوافذ المنذِرة، مثل `5,10,20` | يوضح أي أفق زمني أطلق التنبيه |
+| `user`, `day` | The identifiers | Row key |
+| `risk_5`, `risk_10`, `risk_20` | The risk 0–100 for each window | Risk curve over time for each window |
+| `level_5`, `level_10`, `level_20` | Low / Medium / High for each window | A badge for each window |
+| `score_raw_5/10/20` | The raw probability before calibration | For auditing only |
+| `risk` | The highest risk among the windows | The main number for the day |
+| `level` | The level of the day | Row color |
+| `alert` | True if `risk > 85` | Generates an alert |
+| `alert_windows` | The windows that raised the alarm, such as `5,10,20` | Shows which time horizon triggered the alert |
 
-### ب) مستوى المستخدم: `scorer.score_users(rows)`
+### B) User level: `scorer.score_users(rows)`
 
-| العمود | المعنى |
+| Column | Meaning |
 |---|---|
-| `risk_5_peak`, `risk_10_peak`, `risk_20_peak`, `risk_peak` | أعلى خطر للمستخدم لكل نافذة وعمومًا |
-| `level`, `alert` | مستوى المستخدم وهل أُنذر |
-| `peak_day` | يوم الذروة |
-| `first_alert_day` | أول يوم High، وهو أهم حقل للتحقيق (فارغ إن لم ينذر) |
-| `n_days` | عدد الأيام المقيَّمة |
+| `risk_5_peak`, `risk_10_peak`, `risk_20_peak`, `risk_peak` | The user's highest risk for each window and overall |
+| `level`, `alert` | The user's level and whether the user was alerted |
+| `peak_day` | The peak day |
+| `first_alert_day` | The first High day, which is the most important field for investigation (empty if the user was never alerted) |
+| `n_days` | The number of evaluated days |
 
-مثال حقيقي من `example_input.parquet`: المستخدم NVH3726 ذروته 99.9 وأول إنذار 2011-01-31، والمستخدم SHB3512 ذروته 53.7 (Low) بلا إنذار.
+A real example from `example_input.parquet`: user NVH3726 has a peak of 99.9 and a first alert on 2011-01-31, and user SHB3512 has a peak of 53.7 (Low) with no alert.
 
-### ج) التفسير: `scorer.explain(...)` (SHAP)
-صف لكل (ميزة بارزة، نافذة): `rank`, `feature`, `family`, `value`, `shap` (بوحدة log-odds، والموجب يرفع الخطر)، `effect` ("raises risk" / "lowers risk")، و`base_logodds` و`logodds` و`risk`.
-- في المثال الحقيقي: أعلى مساهمة لـNVH3726 كانت `cumulative_deviation_10wd = 11.3` بمساهمة +4.43، ثم `email_event_count = 17` (+1.60).
-- `explain_text()` يعطي سطرًا مقروءًا جاهزًا للعرض.
-- نصيحة للعرض: أظهر أهم 3–5 مساهمات مع `family` (بريد / USB / HTTP / تراكم-انحراف / تناوب)، وراجع `FEATURE_DEFINITIONS_ROTATION.md` لتحويل أسماء الميزات إلى جمل مفهومة.
+### C) Explanation: `scorer.explain(...)` (SHAP)
+One row per (prominent feature, window): `rank`, `feature`, `family`, `value`, `shap` (in log-odds units, positive raises the risk), `effect` ("raises risk" / "lowers risk"), and `base_logodds`, `logodds` and `risk`.
+- In the real example: the highest contribution for NVH3726 was `cumulative_deviation_10wd = 11.3` with a contribution of +4.43, then `email_event_count = 17` (+1.60).
+- `explain_text()` gives a readable line ready for display.
+- Display advice: show the top 3–5 contributions with `family` (email / USB / HTTP / accumulation-shift / rotation), and see `FEATURE_DEFINITIONS_ROTATION.md` to turn the feature names into understandable sentences.
 
-### د) معلومات ثابتة عن النموذج (لا تتغير مع كل تشغيل)
-- `scorer.thresholds()`: العتبتان 60 و85 بمقياس الخطر ومكافئهما الخام لكل نافذة.
-- `manifest.json`: الإصدار وتاريخ الإنشاء والخوارزمية.
-- صفحة «عن النموذج» اختيارية من الملفات: أهمية SHAP العامة (`pipeline/results/shap75/shap_families.csv`)، ومصفوفات الالتباس (`docs/figures/`)، ومقاييس العتبات الثابتة (`pipeline/results/fixed_bands_*.csv`).
+### D) Fixed information about the model (does not change with each run)
+- `scorer.thresholds()`: the two thresholds 60 and 85 on the risk scale and their raw equivalents for each window.
+- `manifest.json`: the version, the creation date and the algorithm.
+- An optional "About the model" page from the files: the global SHAP importance (`pipeline/results/shap75/shap_families.csv`), the confusion matrices (`docs/figures/`), and the fixed-threshold metrics (`pipeline/results/fixed_bands_*.csv`).
 
-### كيف يُقرأ الخطر (مهم للداشبورد)
-الخطر **احتمال معايَر × 100** أن يكون المستخدم داخل نافذة تسريب، وليس مقدار الانحراف. تركيب المستويات على بيانات الاختبار (199 مستخدمًا، LightGBM، مقاسة):
+### How the risk is read (important for the dashboard)
+The risk is the **calibrated probability × 100** that the user is inside an exfiltration window; it is not the size of the deviation. The composition of the levels on the test data (199 users, LightGBM, measured):
 
-| المستوى | الصفوف (نافذة 10) | نسبة الهجوم الفعلي في الصفوف | المستخدمون (أي نافذة) | منهم مهاجمون |
+| Level | Rows (window 10) | Share of actual attack in the rows | Users (any window) | Of which attackers |
 |---|---|---|---|---|
-| Low (≤60) | 83.0% من الصفوف | 3.9% | 65 | 2 |
+| Low (≤60) | 83.0% of the rows | 3.9% | 65 | 2 |
 | Medium (60–85) | 2.4% | 73.8% | 3 | 2 |
 | High (>85) | 14.6% | 98.7% | 131 | 130 |
 
-أي أن High موثوق جدًا، وMedium منطقة مراجعة (حوالي ثلاثة من كل أربعة صفوف فيها هجوم فعلي)، وLow ليس ضمانًا مطلقًا (يضم مهاجمَين من 134).
+That is, High is very reliable, Medium is a review zone (about three of every four rows in it are an actual attack), and Low is not an absolute guarantee (it includes two attackers out of 134).
 
-### تعيين المخرجات على مخطط قاعدة البيانات الحالي (دون تعديله)
+### Mapping the outputs to the current database schema (without modifying it)
 
-| الجدول / العمود | ما يُكتب |
+| Table / column | What is written |
 |---|---|
-| `behavior_features.feature_values_jsonb` | الميزات الـ75 لنموذج النافذة، وصف لكل نافذة (`window_workdays` = 5 أو 10 أو 20) |
-| `model_prediction_outputs.model_version` | مثل `mubsir-1.0-w10` |
+| `behavior_features.feature_values_jsonb` | The 75 features of the window model, one row per window (`window_workdays` = 5, 10 or 20) |
+| `model_prediction_outputs.model_version` | For example `mubsir-1.0-w10` |
 | `…risk_score` | `risk_h` (0–100) |
 | `…risk_classification` | `level_h` (Low/Medium/High) |
-| `…shap_explanation_jsonb` | `score_raw` و`base_logodds` وأهم 5 مساهمات |
-| `security_alerts` | صف عند `alert = True`، وتجميع الأيام المتتالية في حادثة يتم في الكود |
-| ملخص المستخدم | يُحسب باستعلام أو بـ`score_users`، ولا يحتاج جدولًا جديدًا |
+| `…shap_explanation_jsonb` | `score_raw`, `base_logodds` and the top 5 contributions |
+| `security_alerts` | A row when `alert = True`; grouping consecutive days into an incident is done in code |
+| User summary | Computed by a query or by `score_users`, and does not need a new table |

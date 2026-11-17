@@ -1,107 +1,107 @@
-# عقد توليد الميزات — الـ27 ميزة التي أضفناها للنموذج
+# Feature generation contract — the 27 features we added to the model
 
-**الغرض:** النموذج يستهلك 77 عمودًا مميزًا. من هذه الأعمدة **27 عمودًا لا توجد في بيانات الفريق** (لا في جدول التجميع اليومي ولا في `behavior_features_r62_ml_final.parquet`)، أضفتها أنا. هذه الوثيقة تحدد بدقة كيف تُحسب، ليحسبها مسار الإنتاج بنفس التعريفات التي دُرّب عليها النموذج.
+**Purpose:** the model consumes 77 distinct columns. Of these, **27 columns do not exist in the team's data** (neither in the daily aggregation table nor in `behavior_features_r62_ml_final.parquet`); I added them. This document specifies exactly how they are computed, so that the production pipeline computes them with the same definitions the model was trained on.
 
-**ما تغطيه الوثيقة وما لا تغطيه:**
+**What this document covers and what it does not:**
 
-| المصدر | العدد | أين تعريفه |
+| Source | Count | Where it is defined |
 |---|---|---|
-| أعمدة يومية موجودة في جدول التجميع (`user_day_injected`) | 14 | الجدول نفسه |
-| أعمدة الفريق في `ml_final` (مجاميع النوافذ، الأيام النشطة، `cumulative_deviation`، `consecutive_elevated_days`، `channel_distribution_shift`، نسب p95) | 36 | كود الفريق (لم أجده في المستودع)، وأصف في القسم 6 ما تحققت منه عنها |
-| **أعمدة أضفتها أنا — موضوع هذه الوثيقة** | **27** | **هنا** |
+| Daily columns that exist in the aggregation table (`user_day_injected`) | 14 | The table itself |
+| Team columns in `ml_final` (window sums, active days, `cumulative_deviation`, `consecutive_elevated_days`, `channel_distribution_shift`, p95 ratios) | 36 | Team code (I did not find it in the repository); Section 6 describes what I verified about them |
+| **Columns I added — the subject of this document** | **27** | **Here** |
 
-الـ27 هي: `nr_{m, entropy, excl_days, overlap_days, alt, handoff, stealth_acc}_{5,10,20}wd` (21) + `nr_gap_alt_2_{5,10,20}wd` (3) + `email_count_to_p90_ratio` و`usb_copy_to_p90_ratio` و`http_upload_to_p90_ratio` (3). كل نموذج نافذة يستعمل الـ21 `nr_*` كلها (نسخ النوافذ الثلاث) والنسب الثلاث p90، ونسخة نافذته وحدها من `nr_gap_alt_2` (75 = 74 مشتركة + 1)؛ ولهذا يحتاج المستخرج الأعمدة الـ27 كلها.
+The 27 are: `nr_{m, entropy, excl_days, overlap_days, alt, handoff, stealth_acc}_{5,10,20}wd` (21) + `nr_gap_alt_2_{5,10,20}wd` (3) + `email_count_to_p90_ratio`, `usb_copy_to_p90_ratio` and `http_upload_to_p90_ratio` (3). Each window model uses all 21 `nr_*` columns (the versions of all three windows) and the three p90 ratios, plus only its own window's version of `nr_gap_alt_2` (75 = 74 shared + 1); therefore the extractor needs all 27 columns.
 
-## 1) ما يحتاجه المستخرج من الداخل
+## 1) What the extractor needs as input
 
-**أ) سلسلة أيام العمل لكل مستخدم** (بالترتيب الزمني):
-- يوم عمل = `is_weekend == 0` **و** `logon_count > 0`. اليوم بلا تسجيل دخول **ليس يومًا هادئًا**، بل لا يدخل السلسلة أصلًا. هذا يؤثر على كل النوافذ (النافذة = آخر w يوم عمل في السلسلة وليست w يومًا تقويميًا) وعلى المسافة بين أيام الانحراف في `nr_gap_alt_2`.
-- يُحسب كل شيء على السلسلة كاملة (2010 + 2011): في التدريب كان لكل مستخدم 250–260 يوم عمل من 2010 قبل أول صف في 2011 (وسيطها 251)، فلا تبدأ أي نافذة ناقصة.
-- يلزم لحساب يوم t: الأيام t−w … t (أي **w+1 يوم** للنافذة الأكبر 21 يومًا)، لأن `nr_handoff` ينظر إلى اليوم السابق لأول يوم في النافذة.
+**a) The workday sequence of each user** (in chronological order):
+- A workday = `is_weekend == 0` **and** `logon_count > 0`. A day without a logon is **not a quiet day**; it is not part of the sequence at all. This affects every window (a window is the last w workdays in the sequence, not w calendar days) and the distance between deviation days in `nr_gap_alt_2`.
+- Everything is computed on the full sequence (2010 + 2011): in training, each user had 250–260 workdays from 2010 before the first row of 2011 (median 251), so no window starts incomplete.
+- Computing day t requires days t−w … t (that is, **w+1 days**, 21 days for the largest window), because `nr_handoff` looks at the day before the first day of the window.
 
-**ب) ثلاثة أعمدة عدّ يومية** بهذا الترتيب الثابت (البريد < USB < HTTP، وهو أيضًا ترتيب كسر التعادل): `external_email_count`, `usb_copy_count`, `www_upload_count`.
+**b) Three daily count columns** in this fixed order (email < USB < HTTP, which is also the tie-breaking order): `external_email_count`, `usb_copy_count`, `www_upload_count`.
 
-**ج) خط الأساس الثابت لكل مستخدم** (من 2010 فقط، نفس القيم لكل أيام المستخدم، وهي موجودة كأعمدة ثابتة في `ml_final` (مصدرها بيزلاين الفريق)، **تُحمَّل كما هي ولا تُعاد حسابها**):
+**c) The fixed per-user baseline** (from 2010 only, the same values for all days of a user; they exist as constant columns in `ml_final` (originating from the team's baseline), **to be loaded as they are and not recomputed**):
 
-| القناة | P50 | P90 | P95 |
+| Channel | P50 | P90 | P95 |
 |---|---|---|---|
 | email | `email_count_p50` | `email_count_p90` | `email_count_p95` |
 | usb | `usb_copy_p50` | `usb_copy_p90` | `usb_copy_p95` |
 | http | `http_upload_p50` | `http_upload_p90` | `http_upload_p95` |
 
-هذه الأعمدة **ليست مدخلات للنموذج** (محظورة بفحص في `verify_release.py`)، لكنها لازمة لحساب الميزات. لاحظ أن P95 (وP90) يساوي صفرًا أو غير موجود في 27.5% من صفوف بيانات التدريب لقناة USB و43.0% لـHTTP (و0% للبريد)، فتلك الصفوف تعطي نسب p90 = NaN.
+These columns are **not model inputs** (forbidden by a check in `verify_release.py`), but they are needed to compute the features. Note that P95 (and P90) is zero or missing in 27.5% of the training rows for the USB channel and 43.0% for HTTP (and 0% for email); those rows give p90 ratios = NaN.
 
-## 2) الترميز
+## 2) Notation
 
-- `x_c(d)`: عدّ القناة c في يوم العمل d.
-- **الانحراف** `E_c(d) = max(0, x_c(d) − P50_c) / max(1, P95_c − P50_c)`. أي قيمة ناقصة (عدّ أو خط أساس) تُحسب **بلا انحراف** (E = 0).
-- **يوم انحراف:** `Σ_c E_c(d) > 0`. **القناة المهيمنة** في يوم انحراف: `argmax_c E_c(d)` ويُكسر التعادل لأقل رقم (email=0 < usb=1 < http=2). أيام بلا انحراف مهيمنتها «لا شيء» (−1).
-- `W_t`: آخر w يوم عمل وينتهي باليوم t (يشمله). كل ميزة سببية (تستخدم أيامًا ≤ t فقط).
-- `S_c = Σ_{d∈W_t} E_c(d)` و`S = Σ_c S_c`.
+- `x_c(d)`: the count of channel c on workday d.
+- **Deviation** `E_c(d) = max(0, x_c(d) − P50_c) / max(1, P95_c − P50_c)`. Any missing value (count or baseline) is treated as **no deviation** (E = 0).
+- **Deviation day:** `Σ_c E_c(d) > 0`. The **dominant channel** on a deviation day: `argmax_c E_c(d)`, with ties broken toward the lowest index (email=0 < usb=1 < http=2). On days without deviation the dominant channel is "none" (−1).
+- `W_t`: the last w workdays ending at day t (inclusive). Every feature is causal (it uses only days ≤ t).
+- `S_c = Σ_{d∈W_t} E_c(d)` and `S = Σ_c S_c`.
 
-## 3) التعريفات (لكل نافذة w ∈ {5, 10, 20})
+## 3) Definitions (for each window w ∈ {5, 10, 20})
 
-| الميزة | التعريف الدقيق |
+| Feature | Exact definition |
 |---|---|
-| `nr_m_{w}wd` | عدد القنوات التي `S_c > 0` (0 إلى 3) |
-| `nr_entropy_{w}wd` | إن كان `S > 0`: `−Σ_{c: S_c>0} p_c·ln p_c / ln 3` حيث `p_c = S_c / S`؛ وإلا 0 |
-| `nr_excl_days_{w}wd` | عدد الأيام في W_t التي ينحرف فيها **قناة واحدة بالضبط** (`E_c > 0` لقناة واحدة) |
-| `nr_overlap_days_{w}wd` | عدد الأيام في W_t التي تنحرف فيها **قناتان أو أكثر** |
-| `nr_alt_{w}wd` | الأزواج = (d−1, d) متتاليان في السلسلة، **كلاهما داخل W_t وكلاهما يوم انحراف**. القيمة = عدد الأزواج التي تتغير فيها القناة المهيمنة ÷ عدد الأزواج؛ 0 إن لم يوجد زوج. لا يُضغط يوم هادئ ولا يُعبَر |
-| `nr_handoff_{w}wd` | لكل يوم d في W_t: إن كانت **أي** قناة منحرفة في d−1 فاحسب عدد القنوات المنحرفة في d وغير المنحرفة في d−1؛ المجموع على W_t (d−1 قد يكون اليوم السابق للنافذة؛ وفي أول يوم من السلسلة = 0) |
-| `nr_stealth_acc_{w}wd` | `Σ_{d∈W_t} Σ_c E_c(d)` على الأيام والقنوات التي `E_c(d) > 0` **و** `x_c(d) ≤ P95_c` (قناة تتجاوز P95 تُسقِط نفسها فقط) |
-| `nr_gap_alt_2_{w}wd` | أيام الانحراف داخل W_t مرتبة؛ **زوج مؤهل** = يومان متجاوران في هذه القائمة بينهما `d − p − 1 ≤ 2` يوم عمل هادئ (فجوة أطول تُهمل ولا تُجسَّر إلى يوم أبعد). القيمة = أزواج تغيرت مهيمنتها ÷ الأزواج المؤهلة؛ 0 إن لم يوجد. G=0 يساوي `nr_alt` |
-| `email_count_to_p90_ratio` | `external_email_count(d) / email_count_p90` إن كان `p90 > 0`، وإلا **NaN** |
-| `usb_copy_to_p90_ratio` | `usb_copy_count(d) / usb_copy_p90` إن كان `p90 > 0`، وإلا NaN |
-| `http_upload_to_p90_ratio` | `www_upload_count(d) / http_upload_p90` إن كان `p90 > 0`، وإلا NaN |
+| `nr_m_{w}wd` | The number of channels with `S_c > 0` (0 to 3) |
+| `nr_entropy_{w}wd` | If `S > 0`: `−Σ_{c: S_c>0} p_c·ln p_c / ln 3` where `p_c = S_c / S`; otherwise 0 |
+| `nr_excl_days_{w}wd` | The number of days in W_t on which **exactly one channel** deviates (`E_c > 0` for one channel) |
+| `nr_overlap_days_{w}wd` | The number of days in W_t on which **two or more channels** deviate |
+| `nr_alt_{w}wd` | Pairs = (d−1, d) consecutive in the sequence, **both inside W_t and both deviation days**. The value = the number of pairs in which the dominant channel changes ÷ the number of pairs; 0 if there is no pair. A quiet day is neither compressed nor crossed |
+| `nr_handoff_{w}wd` | For each day d in W_t: if **any** channel deviates on d−1, count the channels that deviate on d and did not deviate on d−1; the sum over W_t (d−1 may be the day before the window; on the first day of the sequence = 0) |
+| `nr_stealth_acc_{w}wd` | `Σ_{d∈W_t} Σ_c E_c(d)` over the days and channels with `E_c(d) > 0` **and** `x_c(d) ≤ P95_c` (a channel that exceeds P95 excludes only itself) |
+| `nr_gap_alt_2_{w}wd` | The deviation days inside W_t, in order; an **eligible pair** = two adjacent days in this list with `d − p − 1 ≤ 2` quiet workdays between them (a longer gap is ignored and is not bridged to a more distant day). The value = pairs whose dominant channel changed ÷ eligible pairs; 0 if there are none. G=0 equals `nr_alt` |
+| `email_count_to_p90_ratio` | `external_email_count(d) / email_count_p90` if `p90 > 0`, otherwise **NaN** |
+| `usb_copy_to_p90_ratio` | `usb_copy_count(d) / usb_copy_p90` if `p90 > 0`, otherwise NaN |
+| `http_upload_to_p90_ratio` | `www_upload_count(d) / http_upload_p90` if `p90 > 0`, otherwise NaN |
 
-(النسب الثلاث يومية ولا تعتمد على نافذة.)
+(The three ratios are daily and do not depend on a window.)
 
-مثال صغير لـ`nr_alt` و`nr_gap_alt_2` على تسلسل المهيمنة (E=email, U=usb, H=http, ·=يوم هادئ): `E U · U H` → أزواج `nr_alt` المتتالية المنحرفة: (E,U) تغيّر، (U·) غير صالح، (·U) غير صالح، (U,H) تغيّر ⇒ 2/2 = 1.0؛ بينما أزواج `nr_gap_alt_2`: (E,U) فجوة 0، (U,U) عبر يوم هادئ فجوة 1، (U,H) فجوة 0 ⇒ تغيّر 2 من 3 مؤهلة = 0.667.
+A small example for `nr_alt` and `nr_gap_alt_2` on a sequence of dominant channels (E=email, U=usb, H=http, ·=quiet day): `E U · U H` → the consecutive deviating pairs of `nr_alt`: (E,U) change, (U·) invalid, (·U) invalid, (U,H) change ⇒ 2/2 = 1.0; whereas the pairs of `nr_gap_alt_2`: (E,U) gap 0, (U,U) across a quiet day gap 1, (U,H) gap 0 ⇒ change in 2 of 3 eligible pairs = 0.667.
 
-## 4) من أين تُؤخذ نسخة كل ميزة (التباس موجود في السكربتات)
+## 4) Where the version of each feature is taken from (an ambiguity that exists in the scripts)
 
-| الميزة | السكربت المعتمد |
+| Feature | Authoritative script |
 |---|---|
 | `nr_m`, `nr_entropy`, `nr_excl_days`, `nr_overlap_days`, `nr_handoff` | `18_build_evidence_features.py` |
-| `nr_alt`, `nr_stealth_acc`, نسب p90 | `21_build_final_features.py` (**تستبدل** نسختي 18 من `nr_alt` و`nr_stealth_acc`، وهذا ما يفعله `28_final75.py`) |
-| `nr_gap_alt_2` | `25_build_gap_alt.py` (G = 2 باتفاق الفريق؛ G = 0/1/3 و`nr_alt_pairs` تجريبية/تشخيصية وليست مدخلات) |
+| `nr_alt`, `nr_stealth_acc`, p90 ratios | `21_build_final_features.py` (**replaces** the versions of `nr_alt` and `nr_stealth_acc` from 18, which is what `28_final75.py` does) |
+| `nr_gap_alt_2` | `25_build_gap_alt.py` (G = 2 by agreement with the team; G = 0/1/3 and `nr_alt_pairs` are experimental/diagnostic and are not inputs) |
 
-سكربت 18 يولّد أيضًا أعمدة `e1_*` و`e2_*` (أدلة التراكم والتهرب): **لا يستخدمها النموذج النهائي**، ولا تحتاجها في الإنتاج.
+Script 18 also generates the `e1_*` and `e2_*` columns (accumulation and evasion evidence): **the final model does not use them**, and you do not need them in production.
 
-## 5) حالات الحافة المقصودة
+## 5) Intended edge cases
 
-- عدّ ناقص (NaN) أو خط أساس ناقص → E = 0 (لا انحراف)، لا خطأ.
-- `P95 − P50 ≤ 1` → المقام 1 (كل عدّ فوق P50 يعطي انحرافًا = الفرق نفسه).
-- `P95 = 0`: أي عدّ موجب فوق P95، فلا يدخل `nr_stealth_acc` أبدًا (أما `x ≤ P95` فيعني x = 0 وE = 0).
-- في التدريب كانت خطوط الأساس ثابتة لكل مستخدم (2010 فقط) ومأخوذة من ملف الفريق؛ لا تُحدَّث يوميًا ولا تُشتق من الأيام الحية.
+- A missing count (NaN) or a missing baseline → E = 0 (no deviation), not an error.
+- `P95 − P50 ≤ 1` → the denominator is 1 (every count above P50 gives a deviation equal to the difference itself).
+- `P95 = 0`: any positive count is above P95, so it never enters `nr_stealth_acc` (while `x ≤ P95` means x = 0 and E = 0).
+- In training, the baselines were fixed per user (2010 only) and taken from the team's file; they are not updated daily and are not derived from live days.
 
-## 6) ما اكتشفته عن الأعمدة الـ36 للفريق أثناء كتابة هذه الوثيقة
+## 6) What I found about the team's 36 columns while writing this document
 
-عند مقارنة إعادة حساب المجاميع بأعمدة الفريق في `ml_final` تبيّن أن الفرق الذي كنت أصفه سابقًا بأنه «غير مفسَّر» سببه **اتفاقيتا بداية مختلفتان**، وليس اختلافًا في الصيغة:
+When comparing the recomputed sums with the team's columns in `ml_final`, it turned out that the difference I had previously described as "unexplained" is caused by **two different start conventions**, not by a difference in the formula:
 
-| أعمدة الفريق | سلوكها في أول w−1 يوم عمل من 2011 | بعد ذلك |
+| Team columns | Behavior in the first w−1 workdays of 2011 | Afterwards |
 |---|---|---|
-| مجاميع العدّ 5 و10 يوم | مجموع نافذة **جزئية** تبدأ من 2011-01-03 (يطابق `rolling(w, min_periods=1)` تمامًا) | مطابقة تامة |
-| مجاميع العدّ 20 و30 يوم | **NaN** | مطابقة تامة (18,877 و28,793 صفًا NaN) |
-| `cumulative_deviation_{5,10,20,30}` | **NaN** (3,980 / 8,951 / 18,877 / 28,793 صفًا) | مطابقة تامة لـ`Σ E` عندنا: 0 اختلاف في 99,415 / 94,444 / 84,518 صفًا |
+| Count sums of 5 and 10 days | The sum of a **partial** window starting from 2011-01-03 (matches `rolling(w, min_periods=1)` exactly) | Exact match |
+| Count sums of 20 and 30 days | **NaN** | Exact match (18,877 and 28,793 NaN rows) |
+| `cumulative_deviation_{5,10,20,30}` | **NaN** (3,980 / 8,951 / 18,877 / 28,793 rows) | Exact match with our `Σ E`: 0 differences in 99,415 / 94,444 / 84,518 rows |
 
-أما ميزاتنا الـ27 فتبدأ من 2010 (لا NaN ولا نوافذ جزئية). لذلك:
-- عند اختبار المطابقة مع `ml_final` على صفوف 2011 تتوقع اختلافًا في أول w−1 يوم من 2011 لكل مستخدم في أعمدة الفريق (جزئي/NaN) وليس في أعمدتنا.
-- في الإنتاج بتاريخ متصل لن تظهر هذه النوافذ الناقصة؛ النموذج رأى NaN في هذه الصفوف أثناء التدريب (من 3.8% إلى 27.8% من صفوف بيانات الـ995 مستخدمًا حسب العمود)، ولا أثر لذلك على التشغيل الطبيعي، لكنه يجعل أول w−1 يوم لأي مستخدم جديد بلا تاريخ غير ممثَّل في التدريب بنفس الطريقة.
+Our 27 features, however, start from 2010 (no NaN and no partial windows). Therefore:
+- When testing the match against `ml_final` on 2011 rows, expect a difference in the first w−1 days of 2011 of every user in the team's columns (partial/NaN), not in ours.
+- In production, with a continuous history, these incomplete windows will not appear; the model saw NaN in these rows during training (from 3.8% to 27.8% of the rows of the 995-user data, depending on the column), which has no effect on normal operation, but it means that the first w−1 days of any new user without history are not represented in training in the same way.
 
-وهذا يصحّح أيضًا الجملة القديمة في `FEATURE_DEFINITIONS_ROTATION.md` («مطابق لعمود الفريق») التي كانت مطلقة أكثر من اللازم، وقد عُدّلت.
+This also corrects the old sentence in `FEATURE_DEFINITIONS_ROTATION.md` ("identical to the team's column"), which was more absolute than warranted, and it has been amended.
 
-## 7) التحقق (`pipeline/verify_feature_contract.py`)
+## 7) Verification (`pipeline/verify_feature_contract.py`)
 
-- كتبت ترجمة حرفية للتعريفات أعلاه بحلقات بسيطة (`rotation_features`) ولا تشترك بالكود مع سكربتات 18 و21 و25 الأصلية.
-- قارنتها بالقيم المخزنة التي دُرّب عليها النموذج على 60 مستخدمًا (كل أيامهم وكل النوافذ): **165,051 خلية (27 عمودًا)، 0 اختلاف** (تسامح 1e-9، وتطابق NaN مع NaN في نسب p90).
-- حالات اختبار ذهبية: `docs/golden_feature_cases.json` فيها 3 حالات (هجوم متناوب، يوم بلا انحراف مع p90 صفرية، أيام انحراف حصرية ومتداخلة): لكل حالة عدّ آخر 21 يوم عمل وخط الأساس والقيم المتوقعة الـ27 (مأخوذة من الجداول المخزنة لا من المنفّذ المرجعي)، ويجتازها المنفّذ المرجعي بلا اختلاف.
-- شغّله: `cd pipeline && python verify_feature_contract.py` (يحتاج `pipeline/data/`، ويخرج 0 فقط إذا نجح كل شيء). مستخرج الإنتاج الذي تكتبونه يُختبر بالحالات الذهبية نفسها (الملف لا يحتاج بيانات).
+- I wrote a literal translation of the definitions above with simple loops (`rotation_features`) that shares no code with the original scripts 18, 21 and 25.
+- I compared it with the stored values on which the model was trained, for 60 users (all their days and all windows): **165,051 cells (27 columns), 0 differences** (tolerance 1e-9, and NaN matching NaN in the p90 ratios).
+- Golden test cases: `docs/golden_feature_cases.json` contains 3 cases (alternating attack, a day without deviation with a zero p90, exclusive and overlapping deviation days): each case has the counts of the last 21 workdays, the baseline, and the 27 expected values (taken from the stored tables, not from the reference implementation), and the reference implementation passes them with no difference.
+- Run it with: `cd pipeline && python verify_feature_contract.py` (needs `pipeline/data/`, and exits 0 only if everything succeeds). The production extractor that you write is tested with the same golden cases (the file needs no data).
 
-## 8) ما لم يُتحقق منه
+## 8) What was not verified
 
-1. **لم أختبر الميزات على أحداث خام** (لا توجد أحداث خام في المستودع)؛ المدخل هو التجميع اليومي كما في `user_day_injected`.
-2. **لم أختبر سلوك المستخرج حين يقل التاريخ عن w+1 يوم عمل**: في التدريب لم تحدث هذه الحالة لميزاتنا، فالسلوك غير مُعرَّف لها هنا. قرّروا في الإنتاج (رفض التقييم أو إرجاع NaN) ووثّقوه.
-3. **الـ36 ميزة للفريق** ما زالت تحتاج كودهم؛ القسم 6 يصف سلوك البداية فقط، وليس تعريفاتها الكاملة (`channel_distribution_shift` و`consecutive_elevated_days` لم أعد حسابهما هنا).
-4. صحة بناء `user_day_injected` نفسه من سجلات CERT الخام غير مفحوصة هنا.
+1. **I did not test the features on raw events** (there are no raw events in the repository); the input is the daily aggregation as in `user_day_injected`.
+2. **I did not test the extractor's behavior when the history is shorter than w+1 workdays**: in training this case did not occur for our features, so the behavior is undefined here. Decide in production (reject the scoring or return NaN) and document it.
+3. **The team's 36 features** still need their code; Section 6 describes only the start-up behavior, not their full definitions (I did not recompute `channel_distribution_shift` and `consecutive_elevated_days` here).
+4. The correctness of building `user_day_injected` itself from the raw CERT logs is not checked here.

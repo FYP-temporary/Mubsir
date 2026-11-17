@@ -1,13 +1,13 @@
-# pipeline/data — بيانات التدريب
+# pipeline/data — training data
 
-**مصدر البيانات الأصلية موجود في مستودع الفريق:** فرع `remas-mushabbab-attacks-generator`، مجلد `Clear_Attack_Simulation/` (من عمل ريماس). الملفات الستة الأصلية أدناه **مطابقة بايتًا ببايت** لما دُرّب عليه النموذج (قورنت بـSHA-256)، فلا حاجة لنسخها هنا. يلتقط `pipeline/common.py` المجلد تلقائيًا إذا وُجد `Clear_Attack_Simulation/` في جذر المستودع، أو عبر المتغير `MUBSIR_DATA`.
-أما ملفات `work/` فمشتقة من سكربتاتنا (`01` و`18` و`21` و`25`) وتُعاد توليدها، ولا حاجة لرفعها.
+**The original source data is in the team repository:** branch `remas-mushabbab-attacks-generator`, folder `Clear_Attack_Simulation/` (work of Remas). The six original files below are **byte-for-byte identical** to what the model was trained on (compared by SHA-256), so there is no need to copy them here. `pipeline/common.py` picks up the folder automatically if `Clear_Attack_Simulation/` exists in the repository root, or through the variable `MUBSIR_DATA`.
+The files in `work/` are derived by our scripts (`01`, `18`, `21` and `25`) and are regenerated, so they do not need to be uploaded.
 
-المجلدان `Clear_Attack_Simulation/` و`work/` مستثناة في `.gitignore`: هي بيانات محاكاة مشتقة من CERT r6.2 (63 ميغابايت) وملكيتها وترخيصها يقرّرهما صاحب المشروع. **النموذج (`../../model`) والاختبارات (`../../tests`) لا تحتاجانها.** تحتاجها فقط سكربتات `pipeline/` و`verify_release.py`.
+The folders `Clear_Attack_Simulation/` and `work/` are excluded in `.gitignore`: they are simulated data derived from CERT r6.2 (63 MB), and their ownership and licence are decided by the project owner. **The model (`../../model`) and the tests (`../../tests`) do not need them.** Only the `pipeline/` scripts and `verify_release.py` need them.
 
-ضع الملفات التالية في مسارها بالضبط (أو وجّه `MUBSIR_DATA` و`MUBSIR_WORK` إلى مواقعها). التحقق من سلامتها: `sha256sum -c SHA256SUMS.txt` من هذا المجلد.
+Place the following files at exactly these paths (or point `MUBSIR_DATA` and `MUBSIR_WORK` to their locations). To check their integrity: `sha256sum -c SHA256SUMS.txt` from this folder.
 
-| الملف (نسبةً إلى هذا المجلد) | SHA-256 (أول 16) |
+| File (relative to this folder) | SHA-256 (first 16) |
 |---|---|
 | `Clear_Attack_Simulation/data/final/behavior_features_r62_ml_final.parquet` | `1aaa189471fb4f57` |
 | `Clear_Attack_Simulation/data/final/user_day_injected_r62.parquet` | `d0f960c97b7cbe17` |
@@ -20,4 +20,4 @@
 | `work/gap_alt_features.parquet` | `689baa59b3611ccd` |
 | `work/prepared_995.parquet` | `aa49c759e42f2c17` |
 
-الملفات في `work/` تُنتَج من `01_prepare.py` و`18` و`21` و`25`؛ والباقي هو مدخلات المحاكاة الأصلية للفريق.
+The files in `work/` are produced by `01_prepare.py`, `18`, `21` and `25`; the rest are the original simulation inputs of the team.

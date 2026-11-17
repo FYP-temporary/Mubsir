@@ -1,100 +1,100 @@
-# تقرير التحقق من الإصدار (Release Verification)
+# Release Verification Report
 
-كل رقم هنا من تشغيل فعلي في 2026-11-15، والسجلات الخام في `docs/pytest_log.txt` و`docs/verify_release_log.txt` و`docs/reproducibility_log.txt` و`docs/feature_contract_log.txt`.
+Every number here comes from an actual run on 2026-11-15; the raw logs are in `docs/pytest_log.txt`, `docs/verify_release_log.txt`, `docs/reproducibility_log.txt` and `docs/feature_contract_log.txt`.
 
-**البيئة:** Linux x86_64، Python 3.13.18، lightgbm 4.7.0، numpy 2.5.3، pandas 3.0.5، scikit-learn 1.9.1، xgboost 3.4.1، pytest 9.1.1، نواتان.
+**Environment:** Linux x86_64, Python 3.13.18, lightgbm 4.7.0, numpy 2.5.3, pandas 3.0.5, scikit-learn 1.9.1, xgboost 3.4.1, pytest 9.1.1, two cores.
 
-## الخلاصة
+## Summary
 
-| الفحص | الأداة | النتيجة |
+| Check | Tool | Result |
 |---|---|---|
-| اختبارات عقد النموذج (11) وسلامة الحزمة (3) | `pytest tests` (لا تحتاج بيانات) | 14 / 14 نجحت |
-| تطابق تعريفات الميزات الـ27 المضافة مع القيم المخزنة | `pipeline/verify_feature_contract.py` | 165,051 خلية و3 حالات ذهبية، 0 اختلاف (انظر `FEATURE_GENERATION_CONTRACT.md` §7) |
-| هاشات الحزمة والنماذج والبيانات والسجلات | `pipeline/35_write_release_hashes.py` | `model/SHA256SUMS.txt` + `docs/RELEASE_HASHES.md` |
-| فحوص الإصدار مع البيانات (30 فحصًا) | `pipeline/verify_release.py` | 30 / 30 نجحت (وأيضًا ضمن هيكل مستودع الفريق، البند 6) |
-| إعادة اشتقاق المعايرة والعتبات من الصفر في نسخة معزولة | `30_export_bundle.py` | مطابقة تامة (انظر 4) |
-| نظافة المستودع من المسارات الشخصية والإيميلات والمفاتيح | بحث نصي | لا شيء (انظر 5) |
+| Model contract tests (11) and bundle integrity (3) | `pytest tests` (needs no data) | 14 / 14 passed |
+| The definitions of the 27 added features match the stored values | `pipeline/verify_feature_contract.py` | 165,051 cells and 3 golden cases, 0 differences (see `FEATURE_GENERATION_CONTRACT.md` §7) |
+| Hashes of the bundle, the models, the data and the logs | `pipeline/35_write_release_hashes.py` | `model/SHA256SUMS.txt` + `docs/RELEASE_HASHES.md` |
+| Release checks with the data (30 checks) | `pipeline/verify_release.py` | 30 / 30 passed (also inside the team repository layout, item 6) |
+| Re-deriving the calibration and thresholds from scratch in an isolated copy | `30_export_bundle.py` | Exact match (see 4) |
+| Repository free of personal paths, emails and keys | Text search | Nothing found (see 5) |
 
-## 1) اختبارات العقد (`tests/test_bundle.py`)
-- **سلامة manifest:** 3 نوافذ، كل نموذج 75 ميزة بلا تكرار، 74 مشتركة، 77 عمودًا مميزًا، وعدد الأشجار في manifest (328 / 337 / 288) يساوي ما في ملف النموذج المحفوظ، ومعامل المعايرة موجب (متزايد رتيبًا).
-- **حارس التسرب:** لا عمود تسمية أو حقيقة أرضية (`is_attack_day`, `scenario_id`, `y_*`, `injected_*` …) ولا أي من الأعمدة الثابتة الـ23 لخط الأساس بين مدخلات النموذج.
-- **العتبات:** 60 → Low، 60.0001 → Medium، 85 → Medium، 85.0001 → High، وتتحول العتبتان من مقياس الخطر إلى الخام وتعودان إلى 60 و85 بدقة أفضل من 1e-6.
-- **العقد:** المخرجات داخل [0, 100]، والمستوى مطابق للخطر، و`alert` يساوي (الخطر > 85)، وترتيب الأعمدة لا يؤثر (فرق أقل من 1e-12)، والأعمدة الزائدة تُهمل، والعمود الناقص يرفع `ValueError`، وNaN مقبولة.
-- **SHAP:** مجموع المساهمات + القيمة الأساسية = log-odds للدرجة الخام (أقل من 1e-9)، والخطر المحسوب من SHAP يطابق `risk_10`.
-- **نتائج متوقعة على `example_input.parquet`:** NVH3726: High وذروة > 99.8 وأول إنذار 2011-01-31؛ DBF3582: High وأول إنذار 2011-05-23؛ SHB3512: Low بذروة 53.7 وبلا إنذار.
+## 1) Contract tests (`tests/test_bundle.py`)
+- **Manifest integrity:** 3 windows, each model has 75 features with no duplicates, 74 shared, 77 distinct columns, and the number of trees in the manifest (328 / 337 / 288) equals the number in the saved model file, and the calibration coefficient is positive (monotonically increasing).
+- **Leakage guard:** no label or ground-truth column (`is_attack_day`, `scenario_id`, `y_*`, `injected_*` …) and none of the 23 constant baseline columns is among the model inputs.
+- **Thresholds:** 60 → Low, 60.0001 → Medium, 85 → Medium, 85.0001 → High, and the two thresholds convert from the risk scale to the raw scale and back to 60 and 85 with a precision better than 1e-6.
+- **Contract:** the outputs are within [0, 100], the level matches the risk, `alert` equals (risk > 85), the column order has no effect (difference below 1e-12), extra columns are ignored, a missing column raises `ValueError`, and NaN is accepted.
+- **SHAP:** the sum of the contributions + the base value = the log-odds of the raw score (below 1e-9), and the risk computed from SHAP matches `risk_10`.
+- **Expected results on `example_input.parquet`:** NVH3726: High, peak > 99.8, first alert 2011-01-31; DBF3582: High, first alert 2011-05-23; SHB3512: Low with a peak of 53.7 and no alert.
 
-## 1ب) اختبارات سلامة الحزمة (`tests/test_integrity.py`)
-- كل ملفات `model/` مطابقة لـ`SHA256SUMS.txt`، والقائمة تشمل النماذج الثلاثة وmanifest وكود الاستدلال.
-- تعديل بايت واحد في manifest، أو حذف نموذج، أو إضافة ملف غير مدرج: كلها تُرفض (`BundleIntegrityError`).
-- استبدال نموذج **مع إعادة توليد قائمة الهاشات**: لا يكشفه إلا تثبيت الـroot hash (هاشّ القائمة نفسها)، وهو ما يختبره الاختبار الثالث. لذلك يجب حفظ الـroot hash خارج مجلد النموذج.
+## 1b) Bundle integrity tests (`tests/test_integrity.py`)
+- All files of `model/` match `SHA256SUMS.txt`, and the list includes the three models, the manifest and the inference code.
+- Modifying a single byte in the manifest, deleting a model, or adding an unlisted file: all are rejected (`BundleIntegrityError`).
+- Replacing a model **while regenerating the hash list**: only pinning the root hash (the hash of the list itself) detects it, which is what the third test checks. Therefore the root hash must be kept outside the model folder.
 
-## 2) فحوص `verify_release.py` (تحتاج `pipeline/data/`)
+## 2) `verify_release.py` checks (need `pipeline/data/`)
 
-**سلامة البيانات والتقسيم**
-- ملفات البيانات العشرة مطابقة لـ`SHA256SUMS.txt`.
-- مستخدمو التطوير (796) والاختبار (199) منفصلون، ومجموعهما 995.
-- التقسيم المعاد اشتقاقه من الكود = `results/final_split.csv`.
-- لا قالب هجوم (`scenario_id`) مشترك بين التطوير والاختبار (270 مقابل 67 قالبًا).
-- لا زوج (مستخدم، يوم) مشترك بين المجموعتين (82,761 مقابل 20,634 مستخدم-يوم).
-- تركيبة الاختبار: 134 مهاجمًا + 65 عاديًا.
+**Data and split integrity**
+- The ten data files match `SHA256SUMS.txt`.
+- The development users (796) and test users (199) are disjoint, and together they total 995.
+- The split re-derived from the code = `results/final_split.csv`.
+- No attack template (`scenario_id`) is shared between development and test (270 versus 67 templates).
+- No (user, day) pair is shared between the two sets (82,761 versus 20,634 user-days).
+- Test composition: 134 attackers + 65 normal users.
 
-**المدخلات:** لا عمود من الأعمدة الـ31 المحظورة (تسميات وحقيقة أرضية) بين الأعمدة الـ77، ولا عمود خط أساس ثابت، وقائمة ميزات كل نافذة في manifest تساوي قائمة التدريب `F75(h)` حرفيًا.
+**Inputs:** none of the 31 forbidden columns (labels and ground truth) is among the 77 columns, and no constant baseline column; the feature list of each window in the manifest equals the training list `F75(h)` literally.
 
-**تكافؤ النماذج:** نموذج joblib (sklearn) وmodel الحزمة (booster الأصلي) يعطيان الدرجات نفسها على 20,634 صف اختبار في النوافذ الثلاث (أقصى فرق = 0.0).
+**Model equivalence:** the joblib model (sklearn) and the bundle model (the native booster) give the same scores on 20,634 test rows in the three windows (maximum difference = 0.0).
 
-**مصفوفات الالتباس المعاد حسابها من الحزمة ومقارنتها بالجداول المخزنة** (TP / FN / FP / TN، كلها مطابقة):
+**Confusion matrices recomputed from the bundle and compared with the stored tables** (TP / FN / FP / TN, all matching):
 
-| المستوى | النافذة | High (>85) | Medium + High (>60) |
+| Level | Window | High (>85) | Medium + High (>60) |
 |---|---|---|---|
-| مستخدمون | 5 | 129 / 5 / 1 / 64 | 132 / 2 / 2 / 63 |
-| مستخدمون | 10 | 127 / 7 / 1 / 64 | 131 / 3 / 1 / 64 |
-| مستخدمون | 20 | 124 / 10 / 1 / 64 | 131 / 3 / 1 / 64 |
-| مستخدمون | أي نافذة | **130 / 4 / 1 / 64** | 132 / 2 / 2 / 63 |
-| صفوف | 5 | 2602 / 804 / 50 / 17178 | 2929 / 477 / 174 / 17054 |
-| صفوف | 10 | 2976 / 1024 / 40 / 16594 | 3337 / 663 / 168 / 16466 |
-| صفوف | 20 | 3601 / 1469 / 43 / 15521 | 4096 / 974 / 181 / 15383 |
+| Users | 5 | 129 / 5 / 1 / 64 | 132 / 2 / 2 / 63 |
+| Users | 10 | 127 / 7 / 1 / 64 | 131 / 3 / 1 / 64 |
+| Users | 20 | 124 / 10 / 1 / 64 | 131 / 3 / 1 / 64 |
+| Users | any window | **130 / 4 / 1 / 64** | 132 / 2 / 2 / 63 |
+| Rows | 5 | 2602 / 804 / 50 / 17178 | 2929 / 477 / 174 / 17054 |
+| Rows | 10 | 2976 / 1024 / 40 / 16594 | 3337 / 663 / 168 / 16466 |
+| Rows | 20 | 3601 / 1469 / 43 / 15521 | 4096 / 974 / 181 / 15383 |
 
-عند High في أي نافذة: Recall = 130/134 = 0.970، وPrecision = 130/131 = 0.992، وFPR = 1/65 = 0.0154.
+At High in any window: Recall = 130/134 = 0.970, Precision = 130/131 = 0.992, and FPR = 1/65 = 0.0154.
 
-**محتوى النطاقات (صفوف الاختبار، نافذة 10):** Low = 83.0% من الصفوف بنسبة هجوم 3.9%؛ Medium = 2.4% بنسبة 73.8%؛ High = 14.6% بنسبة 98.7%.
+**Band content (test rows, window 10):** Low = 83.0% of the rows with an attack share of 3.9%; Medium = 2.4% with a share of 73.8%; High = 14.6% with a share of 98.7%.
 
-## 3) اكتشاف أثناء التحقق (صُحِّح)
-فشل فحص مقارنة التقسيم المحفوظ بالتقسيم المستخدم فعلًا. السبب: أعمدة `part` و`rep*` في `results/user_split.csv` ناتجة عن `02_split.py` القديم (تقسيم عشوائي مصنَّف حسب المستخدم، لا حسب القالب)، وتتطابق مع اختبار المسار النهائي في **42 من 199 مستخدمًا فقط**. المسار النهائي (22 و28 و31 و33) يبني تقسيمًا مجمَّعًا بـ`scenario_id` في الكود ولا يقرأ هذه الأعمدة، لذا **لا أثر على أي نتيجة مذكورة**. التصحيح:
-- أضفت `34_save_final_split.py` الذي يحفظ التقسيم الفعلي في `results/final_split.csv`.
-- أضفت تعليقًا في `02_split.py` يشير إلى أنه قديم.
-- صحّحت جدول `pipeline/README.md` الذي كان يصف خطأً أن `02_split.py` ينتج التقسيم المجمَّع.
-- استبدلت الفحص بمقارنة التقسيم المشتق بـ`final_split.csv`، وأبقيت سطر INFO يوثّق التداخل القديم.
+## 3) A discovery during verification (corrected)
+The check comparing the saved split with the split actually used failed. The cause: the `part` and `rep*` columns in `results/user_split.csv` come from the old `02_split.py` (a random split stratified by user, not by template), and they match the final pipeline's test set for **only 42 of 199 users**. The final pipeline (22, 28, 31 and 33) builds a split grouped by `scenario_id` in the code and does not read these columns, so **there is no effect on any reported result**. The correction:
+- I added `34_save_final_split.py`, which saves the actual split to `results/final_split.csv`.
+- I added a comment in `02_split.py` stating that it is legacy.
+- I corrected the table in `pipeline/README.md`, which wrongly described `02_split.py` as producing the grouped split.
+- I replaced the check with a comparison of the derived split against `final_split.csv`, and kept an INFO line documenting the old overlap.
 
-## 4) إعادة الاشتقاق من الصفر (نسخة معزولة)
-أعدت تشغيل `30_export_bundle.py` في نسخة مؤقتة (60 ثانية): يعيد تدريب 15 نموذج CV (5 طيات × 3 نوافذ) ويشتق معاملات المعايرة والعتبات المرجعية، ويتحقق (assert) من تساويها مع المخزنة في ملفات joblib. النتائج:
-- التأكيدات نجحت لكل النوافذ (العتبات الخام تساوي المخزنة حتى 1e-9).
-- `manifest.json` الناتج **مطابق بايتًا ببايت** لما في `model/`: المعاملات `0.948 / 0.093` و`0.922 / 0.028` و`0.930 / −0.022` للنوافذ 5 و10 و20.
-- هذا يثبت أن التدريب حتمي (deterministic) في هذه البيئة بالبذرة 42.
+## 4) Re-derivation from scratch (isolated copy)
+I re-ran `30_export_bundle.py` in a temporary copy (60 seconds): it retrains 15 CV models (5 folds × 3 windows) and derives the calibration coefficients and the reference thresholds, and asserts that they equal the ones stored in the joblib files. The results:
+- The assertions passed for all windows (the raw thresholds equal the stored ones to 1e-9).
+- The resulting `manifest.json` is **byte-for-byte identical** to the one in `model/`: the coefficients `0.948 / 0.093`, `0.922 / 0.028` and `0.930 / −0.022` for windows 5, 10 and 20.
+- This proves that the training is deterministic in this environment with seed 42.
 
-## 5) المستودع
-بحث نصي في كل ملفات المستودع (ما عدا الملفات الثنائية) عن أسماء شخصية وإيميلات ومسارات Windows وكلمات `token/api_key/password/secret`: **لا نتائج**. أكبر ملف مرفوع إلى git: `cv75_oof_LightGBM.npz` (5.6 ميغابايت)، وكلها أقل بكثير من حد GitHub (100 ميغابايت للملف). ملفات البيانات (63 ميغابايت) مستثناة في `.gitignore`.
+## 5) The repository
+A text search over all repository files (except binary files) for personal names, emails, Windows paths and the words `token/api_key/password/secret`: **no results**. The largest file uploaded to git: `cv75_oof_LightGBM.npz` (5.6 MB), and all are far below the GitHub limit (100 MB per file). The data files (63 MB) are excluded in `.gitignore`.
 
-## 6) تجربة الرفع والتشغيل داخل هيكل مستودع الفريق (`FYP-temporary/Mubsir`)
-فحصت المستودع العام ونسخته محليًا للقراءة، ثم جرّبت الرفع على نسخة محلية من فرع `reef-ml` دون دفع شيء:
-- **مطابقة البيانات:** الملفات الستة الأصلية التي يقرأها المسار موجودة في فرع `remas-mushabbab-attacks-generator` (مجلد `Clear_Attack_Simulation/`) و**مطابقة بايتًا ببايت** (SHA-256) لما دُرّب عليه النموذج.
-- **إعادة التوليد من بيانات الفريق:** من بيانات ذلك الفرع وحدها أعدت توليد الجداول المشتقة الأربعة (`01` ثم `14b` ثم `18` ثم `21` ثم `25`)، فخرجت **مطابقة** لما دُرّب عليه النموذج (نفس الأشكال والأعمدة والقيم، وتطابق SHA-256 لجميعها في `verify_release.py`).
-- **ثم `verify_release.py` بلا تعديل داخل الهيكل `Machine_learning/` + `Clear_Attack_Simulation/` في جذر واحد:** 30 / 30 نجحت.
-- **اكتشاف أثناء التجربة (صُحِّح):** (أ) الخطوة 18 تقرأ `new_rotation_features.parquet` الذي ينتجه `14_new_rotation_features.py`، وكان مؤرشفًا؛ أضفت `14_build_new_rotation_features.py` (مقتطع حرفيًا من الأسطر 1–73، دون جزء التقييم). (ب) `.gitignore` في جذر المستودع يتجاهل `*.log`، فكانت 6 ملفات سجل ستسقط بصمت عند الرفع؛ أضفت استثناءً صريحًا لها في `.gitignore` المجلد. (ج) `common.py` صار يلتقط `Clear_Attack_Simulation/` من جذر المستودع تلقائيًا.
-- **الرفع الجاف:** 127 ملفًا، لا ملف ضمن المتجاهَل، أكبر ملف 5.6 ميغابايت، ولا ملف بيانات parquet خارج `model/` ونتائج التقييم، ولا تعديل على أي ملف في جذر المستودع ولا على مجلدات الأعضاء (لا تعارضات مع فروعهم).
+## 6) Upload and run test inside the team repository layout (`FYP-temporary/Mubsir`)
+I inspected the public repository and copied it locally for reading, then tried the upload on a local copy of the `reef-ml` branch without pushing anything:
+- **Data match:** the six original files that the pipeline reads exist in the branch `remas-mushabbab-attacks-generator` (folder `Clear_Attack_Simulation/`) and are **byte-for-byte identical** (SHA-256) to what the model was trained on.
+- **Regeneration from the team's data:** from the data of that branch alone I regenerated the four derived tables (`01`, then `14b`, then `18`, then `21`, then `25`), and they came out **identical** to what the model was trained on (the same shapes, columns and values, and a SHA-256 match for all of them in `verify_release.py`).
+- **Then `verify_release.py` without modification inside the layout `Machine_learning/` + `Clear_Attack_Simulation/` in one root:** 30 / 30 passed.
+- **Discoveries during the trial (corrected):** (a) step 18 reads `new_rotation_features.parquet`, which is produced by `14_new_rotation_features.py`, and that was archived; I added `14_build_new_rotation_features.py` (extracted verbatim from lines 1–73, without the evaluation part). (b) The `.gitignore` at the repository root ignores `*.log`, so 6 log files would have been silently dropped on upload; I added an explicit exception for them in the folder's `.gitignore`. (c) `common.py` now picks up `Clear_Attack_Simulation/` from the repository root automatically.
+- **Dry-run upload:** 127 files, no file among the ignored ones, the largest file 5.6 MB, no parquet data file outside `model/` and the evaluation results, and no modification to any file in the repository root or to the members' folders (no conflicts with their branches).
 
-## ما لم يُتحقَّق منه (للأمانة)
-1. **لم أعد تشغيل التدريب الكامل** (`28_final75.py` و`31_xgb75.py` و`33_cv_fixed_bands.py`) بعد إعادة التنظيم؛ تغيّرت فيها المسارات فقط. فحص 4 يغطي 15 نموذجًا من أصل 45 في 28، ويعيد تدريبًا فعليًا، لكن ملفات `lgbm_w*.txt` نفسها مأخوذة من joblib المحفوظ ولم تُعَد كتابتها من تدريب جديد.
-2. **مصدر البيانات الأصلية** (`behavior_features_r62_ml_final.parquet`) ناتج من دفتر الفريق قبل هذا العمل؛ تحققت من سلامة الملفات (SHA-256) ومن اتساقها مع المسار، لا من صحة بناء الميزات الأولى من سجلات CERT الخام.
-3. **مقياس Recall@1%FPR** في جداول الصفوف يُقرأ من منحنى ROC للمجموعة نفسها (نقطة تقييم لا عتبة قابلة للنشر)؛ العتبة التشغيلية هي 85.
-4. **لم أشغّل المستودع على GitHub نفسه** (لا CI)، وفحصي كله محلي.
-5. **النتائج على بيانات محاكاة** نسبة المهاجمين فيها 67% في الاختبار، فلا تُعمَّم Precision على بيئة بانتشار أقل.
-6. **لا ترخيص** في المستودع: اختر ترخيصًا قبل النشر العام.
+## What was not verified (for honesty)
+1. **I did not re-run the full training** (`28_final75.py`, `31_xgb75.py` and `33_cv_fixed_bands.py`) after the reorganization; only the paths changed in them. Check 4 covers 15 models out of 45 in 28 and does retrain, but the `lgbm_w*.txt` files themselves are taken from the saved joblib and were not rewritten from a new training run.
+2. **The original data source** (`behavior_features_r62_ml_final.parquet`) is a product of the team's notebook before this work; I verified the integrity of the files (SHA-256) and their consistency with the pipeline, not the correctness of building the first features from the raw CERT logs.
+3. **The Recall@1%FPR metric** in the row tables is read from the ROC curve of the same set (an evaluation point, not a deployable threshold); the operational threshold is 85.
+4. **I did not run the repository on GitHub itself** (no CI), and all my checking is local.
+5. **The results are on simulated data** in which attackers are 67% of the test set, so Precision must not be generalized to an environment with lower prevalence.
+6. **There is no licence** in the repository: choose a licence before public release.
 
-## إعادة التحقق بنفسك
+## Re-verify yourself
 ```bash
 pip install -r model/requirements.txt pytest
-pytest -q tests                                   # بلا بيانات
-# مع البيانات (ضعها في pipeline/data/ كما في pipeline/data/README.md):
+pytest -q tests                                   # no data needed
+# With the data (place it in pipeline/data/ as in pipeline/data/README.md):
 pip install -r pipeline/requirements.txt
-cd pipeline && python verify_release.py           # يخرج بالرمز 0 فقط إذا نجحت كل الفحوص
+cd pipeline && python verify_release.py           # exits with code 0 only if all checks pass
 ```

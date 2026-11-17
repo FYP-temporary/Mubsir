@@ -1,11 +1,9 @@
-# Mubsir (مُبصِر)
+# Mubsir
 
 **Detecting channel-rotating, low-and-slow data exfiltration with UEBA (CERT r6.2).**
 King Khalid University (KKU) graduation project, Digital Forensics track.
 
 For every (user, workday) the model outputs three risk scores in 0–100 (windows of 5, 10 and 20 workdays), a level (Low / Medium / High, fixed thresholds 60 and 85), and a SHAP explanation. One LightGBM model per window, 75 features each. Inference needs only `numpy`, `pandas` and `lightgbm`.
-
-كشف سلوكي (UEBA) لتسريب البيانات البطيء الذي يتنقل بين البريد وUSB وHTTP. لكل (مستخدم، يوم عمل) ثلاث درجات خطر من 0 إلى 100 ومستوى وتفسير SHAP.
 
 ## Quick start
 
@@ -44,7 +42,7 @@ Row level (user-workday), window 10, LightGBM: PR-AUC 0.958, Recall 0.833 at FPR
 | `model/` | **Deployable bundle**: 3 LightGBM boosters, `manifest.json` (feature order, calibration, thresholds), `mubsir_infer.py`, example input |
 | `pipeline/` | Scripts, results and the verification script that rebuild the model (training data excluded, see `pipeline/data/README.md`) |
 | `tests/` | `pytest` contract tests for the bundle |
-| `docs/` | `INTEGRATION_GUIDE.md` (embedding the model + dashboard outputs), `FEATURE_GENERATION_CONTRACT.md` + `golden_feature_cases.json` (how the 27 added features are computed), `RELEASE_HASHES.md` (SHA-256 of the bundle, models, data and logs, with the root hash to pin), `MUBSIR_QA_REPORT.md`, `FEATURE_DEFINITIONS_ROTATION.md`, `VERIFICATION.md` + raw logs, figures (confusion matrices, revised ERD) |
+| `docs/` | `INTEGRATION_GUIDE.md` (embedding the model + dashboard outputs), `FEATURE_GENERATION_CONTRACT.md` + `golden_feature_cases.json` (how the 27 added features are computed), `RELEASE_HASHES.md` (SHA-256 of the bundle, models, data and logs, with the root hash to pin), `MUBSIR_QA_REPORT.md`, `FEATURE_DEFINITIONS_ROTATION.md`, `VERIFICATION.md` + raw logs, figures (confusion matrices) |
 
 ## Verification
 

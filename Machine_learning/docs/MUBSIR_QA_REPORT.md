@@ -1,26 +1,26 @@
-# مُبصِر (Mubsir) — إجابات الأسئلة الستة: التدريب والتقسيم والميزات والنموذج المحفوظ والاستدلال وSHAP
+# Mubsir — Answers to the six questions: training, splitting, features, the saved model, inference and SHAP
 
-**السياق:** كشف تسريب البيانات المتناوب بين القنوات (Email / USB / HTTP) ببطء وبصمت (low-and-slow) على بيانات CERT r6.2 المحاكاة (995 مستخدمًا: 670 مهاجمًا مُحقَن و325 مستخدمًا عاديًا). نموذج لكل نافذة زمنية (5 و10 و20 يوم عمل). كل الأرقام أدناه محسوبة من ملفات النتائج الفعلية، وموضّح في كل موضع هل هي من **الاختبار** (199 مستخدمًا لم تُستخدم في أي قرار) أم من **التحقق المتقاطع** (CV 5×3 على المستخدمين التطويريين).
+**Context:** detection of low-and-slow data exfiltration that rotates between channels (Email / USB / HTTP) on the simulated CERT r6.2 data (995 users: 670 injected attackers and 325 normal users). One model per time window (5, 10 and 20 workdays). All numbers below are computed from the actual result files, and each place states whether it comes from the **test set** (199 users not used in any decision) or from **cross-validation** (5×3 CV on the development users).
 
-**تعريفات أساسية تُستخدم في كل الأقسام:**
-- **درجة الخطر (risk 0–100):** احتمال معايَر ×100 أن يكون المستخدم في ذلك اليوم داخل نافذة تسريب. ليست مقياسًا خطيًا لحجم الانحراف؛ الانحراف يدخل عبر الميزات (أقواها `cumulative_deviation`).
-- **المستويات (عتبتان ثابتتان 60 و85):** منخفض Low: الخطر ≤ 60 · متوسط Medium: 60 < الخطر ≤ 85 · عالٍ High: الخطر > 85. الإنذار (Alert) = High.
-- **خطر المستخدم** = أعلى خطر (peak) له خلال فترة المراقبة، وللنتيجة الإجمالية = الأقصى بين النوافذ الثلاث.
-- **PR-AUC:** مساحة منحنى Precision–Recall. **FPR:** نسبة العاديين الذين أُنذروا خطأً. **Recall@1%FPR:** نسبة اكتشاف الصفوف الهجومية عند عتبة تسمح بإنذار كاذب لـ1% من صفوف العاديين.
+**Basic definitions used in all sections:**
+- **Risk score (risk 0–100):** the calibrated probability ×100 that the user on that day is inside an exfiltration window. It is not a linear measure of the size of the deviation; the deviation enters through the features (the strongest is `cumulative_deviation`).
+- **Levels (two fixed thresholds, 60 and 85):** Low: risk ≤ 60 · Medium: 60 < risk ≤ 85 · High: risk > 85. Alert = High.
+- **User risk** = the user's highest risk (peak) during the monitoring period, and the overall result = the maximum among the three windows.
+- **PR-AUC:** the area under the Precision–Recall curve. **FPR:** the share of normal users who were alerted wrongly. **Recall@1%FPR:** the share of attack rows detected at a threshold that allows a false alarm for 1% of the normal users' rows.
 
 ---
 
-## 1) Training & Evaluation — ما النماذج التي دُرّبت وما نتائجها وأيها الأفضل؟
+## 1) Training & Evaluation — which models were trained, what are their results, and which is best?
 
-### 1.1 النماذج التي دُرّبت
-- **المرحلة الأولى (مقارنة الخوارزميات):** دُرّبت خمس خوارزميات هي DecisionTree وRandomForest وLightGBM وXGBoost وCatBoost على مجموعة ميزات سابقة (87 ميزة). الشجرة المفردة والغابة العشوائية استُبعدتا من نص التقرير، ولم تُعد المقارنة معهما على المجموعة النهائية.
-- **المرحلة النهائية (المقارنة العادلة):** **LightGBM** و**XGBoost** على **مجموعة الميزات نفسها (75 ميزة لكل نافذة)** وبالتقسيم نفسه والبذور نفسها وبروتوكول المعايرة نفسه وبإعداداتهما الافتراضية. ثلاثة نماذج لكل خوارزمية (نافذة 5 و10 و20).
-- **ضبط المعاملات:** جرى بحث Optuna (60 تجربة لكل نافذة، هدفه PR-AUC) على LightGBM، ولم يتجاوز التحسن عتبة الاعتماد المتفق عليها مسبقًا (≥ 0.005 في Recall@1% دون تراجع PR-AUC)، فاعتُمدت **المعاملات الافتراضية**. ملاحظة: مرحلة ثانية تجريبية (توقع استمرار الهجوم) موجودة في المشروع لكنها خارج نطاق هذه الإجابات.
+### 1.1 The models that were trained
+- **First stage (algorithm comparison):** five algorithms were trained: DecisionTree, RandomForest, LightGBM, XGBoost and CatBoost, on an earlier feature set (87 features). The single tree and the random forest were excluded from the report text, and the comparison with them was not repeated on the final set.
+- **Final stage (fair comparison):** **LightGBM** and **XGBoost** on **the same feature set (75 features per window)**, with the same split, the same seeds, the same calibration protocol and their default settings. Three models per algorithm (windows 5, 10 and 20).
+- **Hyperparameter tuning:** an Optuna search (60 trials per window, with PR-AUC as the objective) was run on LightGBM, and the improvement did not exceed the adoption threshold agreed in advance (≥ 0.005 in Recall@1% without a PR-AUC decline), so the **default parameters** were adopted. Note: an experimental second stage (predicting the continuation of the attack) exists in the project but is outside the scope of these answers.
 
-### 1.2 النتائج على الاختبار (199 مستخدمًا: 134 مهاجمًا و65 عاديًا) — مستوى الصفوف
-المقاييس عند عتبة تسمح بـ FPR = 1% من صفوف العاديين:
+### 1.2 Results on the test set (199 users: 134 attackers and 65 normal) — row level
+The metrics at a threshold that allows FPR = 1% of the normal users' rows:
 
-| النافذة | النموذج | PR-AUC | Recall | Precision | F1 |
+| Window | Model | PR-AUC | Recall | Precision | F1 |
 |---|---|---|---|---|---|
 | 5 | LightGBM | 0.962 | 0.860 | 0.944 | 0.900 |
 | 5 | XGBoost | 0.963 | 0.859 | 0.944 | 0.900 |
@@ -29,23 +29,23 @@
 | 20 | LightGBM | 0.952 | 0.800 | 0.963 | 0.874 |
 | 20 | XGBoost | 0.952 | 0.798 | 0.963 | 0.873 |
 
-### 1.3 النتائج باستخدام العتبتين الثابتتين 60/85 — الاختبار
-**مستوى المستخدم** (الإنذار = خطر المستخدم الأقصى > 85؛ TP/FN/FP/TN من 134 مهاجمًا و65 عاديًا):
+### 1.3 Results using the two fixed thresholds 60/85 — test set
+**User level** (alert = the user's maximum risk > 85; TP/FN/FP/TN out of 134 attackers and 65 normal users):
 
-| النطاق | النموذج | TP/FN/FP/TN | Recall | Precision | F1 | FPR |
+| Scope | Model | TP/FN/FP/TN | Recall | Precision | F1 | FPR |
 |---|---|---|---|---|---|---|
-| أقصى النوافذ | LightGBM | 130/4/1/64 | 0.970 | 0.992 | 0.981 | 0.015 |
-| أقصى النوافذ | XGBoost | 129/5/1/64 | 0.963 | 0.992 | 0.977 | 0.015 |
-| نافذة 5 | LightGBM | 129/5/1/64 | 0.963 | 0.992 | 0.977 | 0.015 |
-| نافذة 10 | LightGBM | 127/7/1/64 | 0.948 | 0.992 | 0.969 | 0.015 |
-| نافذة 20 | LightGBM | 124/10/1/64 | 0.925 | 0.992 | 0.958 | 0.015 |
+| Max of windows | LightGBM | 130/4/1/64 | 0.970 | 0.992 | 0.981 | 0.015 |
+| Max of windows | XGBoost | 129/5/1/64 | 0.963 | 0.992 | 0.977 | 0.015 |
+| Window 5 | LightGBM | 129/5/1/64 | 0.963 | 0.992 | 0.977 | 0.015 |
+| Window 10 | LightGBM | 127/7/1/64 | 0.948 | 0.992 | 0.969 | 0.015 |
+| Window 20 | LightGBM | 124/10/1/64 | 0.925 | 0.992 | 0.958 | 0.015 |
 
-عند احتساب Medium وHigh معًا (> 60) بأقصى النوافذ: LightGBM بـ 132/2/2/63 (Recall 0.985، Precision 0.985، F1 0.985، FPR 0.031)، وXGBoost بـ 131/3/3/62 (Recall 0.978، Precision 0.978، F1 0.978، FPR 0.046).
+When Medium and High are counted together (> 60) with the maximum of the windows: LightGBM gives 132/2/2/63 (Recall 0.985, Precision 0.985, F1 0.985, FPR 0.031), and XGBoost gives 131/3/3/62 (Recall 0.978, Precision 0.978, F1 0.978, FPR 0.046).
 
-**مستوى الصفوف** (High): Precision 0.98–0.99 وFPR 0.2–0.3% لكن Recall 0.71–0.76 (الأيام الأولى من الهجوم درجتها أقل؛ المستخدم يُكتشف عادة قبل أن تُكتشف كل أيامه).
+**Row level** (High): Precision 0.98–0.99 and FPR 0.2–0.3% but Recall 0.71–0.76 (the first days of an attack score lower; a user is usually detected before all of their days are detected).
 
-### 1.4 النتائج في التحقق المتقاطع 5×3 (المستخدمون التطويريون، 15 طية)
-| النافذة | النموذج | PR-AUC | Recall@1%FPR | Recall@5%FPR |
+### 1.4 Results in 5×3 cross-validation (development users, 15 folds)
+| Window | Model | PR-AUC | Recall@1%FPR | Recall@5%FPR |
 |---|---|---|---|---|
 | 5 | LightGBM | 0.954 | 0.829 | 0.927 |
 | 5 | XGBoost | 0.953 | 0.826 | 0.927 |
@@ -54,159 +54,159 @@
 | 20 | LightGBM | 0.944 | 0.769 | 0.871 |
 | 20 | XGBoost | 0.944 | 0.764 | 0.871 |
 
-بالعتبتين الثابتتين في CV (مستوى المستخدم، أقصى النوافذ، High، المتوسط ± الانحراف على 15 طية): LightGBM Recall 0.975 ± 0.023، Precision 0.989 ± 0.010، F1 0.982 ± 0.012، FPR 0.023 ± 0.021؛ XGBoost Recall 0.970 ± 0.023، Precision 0.990 ± 0.010، F1 0.979 ± 0.012، FPR 0.021 ± 0.020.
+With the fixed thresholds in CV (user level, maximum of windows, High, mean ± deviation over 15 folds): LightGBM Recall 0.975 ± 0.023, Precision 0.989 ± 0.010, F1 0.982 ± 0.012, FPR 0.023 ± 0.021; XGBoost Recall 0.970 ± 0.023, Precision 0.990 ± 0.010, F1 0.979 ± 0.012, FPR 0.021 ± 0.020.
 
-### 1.5 ما يعنيه كل نطاق خطر (محتوى النطاقات، الاختبار)
-| النطاق | الصفوف (نافذة 10) | نسبة صفوفه التي هي فعلًا في هجوم | المستخدمون (أقصى النوافذ) |
+### 1.5 What each risk band means (band content, test set)
+| Band | Rows (window 10) | Share of its rows that are actually in an attack | Users (max of windows) |
 |---|---|---|---|
-| منخفض ≤ 60 | 83% | 3.9% | 65 مستخدمًا (2 مهاجمان فقط = 3.1%) |
-| متوسط 61–85 | 2.4% | 73.8% | 3 مستخدمين (2 مهاجمان) |
-| عالٍ > 85 | 14.6% | 98.7% | 131 مستخدمًا (130 مهاجمًا، 1 عادي) |
+| Low ≤ 60 | 83% | 3.9% | 65 users (only 2 attackers = 3.1%) |
+| Medium 61–85 | 2.4% | 73.8% | 3 users (2 attackers) |
+| High > 85 | 14.6% | 98.7% | 131 users (130 attackers, 1 normal) |
 
-النطاق المتوسط ضيّق جدًا لأن توزيع الدرجات يميل إلى القطبين (قرب 0 أو قرب 100).
+The Medium band is very narrow because the distribution of the scores leans toward the two poles (near 0 or near 100).
 
-### 1.6 أي نموذج هو الأفضل؟
-**LightGBM**، بفارق اسمي لا يعتد به إحصائيًا:
-- في الاختبار والـCV يتقدم LightGBM في أغلب المقاييس (Recall@1% بـ 0.003–0.005، وPR-AUC بـ 0.0003–0.0009 في CV، وRecall على مستوى المستخدم بـ +0.005 إلى +0.007)، لكن الفروق الثنائية عبر الطيات الـ15 أقل من الانحراف المعياري (0.001–0.012) وفاز في 8 من 15 طية فقط في مقياس المستخدم الرئيسي.
-- Precision وFPR متطابقان تقريبًا (0.99 و1.5–2%).
-- يُرجَّح LightGBM لأسباب عملية: أسرع تدريبًا (في تشغيلنا استغرق تدريب النوافذ الثلاث نحو نصف زمن XGBoost)، ويدعم القيم الناقصة أصليًا، ويُحفظ بصيغة نصية بسيطة دون pickle.
+### 1.6 Which model is best?
+**LightGBM**, by a nominal margin that is not statistically significant:
+- In the test and the CV, LightGBM leads on most metrics (Recall@1% by 0.003–0.005, PR-AUC by 0.0003–0.0009 in CV, and user-level Recall by +0.005 to +0.007), but the paired differences across the 15 folds are smaller than the standard deviation (0.001–0.012) and it won in only 8 of the 15 folds on the main user metric.
+- Precision and FPR are nearly identical (0.99 and 1.5–2%).
+- LightGBM is preferred for practical reasons: faster training (in our run, training the three windows took about half the time of XGBoost), native support for missing values, and storage in a simple text format without pickle.
 
-### 1.7 تحفظات
-أرقام الاختبار على 65 مستخدمًا عاديًا فقط، فمستخدم عادي واحد يغيّر FPR بنحو 1.5 نقطة؛ مجالات الثقة (bootstrap) واسعة (مثلًا Recall@1% لنافذة 20 بين 0.74 و0.84). كل النتائج على بيانات محاكاة CERT r6.2 ولم تُختبر على بيانات تشغيلية.
+### 1.7 Caveats
+The test numbers rest on only 65 normal users, so one normal user changes the FPR by about 1.5 points; the confidence intervals (bootstrap) are wide (for example, Recall@1% for window 20 is between 0.74 and 0.84). All results are on simulated CERT r6.2 data and were not tested on operational data.
 
 ---
 
-## 2) Data Splitting — كيف قُسّمت البيانات وهل تأكدنا من عدم التداخل؟
+## 2) Data Splitting — how was the data split, and did we make sure there is no overlap?
 
-### 2.1 التصميم
-1. **الاختبار (Test):** 199 مستخدمًا (134 مهاجمًا + 65 عاديًا) بتقسيم `StratifiedGroupKFold` (أول طية من 5) مجمَّعًا بـ `scenario_id` ومقسّمًا حسب المجموعة × مستوى التخفي. لم تُستخدم هذه المجموعة في التدريب ولا في المعايرة ولا في العتبات ولا في اختيار النموذج أو الميزات.
-2. **التطوير (Development):** 796 مستخدمًا (536 مهاجمًا + 260 عاديًا).
-3. **التحقق (Validation):** تحقق متقاطع 5×3 (5 طيات × 3 تكرارات بذور مختلفة) داخل التطوير، بالتجميع نفسه حسب السيناريو.
-4. **الإيقاف المبكر:** 15% من مستخدمي تدريب كل طية (مجمعون حسب السيناريو أيضًا) يُحجزون لإيقاف التدريب مبكرًا، ولا يدخلون في التدريب ولا التحقق.
-5. **المعايرة والعتبات المرجعية:** من درجات الطيات الخارجية (out-of-fold) للتطوير فقط (Platt scaling).
-6. **النموذج النهائي** يُعاد تدريبه على كل مستخدمي التطوير الـ796 بعدد أشجار = متوسط الأشجار في CV.
+### 2.1 The design
+1. **Test:** 199 users (134 attackers + 65 normal) by `StratifiedGroupKFold` (the first of 5 folds) grouped by `scenario_id` and stratified by group × stealth level. This set was not used in training, calibration, thresholds, or the choice of model or features.
+2. **Development:** 796 users (536 attackers + 260 normal).
+3. **Validation:** 5×3 cross-validation (5 folds × 3 repetitions with different seeds) inside development, with the same grouping by scenario.
+4. **Early stopping:** 15% of the training users of each fold (also grouped by scenario) are held out to stop training early, and they enter neither the training nor the validation.
+5. **Calibration and reference thresholds:** from the out-of-fold scores of development only (Platt scaling).
+6. **The final model** is retrained on all 796 development users with a number of trees = the average number of trees in CV.
 
-### 2.2 فحوص عدم التداخل (نُفذت فعليًا)
-| الفحص | النتيجة |
+### 2.2 Overlap checks (actually executed)
+| Check | Result |
 |---|---|
-| مستخدمون مشتركون بين التطوير والاختبار | **0** |
-| سيناريوهات مشتركة بين التطوير والاختبار | **0** |
-| أزواج (مستخدم، يوم) مشتركة | **0** |
-| تداخل المستخدمين بين التدريب والتحقق في الطيات الـ15 | **0** |
-| تداخل السيناريوهات بين التدريب والتحقق في الطيات الـ15 | **0** |
-| تداخل التدريب مع جزء الإيقاف المبكر (مستخدمون وسيناريوهات) | **0** |
-| استخدام مستخدمي الاختبار في أي خطوة تطوير | لا |
+| Users shared between development and test | **0** |
+| Scenarios shared between development and test | **0** |
+| Shared (user, day) pairs | **0** |
+| User overlap between training and validation in the 15 folds | **0** |
+| Scenario overlap between training and validation in the 15 folds | **0** |
+| Overlap of training with the early-stopping part (users and scenarios) | **0** |
+| Use of test users in any development step | No |
 
-**أهمية التجميع بالسيناريو:** 505 من 995 مستخدمًا يشتركون في قوالب هجوم مكررة (Reused template)؛ لو قُسّم بالمستخدم فقط لظهر القالب نفسه في التدريب والاختبار ولتضخمت النتائج.
+**The importance of grouping by scenario:** 505 of the 995 users share duplicated attack templates (reused template); if the split were by user only, the same template would appear in training and test and the results would be inflated.
 
-### 2.3 النوافذ الزمنية
-- كل صفوف المستخدم الواحد تقع في طرف واحد فقط، فلا تتقاطع نوافذ التدريب والاختبار لمستخدم واحد.
-- **كل ميزة سببية (causal):** القيمة في اليوم t تستخدم أيام العمل حتى t فقط، وخط الأساس (P50/P90/P95) من عام 2010 فقط. تحققت من ذلك ببرمجة حرفية مقابل التنفيذ على آلاف الخلايا (0 اختلافات) للميزات التي بنيتها، وبمطابقة `cumulative_deviation` مع عمود الفريق.
-- **الهدف:** `y_h` = 1 إذا كان المستخدم في يوم هجوم خلال آخر h أيام عمل (اليوم محتسب)، فلا يستخدم أي معلومة مستقبلية.
-- **تنبيه صريح:** التقسيم **بالمستخدم وليس بالزمن**. مجموعتا التطوير والاختبار تغطيان الفترة نفسها (3 يناير–1 يونيو 2011). لا يوجد تداخل في المستخدمين، لكن النتائج لا تثبت التعميم على فترة زمنية لاحقة.
+### 2.3 Time windows
+- All rows of one user fall on one side only, so the training and test windows of a single user do not intersect.
+- **Every feature is causal:** the value on day t uses the workdays up to t only, and the baseline (P50/P90/P95) is from 2010 only. I verified this with a literal implementation against the pipeline on thousands of cells (0 differences) for the features I built, and by matching `cumulative_deviation` with the team's column.
+- **Target:** `y_h` = 1 if the user is on an attack day within the last h workdays (the current day included), so it uses no future information.
+- **Explicit warning:** the split is **by user and not by time**. The development and test sets cover the same period (3 January–1 June 2011). There is no user overlap, but the results do not prove generalization to a later period.
 
 ---
 
-## 3) Features & Labels — ملف البيانات والأعمدة
+## 3) Features & Labels — the data file and the columns
 
-### 3.1 ملف البيانات المعتمد
-- **الأساس:** `prepared_995.parquet` (103,395 صفًا × 125 عمودًا؛ صف لكل مستخدم/يوم عمل، 995 مستخدمًا) المبني من `behavior_features_r62_ml_final`.
-- **إضافات مبنية فوقه (بالمفتاح user+day):** ميزات الأدلة (`18_build_evidence_features.py`)، وميزات `21_build_final_features.py` (`nr_alt` و`nr_stealth_acc` ونسب P90)، وميزة `nr_gap_alt_2` (`25_build_gap_alt.py`).
-- المدخلات النهائية للنماذج: **77 عمودًا** إجمالًا؛ كل نموذج يستخدم **75** (الـ74 المتفق عليها + `nr_gap_alt_2` لنافذته).
+### 3.1 The adopted data file
+- **The base:** `prepared_995.parquet` (103,395 rows × 125 columns; one row per user/workday, 995 users) built from `behavior_features_r62_ml_final`.
+- **Additions built on top of it (by the key user+day):** the evidence features (`18_build_evidence_features.py`), the features of `21_build_final_features.py` (`nr_alt`, `nr_stealth_acc` and the P90 ratios), and the feature `nr_gap_alt_2` (`25_build_gap_alt.py`).
+- The final inputs of the models: **77 columns** in total; each model uses **75** (the 74 agreed + `nr_gap_alt_2` of its window).
 
-### 3.2 الميزات المستخدمة (74 مشتركة + 1 لكل نافذة)
-**أساسية (41):**
+### 3.2 The features used (74 shared + 1 per window)
+**Basic (41):**
 `email_event_count`, `external_email_count`, `external_email_count_{5,10,20,30}wd`, `email_active_days_{5,10,20}wd`, `email_count_to_p95_ratio`, `email_count_to_p90_ratio`, `usb_copy_count`, `usb_copy_count_{5,10,20,30}wd`, `usb_active_days_{5,10,20}wd`, `file_event_count`, `unique_usb_files`, `usb_copy_to_p95_ratio`, `usb_copy_to_p90_ratio`, `http_event_count`, `www_visit_count`, `www_upload_count`, `http_upload_count_{5,10,20,30}wd`, `http_active_days_{5,10,20}wd`, `http_upload_to_p95_ratio`, `http_upload_to_p90_ratio`, `unique_external_recipients`, `unique_external_domains`, `unique_upload_domains`, `unique_domains`, `emails_with_attachments`, `attachment_count`.
 
-**التراكم والتحول (12):** `cumulative_deviation_{5,10,20,30}wd`, `consecutive_elevated_days_{5,10,20,30}wd`, `channel_distribution_shift_{5,10,20,30}wd`.
+**Accumulation and shift (12):** `cumulative_deviation_{5,10,20,30}wd`, `consecutive_elevated_days_{5,10,20,30}wd`, `channel_distribution_shift_{5,10,20,30}wd`.
 
-**التناوب `nr_*` (21 = 7 × {5,10,20}wd):** `nr_m`, `nr_entropy`, `nr_excl_days`, `nr_overlap_days`, `nr_alt`, `nr_handoff`, `nr_stealth_acc`.
+**Rotation `nr_*` (21 = 7 × {5,10,20}wd):** `nr_m`, `nr_entropy`, `nr_excl_days`, `nr_overlap_days`, `nr_alt`, `nr_handoff`, `nr_stealth_acc`.
 
-**الميزة التجريبية (1 لكل نموذج):** `nr_gap_alt_2_5wd` أو `_10wd` أو `_20wd` (نسبة تغيّر القناة المهيمنة بين أيام الانحراف المتجاورة شرط ألا يفصل بينها أكثر من يومي عمل هادئين؛ تعريفها الكامل في `FEATURE_DEFINITIONS_ROTATION.md`).
+**The experimental feature (1 per model):** `nr_gap_alt_2_5wd`, `_10wd` or `_20wd` (the rate of change of the dominant channel between adjacent deviation days, provided they are separated by no more than two quiet workdays; its full definition is in `FEATURE_DEFINITIONS_ROTATION.md`).
 
-### 3.3 الهدف (Target)
-`y_5` للنموذج 5، و`y_10` للنموذج 10، و`y_20` للنموذج 20. نسبة الإيجابيات في التطوير: 16.6% و19.5% و24.7%.
+### 3.3 The target
+`y_5` for model 5, `y_10` for model 10, and `y_20` for model 20. The share of positives in development: 16.6%, 19.5% and 24.7%.
 
-### 3.4 الأعمدة المستبعدة
-| المستبعد | السبب |
+### 3.4 The excluded columns
+| Excluded | Reason |
 |---|---|
-| `user`, `day`, `first_logon`, `last_logoff`, `is_weekend` | هوية/وقت، لا تعمّم |
-| `y`, `y_5/10/20`, `yf_5/10/20` | تسميات (الهدف أو مشتقاته المستقبلية) |
-| `group`, `stealth`, `scenario_id` | بيانات السيناريو/التقسيم |
-| 23 عمود خط أساس ثابتًا لكل مستخدم (مثل `email_count_p50/p90/p95`, `usb_copy_p95`, `http_upload_p95`, `*_active_rate`, `*_mad`, `baseline_workdays`) | قيم ثابتة للمستخدم تتيح «حفظ هويته»؛ أُبقيت نسبها (to_p95_ratio) فقط |
-| **Ground Truth:** `is_attack_day`, `is_scheduled`, `day_status`, `planned_channels`, `injected_channel_count`, `injected_email`, `injected_usb`, `injected_http`, `injected_events_total`, `stealth_level` | حقيقة أرضية؛ **لم تدخل أي نموذج** (تحققت أن لا عمود منها ضمن الـ77) |
-| `unique_usb_extensions` | كلها أصفار بسبب خطأ regex (escape زائد) في معالجة الفريق، لا قيمة لها |
-| `combined_channel_intensity`, `dominant_channel_switches_30wd`, `email_bytes_to_p95_ratio` | حُذفت بقرار تصميم |
+| `user`, `day`, `first_logon`, `last_logoff`, `is_weekend` | Identity/time, does not generalize |
+| `y`, `y_5/10/20`, `yf_5/10/20` | Labels (the target or its future-looking derivatives) |
+| `group`, `stealth`, `scenario_id` | Scenario/split data |
+| 23 constant per-user baseline columns (such as `email_count_p50/p90/p95`, `usb_copy_p95`, `http_upload_p95`, `*_active_rate`, `*_mad`, `baseline_workdays`) | Constant values per user that allow "memorizing its identity"; only their ratios (to_p95_ratio) were kept |
+| **Ground Truth:** `is_attack_day`, `is_scheduled`, `day_status`, `planned_channels`, `injected_channel_count`, `injected_email`, `injected_usb`, `injected_http`, `injected_events_total`, `stealth_level` | Ground truth; **did not enter any model** (I verified that none of them is among the 77 columns) |
+| `unique_usb_extensions` | All zeros because of a regex bug (an extra escape) in the team's processing, no value |
+| `combined_channel_intensity`, `dominant_channel_switches_30wd`, `email_bytes_to_p95_ratio` | Dropped by a design decision |
 
-ملاحظة: الاسم `nr_stealth_acc` يحتوي كلمة stealth لكنه محسوب من عدّادات السلوك وP95 فقط، ولا علاقة له بعمود التخفي في الحقيقة الأرضية.
+Note: the name `nr_stealth_acc` contains the word stealth, but it is computed from the behavior counters and P95 only, and has nothing to do with the stealth column in the ground truth.
 
 ---
 
-## 4) Saved Model — النموذج المحفوظ
+## 4) Saved Model — the saved model
 
-**المجلد `model/` (3.4 ميغابايت، كان اسمه mubsir_bundle سابقًا):**
-| الملف | المحتوى |
+**The folder `model/` (3.4 MB, previously named mubsir_bundle):**
+| File | Content |
 |---|---|
-| `lgbm_w5.txt`, `lgbm_w10.txt`, `lgbm_w20.txt` | النماذج الثلاثة بصيغة LightGBM الأصلية النصية (لا pickle؛ 328 و337 و288 شجرة) |
-| `manifest.json` | **ترتيب الميزات** لكل نافذة (75 اسمًا)، معاملات المعايرة (Platt) لكل نافذة، العتبتان 60/85، الأعمدة المطلوبة الـ77، تعريف الهدف |
-| `mubsir_infer.py` | دالة التقييم والتفسير (تحتاج numpy وpandas وlightgbm فقط) |
-| `example_input.parquet` | مثال إدخال (3 مستخدمين) |
-| `README.md` | الاستخدام والعقد |
+| `lgbm_w5.txt`, `lgbm_w10.txt`, `lgbm_w20.txt` | The three models in the native LightGBM text format (no pickle; 328, 337 and 288 trees) |
+| `manifest.json` | The **feature order** of each window (75 names), the calibration coefficients (Platt) of each window, the 60/85 thresholds, the 77 required columns, the target definition |
+| `mubsir_infer.py` | The scoring and explanation function (needs only numpy, pandas and lightgbm) |
+| `example_input.parquet` | An input example (3 users) |
+| `README.md` | Usage and the contract |
 
-**المعالجة المسبقة (Preprocessing):** لا توجد. لا تطبيع ولا ترميز؛ نماذج الأشجار لا تتأثر بمقياس القيم، وLightGBM تعالج القيم الناقصة (NaN) أصليًا. كل ما تعتمد عليه الحزمة هو: **ترتيب الأعمدة** (يُطبَّق تلقائيًا من الـmanifest) ومعاملات **المعايرة**.
+**Preprocessing:** there is none. No normalization and no encoding; tree models are not affected by the scale of values, and LightGBM handles missing values (NaN) natively. All the bundle depends on is: **the column order** (applied automatically from the manifest) and the **calibration** coefficients.
 
-**التحقق من التشغيل بدون إعادة تدريب:** نُسخت الحزمة إلى مجلد مستقل وشُغّلت من عملية بايثون جديدة على ميزات الاختبار، فأعادت النتائج المحفوظة نفسها تمامًا (130/4/1/64 لأقصى النوافذ، و129/5/1/64 و127/7/1/64 و124/10/1/64 للنوافذ الثلاث)، وتطابقت الدرجات الخام مع النموذج الأصلي.
+**Verification of running without retraining:** the bundle was copied to a separate folder and run from a new Python process on the test features, and it returned exactly the same saved results (130/4/1/64 for the maximum of windows, and 129/5/1/64, 127/7/1/64 and 124/10/1/64 for the three windows), and the raw scores matched the original model.
 
-**حدود:**
-- الحزمة تستقبل **الميزات الجاهزة**؛ بناء الميزات من السجلات الخام (السكربتات 18 و21 و25 وبيانات الفريق) غير مغلّف بعد ولم يُختبر على بيانات من خارج المشروع.
-- النماذج مدرّبة على 796 مستخدمًا (لا على الـ995 كلهم)، وعلى بيانات محاكاة.
+**Limits:**
+- The bundle receives **ready-made features**; building the features from the raw logs (scripts 18, 21 and 25 and the team's data) is not yet packaged and has not been tested on data from outside the project.
+- The models are trained on 796 users (not all 995), and on simulated data.
 
 ---
 
-## 5) Inference & Outputs — الاستدلال والمخرجات
+## 5) Inference & Outputs — inference and outputs
 
-**الاستخدام:**
+**Usage:**
 ```python
 from mubsir_infer import MubsirScorer
 import pandas as pd
-sc   = MubsirScorer("model")                 # يحمّل manifest + النماذج
-X    = pd.read_parquet("example_input.parquet")      # user, day + الأعمدة الـ77
-rows = sc.score(X)                                   # مخرجات كل يوم
-users= sc.score_users(rows)                          # مخرجات كل مستخدم
+sc   = MubsirScorer("model")                 # loads the manifest + the models
+X    = pd.read_parquet("example_input.parquet")      # user, day + the 77 columns
+rows = sc.score(X)                                   # outputs for each day
+users= sc.score_users(rows)                          # outputs for each user
 ```
 
-**مخرجات الصفوف `score()`:** `user`, `day`, `score_raw_{5,10,20}` (الاحتمال الخام)، `risk_{5,10,20}` (0–100)، `level_{5,10,20}` (Low/Medium/High)، `risk` (الأقصى بين النوافذ)، `level`، `alert` (صحيح عندما يتجاوز خطر أي نافذة 85)، `alert_windows` (النوافذ التي أطلقت الإنذار).
+**The row outputs of `score()`:** `user`, `day`, `score_raw_{5,10,20}` (the raw probability), `risk_{5,10,20}` (0–100), `level_{5,10,20}` (Low/Medium/High), `risk` (the maximum among the windows), `level`, `alert` (true when the risk of any window exceeds 85), `alert_windows` (the windows that raised the alert).
 
-**مخرجات المستخدمين `score_users()`:** `risk_{5,10,20}_peak`، `risk_peak` (الأقصى)، `level`، `alert`، `n_days`، `peak_day`، `first_alert_day`.
+**The user outputs of `score_users()`:** `risk_{5,10,20}_peak`, `risk_peak` (the maximum), `level`, `alert`, `n_days`, `peak_day`, `first_alert_day`.
 
-**معادلة الدرجة:** `risk = 100 × sigmoid( a × logit(raw) + b )` حيث (a, b) معاملات Platt لكل نافذة (نافذة 5: 0.948 و0.093؛ نافذة 10: 0.922 و0.028؛ نافذة 20: 0.930 و−0.022).
+**The score formula:** `risk = 100 × sigmoid( a × logit(raw) + b )` where (a, b) are the Platt coefficients of each window (window 5: 0.948 and 0.093; window 10: 0.922 and 0.028; window 20: 0.930 and −0.022).
 
-**العتبات المستخدمة للإنذار:**
-| الحد | القيمة (مقياس الخطر) | المستوى |
+**The thresholds used for the alert:**
+| Limit | Value (risk scale) | Level |
 |---|---|---|
-| منخفض | الخطر ≤ 60 | Low |
-| متوسط | 60 < الخطر ≤ 85 | Medium |
-| عالٍ | الخطر > 85 | High — **يصدر Alert** |
+| Low | risk ≤ 60 | Low |
+| Medium | 60 < risk ≤ 85 | Medium |
+| High | risk > 85 | High — **issues an Alert** |
 
-الحدان 60 و85 ثابتان (قرار المشروع) ولا يُضبطان على أي بيانات. العتبات المأخوذة من النسب المئوية (95 و85 لدرجات المستخدمين العاديين) مخزّنة في الـmanifest للرجوع فقط ولا تُستخدم. وتُستعمل المكافئات الخام عبر `sc.thresholds()` عند الحاجة.
+The limits 60 and 85 are fixed (a project decision) and are not tuned on any data. The thresholds taken from percentiles (95 and 85 of the normal users' scores) are stored in the manifest for reference only and are not used. The raw equivalents are used through `sc.thresholds()` when needed.
 
-**سلوك الدالة:** ترتيب الأعمدة غير مهم، والأعمدة الزائدة تُهمل، والعمود الناقص يرفع خطأ يسمّي الأعمدة المفقودة، والقيم الناقصة مقبولة.
+**Function behavior:** the column order does not matter, extra columns are ignored, a missing column raises an error that names the missing columns, and missing values are accepted.
 
 ---
 
-## 6) SHAP — التفسير لكل تنبؤ
+## 6) SHAP — the explanation for each prediction
 
-**الطريقة:** TreeSHAP (دقيقة لنماذج LightGBM) عبر `pred_contrib` في المكتبة نفسها؛ لا حاجة لمكتبة shap في الاستدلال. المساهمات بمقياس log-odds للدرجة الخام: **مجموع المساهمات + القيمة الأساسية = logit(الدرجة الخام)** (تحققت من الجمع، أقصى خطأ 5×10⁻¹⁴). القيمة الموجبة ترفع الخطر والسالبة تخفضه.
+**The method:** TreeSHAP (exact for LightGBM models) via `pred_contrib` in the same library; the shap library is not needed for inference. The contributions are on the log-odds scale of the raw score: **the sum of the contributions + the base value = logit(the raw score)** (I verified the sum, maximum error 5×10⁻¹⁴). A positive value raises the risk and a negative one lowers it.
 
-**الاستخدام:**
+**Usage:**
 ```python
-sc.explain(X.iloc[[i]], window=10, top_k=5)      # جدول: rank, feature, family, value, shap, effect, risk
-sc.explain_text(X.iloc[[i]], 10, 5)              # سطر مقروء
+sc.explain(X.iloc[[i]], window=10, top_k=5)      # table: rank, feature, family, value, shap, effect, risk
+sc.explain_text(X.iloc[[i]], 10, 5)              # a readable line
 ```
-أعمدة المخرجات: `row`, `user`, `day`, `window`, `rank`, `feature`, `family`, `value`, `shap`, `effect` (يرفع/يخفض الخطر)، `base_logodds`, `logodds`, `risk`.
+The output columns: `row`, `user`, `day`, `window`, `rank`, `feature`, `family`, `value`, `shap`, `effect` (raises/lowers the risk), `base_logodds`, `logodds`, `risk`.
 
-**مثال حقيقي — إنذار صحيح (مستخدم مهاجم، 2011-03-01، نافذة 10، الخطر 99.9، High):**
-| الترتيب | الميزة | القيمة | المساهمة |
+**A real example — a correct alert (an attacker user, 2011-03-01, window 10, risk 99.9, High):**
+| Rank | Feature | Value | Contribution |
 |---|---|---|---|
 | 1 | `cumulative_deviation_10wd` | 11.33 | +4.43 |
 | 2 | `email_event_count` | 17 | +1.60 |
@@ -214,18 +214,18 @@ sc.explain_text(X.iloc[[i]], 10, 5)              # سطر مقروء
 | 4 | `cumulative_deviation_20wd` | 20.42 | +1.04 |
 | 5 | `external_email_count_20wd` | 91 | +0.64 |
 
-**مثال هجوم فائت (2011-04-12، الخطر 53.7، Low):** أهم المساهمات `http_event_count=95` (+0.97)، `email_event_count=10` (+0.89)، `unique_upload_domains=3` (−0.82)، لكن الانحراف التراكمي لم يكن كافيًا لرفع الخطر فوق 60، وهو نمط الفوات الذي لاحظناه: هجمات قصيرة بقناة واحدة.
+**A missed attack example (2011-04-12, risk 53.7, Low):** the top contributions are `http_event_count=95` (+0.97), `email_event_count=10` (+0.89), `unique_upload_domains=3` (−0.82), but the accumulated deviation was not enough to raise the risk above 60, which is the pattern of misses that we observed: short attacks on a single channel.
 
-**التفسير العام للنماذج (على الاختبار):**
-- حصة العائلات من إجمالي |SHAP|: الانحراف التراكمي والتحول 31% (نافذة 5) و35% (10) و40% (20)؛ البريد 29% و24% و19%؛ ميزات التناوب `nr_*` 13% و16% و17%؛ HTTP نحو 10–12%؛ USB 8–11%؛ ميزة `nr_gap_alt_2` أقل من 0.5%.
-- **الانحراف التراكمي** هو أقوى ميزة في النوافذ الثلاث (متوسط |SHAP| من 0.86 إلى 1.46).
-- ميزات التناوب تُستخدم جزئيًا لكنها قابلة للتعويض بغيرها (إزالتها لا تغيّر الأداء ضمن الضجيج).
-- ميزتان لهما اتجاه معاكس لما يُتوقع (`http_event_count` و`unique_usb_files`: ارتفاعهما يقلل الخطر)، وتفسيرهما المحتمل أنهما يعملان كسياق تطبيعي؛ لم يُختبر هذا بعد.
-- SHAP تفسّر سلوك النموذج لا آلية الهجوم الحقيقية.
+**Global explanation of the models (on the test set):**
+- The share of the families in the total |SHAP|: accumulated deviation and shift 31% (window 5), 35% (10) and 40% (20); email 29%, 24% and 19%; the rotation features `nr_*` 13%, 16% and 17%; HTTP about 10–12%; USB 8–11%; the feature `nr_gap_alt_2` below 0.5%.
+- **The accumulated deviation** is the strongest feature in the three windows (mean |SHAP| from 0.86 to 1.46).
+- The rotation features add a small but consistent gain: removing them lowered the cross-validated Recall@1%FPR by 0.005 to 0.009 and the PR-AUC by 0.0016 to 0.0039, and the gain grows with the window length; the accumulated deviation features remain the main dependence of the models.
+- Two features have the opposite direction to what is expected (`http_event_count` and `unique_usb_files`: higher values lower the risk); their likely explanation is that they act as a normalizing context; this has not yet been tested.
+- SHAP explains the model's behavior, not the real mechanism of the attack.
 
-**الملفات:** `results/shap75/` (الأهمية والعائلات والاتجاه والحالات والمخططات)، و`27_shap.py` و`29_shap75.py`.
+**The files:** `results/shap75/` (the importance, the families, the direction, the cases and the plots), and `27_shap.py` and `29_shap75.py`.
 
 ---
 
-## ملحق: الملفات الرئيسية
-`22_final_model.py` (74 ميزة)، `28_final75.py` (75 ميزة)، `31_xgb75.py` (XGBoost-75)، `32_fixed_bands.py` و`33_cv_fixed_bands.py` (العتبات الثابتة)، `30_export_bundle.py` (الحزمة)، `model/`، والنتائج في `pipeline/results/final75_*` و`results/xgb75_*` و`results/fixed_bands_*` و`results/cv75_fixed_bands_*`.
+## Appendix: the main files
+`22_final_model.py` (74 features), `28_final75.py` (75 features), `31_xgb75.py` (XGBoost-75), `32_fixed_bands.py` and `33_cv_fixed_bands.py` (the fixed thresholds), `30_export_bundle.py` (the bundle), `model/`, and the results in `pipeline/results/final75_*`, `results/xgb75_*`, `results/fixed_bands_*` and `results/cv75_fixed_bands_*`.
