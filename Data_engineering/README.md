@@ -1,409 +1,323 @@
-# Data Engineering Pipeline
+# CERT r6.2 Data Engineering Pipeline
 
-This directory contains the **Data Engineering component** of the graduation project:
+This directory contains the data engineering workflow developed for the graduation project:
 
 **AI-Based Detection of Cross-Channel Low-and-Slow Data Exfiltration Using UEBA**
 
-The purpose of this component is to transform the raw CERT Insider Threat Dataset r4.2 into structured behavioral data that can later be used for attack simulation, machine-learning experiments, and insider-threat detection.
-
-The pipeline performs raw-data aggregation, user-specific baseline construction, behavioral feature engineering, ground-truth preparation, documentation, and automated data-quality validation.
+The pipeline processes the **CERT Insider Threat Dataset r6.2** and prepares structured datasets for behavioral analysis, synthetic attack generation, machine learning, and evaluation.
 
 ---
 
-## Dataset Overview
+## Overview
 
-This project uses the **CERT Insider Threat Test Dataset, release r4.2**.
+The purpose of this pipeline is to transform the original CERT r6.2 activity logs into clean, structured, user-level behavioral datasets.
 
-The CERT dataset was developed for insider-threat research by the **CERT Division of Carnegie Mellon University's Software Engineering Institute (SEI)** in collaboration with **ExactData, LLC**, with support from **DARPA I2O**.
+The workflow focuses on three data-exfiltration channels:
 
-The dataset is **synthetic**.
+- External Email
+- USB / Removable Media
+- HTTP Upload
 
-It does not contain real employee logs from a real organization. Instead, it simulates activity inside an enterprise environment and includes:
+It also uses logon activity to define valid user workdays and the official CERT answer files to construct ground-truth information for known malicious users.
 
-- synthetic normal user behavior,
-- synthetic malicious insider behavior,
-- organizational information,
-- and ground-truth records describing known malicious scenarios.
+The resulting datasets support later stages of the project, including:
 
-Synthetic datasets are particularly useful in insider-threat research because real organizational logs are difficult to obtain and distribute due to privacy, confidentiality, and security concerns.
-
-The CERT dataset provides a controlled environment in which malicious users and malicious time periods are known, allowing detection methods to be evaluated against known ground truth.
-
----
-
-## Main Data Sources
-
-The main CERT r4.2 activity sources used in this project are:
-
-| Source | Purpose |
-|---|---|
-| `email.csv` | Email activity, recipients, message size, attachments, and content |
-| `device.csv` | USB/removable-device connect and disconnect activity |
-| `file.csv` | File activity associated with removable media |
-| `http.csv` | Web requests and accessed URLs |
-| `logon.csv` | Logon and logoff activity |
-| `answers/` | Ground-truth information for known malicious scenarios |
-
-Additional CERT data such as `psychometric.csv` and `LDAP/` is preserved with the raw dataset but is not currently required by the main behavioral feature pipeline.
-
----
-
-## Ground Truth
-
-The CERT r4.2 ground truth used in this project contains:
-
-- **70 malicious incidents**
-- **70 unique malicious users**
-- **30 Scenario 1 incidents**
-- **30 Scenario 2 incidents**
-- **10 Scenario 3 incidents**
-
-For the current data-exfiltration scope:
-
-- Scenario 1 is treated as exfiltration-relevant.
-- Scenario 2 is treated as exfiltration-relevant.
-- Scenario 3 is preserved but is not part of the primary exfiltration scope.
-
-Therefore, **60 of the 70 original CERT incidents are marked as exfiltration-relevant**.
-
-Original CERT incidents are stored with:
-
-```text
-source = CERT_r4.2
-is_synthetic = 0
-```
-
-The `is_synthetic` field does **not** mean that CERT itself contains real-world data.
-
-The entire CERT dataset is synthetic.
-
-Within this project, `is_synthetic = 0` means that the incident comes from the original CERT ground truth rather than from a new attack scenario generated later by this project.
+- User behavior baselining
+- Cross-channel behavioral analysis
+- Low-and-slow attack simulation
+- Feature engineering
+- Machine-learning model development
+- Explainability and evaluation
 
 ---
 
 ## Project Structure
 
 ```text
-Data_engineering/
+DATA_ENGINEERING_R62/
+│
 ├── data/
 │   ├── raw/
+│   │   └── r6.2/
+│   │
 │   ├── processed/
-│   ├── features/
-│   └── README.md
-│
-├── docs/
-│   ├── data_dictionary.xlsx
-│   └── data_quality_report.csv
+│   │
+│   └── features/
 │
 ├── notebooks/
 │
 ├── results/
-│   └── incident_event_audit.csv
+│
+├── docs/
 │
 ├── src/
-│   └── data_pipeline/
-│       ├── build_user_day.py
-│       ├── build_baseline.py
-│       ├── build_behavior_features.py
-│       ├── build_ground_truth.py
-│       ├── config.py
-│       ├── run_pipeline.py
-│       └── validate_data.py
+│   └── run_pipeline.py
 │
 ├── .gitignore
-├── README.md
-└── requirements.txt
+├── requirements.txt
+└── README.md
+```
+
+### `data/raw/`
+
+Contains the original CERT r6.2 dataset.
+
+The raw dataset is **not included in the Git repository** because of its large size. It must be obtained separately and placed under:
+
+```text
+data/raw/r6.2/
+```
+
+More information is available in:
+
+```text
+docs/DATASET_SOURCE.md
+```
+
+### `data/processed/`
+
+Contains cleaned and aggregated intermediate datasets, including:
+
+- Daily Email activity
+- Daily USB/File activity
+- Daily HTTP activity
+- Daily Logon activity
+- Unified User-Day dataset
+- Ground-truth user and event datasets
+
+### `data/features/`
+
+Contains the main feature-level datasets used for behavioral analysis and later modeling stages, including:
+
+- Benign user baselines
+- Behavioral features
+- Eligible synthetic attack hosts
+- Malicious-user pre-attack baselines
+
+### `notebooks/`
+
+Contains the complete data engineering workflow in execution order:
+
+```text
+00_r62_feasibility_audit.ipynb
+01_build_daily_channels.ipynb
+02_build_user_day_r62.ipynb
+03_build_baseline_r62.ipynb
+04_build_behavior_features_r62.ipynb
+05_clean_ground_truth_r62.ipynb
+06_build_malicious_pre_attack_baseline_r62.ipynb
+07_build_feature_dictionary_r62.ipynb
+08_final_data_engineering_qa.ipynb
+09_final_validation.ipynb
+```
+
+### `results/`
+
+Contains documentation and metadata describing the generated datasets and features:
+
+```text
+dataset_inventory_r62.csv
+feature_dictionary_r62.csv
+schema_dictionary_r62.csv
+```
+
+### `docs/`
+
+Contains supporting documentation for the data engineering stage:
+
+```text
+DATASET_SOURCE.md
+DATA_ENGINEERING_SUMMARY.md
+```
+
+### `src/`
+
+Contains the executable data engineering pipeline:
+
+```text
+run_pipeline.py
 ```
 
 ---
 
-## Data Engineering Workflow
+## Pipeline Workflow
 
-The pipeline contains five main stages.
-
-### 1. Build User-Day Dataset
-
-Raw activity from Email, USB, File, HTTP, and Logon sources is aggregated into a common **User-Day representation**.
-
-Each User-Day record represents:
-
-**one user + one calendar day**
-
-Output:
+The main data engineering workflow is:
 
 ```text
-data/processed/user_day_aggregated_v1.parquet
+CERT r6.2 Raw Data
+        ↓
+Daily Channel Aggregation
+        ↓
+Unified User-Day Dataset
+        ↓
+User Behavioral Baselines
+        ↓
+Behavioral Feature Engineering
+        ↓
+Ground-Truth Preparation
+        ↓
+Malicious Pre-Attack Baselines
+        ↓
+Feature Documentation
+        ↓
+Final Data Engineering QA
+        ↓
+Final Integrity Validation
 ```
+
+Stage `00` performs the initial dataset feasibility audit and is optional during normal pipeline execution.
 
 ---
 
-### 2. Build User-Specific Baselines
+## Environment Setup
 
-A historical behavioral baseline is constructed separately for every user.
+A Python virtual environment is recommended.
 
-The baseline uses:
-
-- activity before the first known malicious CERT r4.2 incident,
-- weekdays only,
-- days where the user had actual logon activity.
-
-The baseline contains statistics such as:
-
-- median activity,
-- 95th-percentile thresholds,
-- early logon thresholds,
-- late logoff thresholds.
-
-Behavioral areas include:
-
-- Email
-- External Email
-- USB
-- File Copy
-- HTTP
-- Unique Domains
-- Logon Time
-- Logoff Time
-
-Output:
-
-```text
-data/processed/user_baseline_v1.parquet
-```
-
----
-
-### 3. Build Behavioral Features
-
-The User-Day dataset is combined with each user's historical baseline.
-
-The resulting feature set includes:
-
-- user-specific baseline values,
-- baseline-relative ratios,
-- above-P95 flags,
-- unusual working-time indicators,
-- Email / USB / HTTP activity indicators,
-- daily abnormality features,
-- 7-day rolling features,
-- 14-day rolling features,
-- 30-day rolling features,
-- recent channel diversity.
-
-Output:
-
-```text
-data/features/user_day_behavior_features_v1.parquet
-```
-
-The current behavioral dataset contains **73 columns**.
-
----
-
-### 4. Build Ground Truth
-
-The original CERT r4.2 answer data is cleaned and converted into a consistent project format.
-
-The resulting ground truth includes:
-
-- malicious user,
-- scenario,
-- scenario description,
-- attack start,
-- attack end,
-- duration,
-- exfiltration relevance,
-- source,
-- original/project-generated indicator.
-
-Outputs:
-
-```text
-data/processed/ground_truth_r42.parquet
-data/processed/ground_truth_r42.csv
-```
-
----
-
-### 5. Final Data Quality Validation
-
-The final stage verifies that the generated datasets are structurally and logically consistent.
-
-The validation pipeline currently performs **61 automated checks** covering:
-
-- dataset structure,
-- User-Day uniqueness,
-- critical missing values,
-- invalid negative values,
-- logical consistency,
-- binary flag validity,
-- baseline quality,
-- ground-truth integrity,
-- malicious-user coverage,
-- attack-date coverage,
-- known CERT behavioral cases,
-- baseline reproducibility.
-
-A successful run ends with:
-
-```text
-DATA QUALITY STATUS: PASS
-Dataset is ready for handoff.
-```
-
----
-
-## Main Outputs
-
-### Processed Data
-
-```text
-data/processed/
-├── device_daily.parquet
-├── email_daily.parquet
-├── file_daily.parquet
-├── http_daily.parquet
-├── logon_daily.parquet
-├── user_day_aggregated_v1.parquet
-├── user_baseline_v1.parquet
-├── ground_truth_r42.parquet
-└── ground_truth_r42.csv
-```
-
-### Behavioral Features
-
-```text
-data/features/
-└── user_day_behavior_features_v1.parquet
-```
-
-### Documentation
-
-```text
-docs/
-├── data_dictionary.xlsx
-└── data_quality_report.csv
-```
-
-`data_dictionary.xlsx` documents the behavioral features and ground-truth fields.
-
-`data_quality_report.csv` stores the complete results of the final **61 automated validation checks**.
-
-### Analysis Results
-
-```text
-results/
-└── incident_event_audit.csv
-```
-
-`incident_event_audit.csv` is an exploratory incident-level analysis generated during the CERT incident audit.
-
-It summarizes malicious incident activity by event type, including:
-
-- Logon
-- Device
-- File
-- HTTP
-- Email
-- Total Events
-- First Event
-- Last Event
-
-This file is an **analysis result**, not a training dataset or pipeline input.
-
----
-
-## Running the Pipeline
-
-Install the required Python packages:
+Install the project dependencies using:
 
 ```bash
 pip install -r requirements.txt
 ```
 
-Place the CERT r4.2 dataset under the raw-data structure described in:
+The pipeline has been validated using Python 3.12.
 
-```text
-data/README.md
-```
+---
 
-Then run:
+## Running the Pipeline
+
+### Validate the environment only
 
 ```bash
-python src/data_pipeline/run_pipeline.py
+python src/run_pipeline.py --check-only
 ```
 
-The pipeline automatically executes:
+### Run the complete data engineering pipeline
+
+```bash
+python src/run_pipeline.py
+```
+
+This executes Stages `01` through `09`.
+
+### Run the feasibility audit before the main pipeline
+
+```bash
+python src/run_pipeline.py --with-audit
+```
+
+### Resume from a specific stage
+
+For example, to continue from Stage 5:
+
+```bash
+python src/run_pipeline.py --from-stage 5
+```
+
+### Run one stage only
+
+For example:
+
+```bash
+python src/run_pipeline.py --only-stage 7
+```
+
+The pipeline stops automatically if a notebook fails or if a required output is missing.
+
+---
+
+## Main Outputs
+
+The primary datasets produced by this workflow include:
 
 ```text
-1. Build User-Day Dataset
-2. Build User Baseline
-3. Build Behavior Features
-4. Build Ground Truth
-5. Final Data Quality Validation
+data/processed/user_day_r62_v1.parquet
+
+data/features/user_baseline_r62_v1.parquet
+data/features/behavior_features_r62_v1.parquet
+data/features/attack_host_eligibility_r62.parquet
+data/features/malicious_pre_attack_baseline_r62.parquet
+
+data/processed/ground_truth_users_r62.parquet
+data/processed/ground_truth_events_r62.parquet
 ```
 
-If any stage fails, the pipeline stops immediately.
-
----
-
-## Notebooks
-
-The `notebooks/` directory provides an interactive and presentation-friendly record of the Data Engineering work.
-
-The notebooks cover:
-
-1. Raw dataset audit
-2. HTTP data inspection
-3. CERT incident inspection
-4. Incident event analysis
-5. User-Day construction
-6. User baseline construction
-7. Baseline and data validation
-8. Behavioral feature engineering
-9. Ground-truth construction
-10. Data dictionary generation
-11. Final data-quality validation
-
-These notebooks make it possible to inspect the processing logic and outputs directly without relying only on terminal pipeline output.
-
----
-
-## Channel Diversity vs. Channel Rotation
-
-The current feature:
+The main behavioral modeling dataset is:
 
 ```text
-activity_channel_diversity_7d
+data/features/behavior_features_r62_v1.parquet
 ```
 
-measures how many of the following channels were active within the recent observation window:
+Feature definitions are documented in:
 
-- Email
-- USB
-- HTTP
-
-It represents **channel diversity**.
-
-It does **not** yet represent deliberate sequential channel rotation.
-
-Explicit cross-channel rotation will be introduced later during the attack-simulation stage, where controlled low-and-slow attacks will distribute activity across Email, USB, and HTTP over time.
+```text
+results/feature_dictionary_r62.csv
+```
 
 ---
 
-## Current Status
+## Data Integrity
 
-**Data Engineering v1.0**
+The final workflow includes dedicated QA and integrity-validation stages.
 
-Completed:
+These checks validate:
 
-- Raw-data preprocessing
-- User-Day aggregation
-- User-specific baseline construction
-- Behavioral feature engineering
-- CERT r4.2 ground-truth preparation
-- Incident-level exploratory audit
-- Data dictionary generation
-- Final 61-check data-quality validation
+- Dataset dimensions
+- User populations
+- Channel-level activity totals
+- Duplicate user-day records
+- Baseline separation
+- Malicious-user exclusion from benign training data
+- Ground-truth consistency
+- Feature documentation
+- Project path portability
 
-The resulting data is ready for handoff to the next project stage.
+The current validated data engineering build passes all final integrity checks.
+
+---
+
+## Reproducibility
+
+The project uses relative project paths rather than machine-specific absolute paths.
+
+This allows the pipeline to be executed on another machine as long as:
+
+1. The repository structure is preserved.
+2. Required Python dependencies are installed.
+3. The CERT r6.2 raw dataset is placed under `data/raw/r6.2/`.
+
+The raw dataset and local Python virtual environment are intentionally excluded from version control.
+
+---
+
+## Additional Documentation
+
+For dataset acquisition and raw-data requirements:
+
+```text
+docs/DATASET_SOURCE.md
+```
+
+For a detailed summary of the data engineering methodology and outputs:
+
+```text
+docs/DATA_ENGINEERING_SUMMARY.md
+```
+
+For feature-level definitions:
+
+```text
+results/feature_dictionary_r62.csv
+```
+
+For dataset schemas:
+
+```text
+results/schema_dictionary_r62.csv
+```
+
+For the final dataset inventory:
+
+```text
+results/dataset_inventory_r62.csv
+```

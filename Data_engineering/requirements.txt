@@ -1,11 +1,17 @@
-# SQL analytics and large CSV/Parquet processing
+# =========================================================
+# CERT r6.2 Data Engineering Pipeline
+# Python 3.12
+# =========================================================
+
+# Data processing
+pandas==2.2.2
 duckdb==1.5.5
-
-# Data manipulation and tabular processing
-pandas
-
-# Parquet read/write support for pandas
 pyarrow
 
-# Excel file generation for the data dictionary
-openpyxl
+# Jupyter notebook execution
+nbformat
+nbconvert
+ipykernel
+
+# Interactive notebook environment
+jupyter
