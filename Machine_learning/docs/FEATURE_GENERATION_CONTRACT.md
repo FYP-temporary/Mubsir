@@ -90,8 +90,6 @@ Our 27 features, however, start from 2010 (no NaN and no partial windows). There
 - When testing the match against `ml_final` on 2011 rows, expect a difference in the first w−1 days of 2011 of every user in the team's columns (partial/NaN), not in ours.
 - In production, with a continuous history, these incomplete windows will not appear; the model saw NaN in these rows during training (from 3.8% to 27.8% of the rows of the 995-user data, depending on the column), which has no effect on normal operation, but it means that the first w−1 days of any new user without history are not represented in training in the same way.
 
-This also corrects the old sentence in `FEATURE_DEFINITIONS_ROTATION.md` ("identical to the team's column"), which was more absolute than warranted, and it has been amended.
-
 ## 7) Verification (`pipeline/verify_feature_contract.py`)
 
 - I wrote a literal translation of the definitions above with simple loops (`rotation_features`) that shares no code with the original scripts 18, 21 and 25.
