@@ -1,0 +1,35 @@
+dataset,channel,column,mismatches,status
+Baseline,Email,email_count_mean_active,0,PASS
+Baseline,Email,email_count_p50,0,PASS
+Baseline,Email,email_count_p75,0,PASS
+Baseline,Email,email_count_p90,0,PASS
+Baseline,Email,email_count_p95,0,PASS
+Baseline,Email,email_count_mad,0,PASS
+Baseline,Email,email_bytes_mean_active,0,PASS
+Baseline,Email,email_bytes_p50,0,PASS
+Baseline,Email,email_bytes_p75,0,PASS
+Baseline,Email,email_bytes_p90,0,PASS
+Baseline,Email,email_bytes_p95,0,PASS
+Baseline,Email,email_bytes_mad,0,PASS
+Baseline,USB,usb_copy_mean_active,0,PASS
+Baseline,USB,usb_copy_p50,0,PASS
+Baseline,USB,usb_copy_p75,0,PASS
+Baseline,USB,usb_copy_p90,0,PASS
+Baseline,USB,usb_copy_p95,0,PASS
+Baseline,USB,usb_copy_mad,0,PASS
+Baseline,HTTP,http_upload_mean_active,0,PASS
+Baseline,HTTP,http_upload_p50,0,PASS
+Baseline,HTTP,http_upload_p75,0,PASS
+Baseline,HTTP,http_upload_p90,0,PASS
+Baseline,HTTP,http_upload_p95,0,PASS
+Baseline,HTTP,http_upload_mad,0,PASS
+Behavior Features,USB,usb_copy_p50,0,PASS
+Behavior Features,USB,usb_copy_p90,0,PASS
+Behavior Features,USB,usb_copy_p95,0,PASS
+Behavior Features,USB,usb_copy_mad,0,PASS
+Behavior Features,USB,usb_copy_to_p95_ratio,0,PASS
+Behavior Features,HTTP,http_upload_p50,0,PASS
+Behavior Features,HTTP,http_upload_p90,0,PASS
+Behavior Features,HTTP,http_upload_p95,0,PASS
+Behavior Features,HTTP,http_upload_mad,0,PASS
+Behavior Features,HTTP,http_upload_to_p95_ratio,0,PASS

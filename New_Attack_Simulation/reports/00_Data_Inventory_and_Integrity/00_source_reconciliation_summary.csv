@@ -1,0 +1,5 @@
+source,source_rows,columns_checked,missing_keys,duplicate_keys,source_keys_absent_from_user_day,user_day_keys_without_source,value_mismatches,status
+Email Daily,1381557,11,0,0,0,12453,0,PASS
+USB Daily,308647,9,0,0,0,1085363,0,PASS
+HTTP Daily,1391239,6,0,0,0,2771,0,PASS
+Logon Daily,1394010,4,0,0,0,0,0,PASS

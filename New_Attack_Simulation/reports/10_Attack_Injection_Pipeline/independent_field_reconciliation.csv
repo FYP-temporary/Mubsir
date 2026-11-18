@@ -1,0 +1,9 @@
+﻿field,expected_changed_rows,actual_changed_rows,expected_added,actual_added,mismatched_rows
+email_event_count,6703,6703,17791,17791,0
+email_send_count,6703,6703,17791,17791,0
+external_email_count,6703,6703,17791,17791,0
+file_copy_count,1935,1935,4920,4920,0
+file_event_count,1935,1935,4920,4920,0
+http_event_count,1486,1486,6296,6296,0
+usb_copy_count,1935,1935,4920,4920,0
+www_upload_count,1486,1486,6296,6296,0

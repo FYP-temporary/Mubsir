@@ -1,0 +1,5 @@
+Range,Level_cases,Feasible_level_cases,Total_integer_options,Infeasible_level_cases,Active_day_configs_all_3_levels
+A,447,399,1134,48,125
+B,447,394,1134,53,120
+C,447,399,1273,48,125
+D,447,399,1255,48,125

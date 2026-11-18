@@ -1,0 +1,4 @@
+dataset,period,total_rows,unique_users,eligible_workday_rows,eligible_users,weekday_without_logon,weekend_with_logon,invalid_weekend_flags,calendar_flag_mismatches,missing_logon_counts
+User-Day,Baseline,998448,4000,977519,4000,87,20261,0,0,0
+User-Day,Future,395562,3741,387437,3740,38,7912,0,0,0
+Behavior Features,Future,387162,3737,387162,3737,0,0,0,0,0

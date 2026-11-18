@@ -1,0 +1,7 @@
+﻿check,status
+Original population and User-Day keys preserved,PASS
+All approved injection actions applied exactly,PASS
+Historical Baseline count fields unchanged,PASS
+All non-count fields unchanged,PASS
+Injection execution log reconciled,PASS
+Total applied increments match approved plan,PASS

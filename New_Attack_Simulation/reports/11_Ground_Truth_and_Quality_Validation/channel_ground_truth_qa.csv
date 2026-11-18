@@ -1,0 +1,21 @@
+﻿check,status
+Required scheduling context is available,PASS
+Scheduling context has unique User-Day keys,PASS
+All channel actions have scheduling context,PASS
+"Exactly 10,124 executed channel-actions",PASS
+Exactly 400 distinct attack users,PASS
+Unique and non-null User-Day-Channel keys,PASS
+Ground Truth users exactly match approved attackers,PASS
+All count and reference values are present,PASS
+Every record represents a positive injection,PASS
+Every before/add/after count reconciles,PASS
+"Exactly 29,007 injected attack events",PASS
+Every Ground Truth record belongs to an active day,PASS
+No Ground Truth record belongs to a forced off-day,PASS
+"Only approved EMAIL, USB and HTTP channels appear",PASS
+Every injected channel is authorized by its daily mask,PASS
+Required scenario and formula identifiers are present,PASS
+All 18 execution-log fields preserved exactly,PASS
+Exact channel-level action and event totals,PASS
+"Exactly 9,080 distinct attacked User-Days",PASS
+Ground Truth contains no model target y,PASS

@@ -1,0 +1,4 @@
+Level,V1_exception_switches,General_C_windows,Exception_windows,Exception_users
+Low,1,21110,21110,854
+Medium,2,0,25865,879
+High,3,25865,18898,826

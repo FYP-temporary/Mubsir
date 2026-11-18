@@ -1,0 +1,165 @@
+dataset,column,total_rows,missing_count,missing_pct,infinite_count
+User-Day,user,1394010,0,0.0,0
+User-Day,day,1394010,0,0.0,0
+User-Day,day_of_week,1394010,0,0.0,0
+User-Day,is_weekend,1394010,0,0.0,0
+User-Day,email_event_count,1394010,0,0.0,0
+User-Day,email_send_count,1394010,0,0.0,0
+User-Day,email_view_count,1394010,0,0.0,0
+User-Day,external_email_count,1394010,0,0.0,0
+User-Day,internal_email_count,1394010,0,0.0,0
+User-Day,total_sent_email_bytes,1394010,0,0.0,0
+User-Day,external_email_bytes,1394010,0,0.0,0
+User-Day,emails_with_attachments,1394010,0,0.0,0
+User-Day,attachment_count,1394010,0,0.0,0
+User-Day,unique_external_recipients,1394010,0,0.0,0
+User-Day,unique_external_domains,1394010,0,0.0,0
+User-Day,file_event_count,1394010,0,0.0,0
+User-Day,file_copy_count,1394010,0,0.0,0
+User-Day,file_open_count,1394010,0,0.0,0
+User-Day,file_write_count,1394010,0,0.0,0
+User-Day,file_delete_count,1394010,0,0.0,0
+User-Day,usb_copy_count,1394010,0,0.0,0
+User-Day,from_removable_count,1394010,0,0.0,0
+User-Day,unique_usb_files,1394010,0,0.0,0
+User-Day,unique_usb_extensions,1394010,0,0.0,0
+User-Day,http_event_count,1394010,0,0.0,0
+User-Day,www_visit_count,1394010,0,0.0,0
+User-Day,www_download_count,1394010,0,0.0,0
+User-Day,www_upload_count,1394010,0,0.0,0
+User-Day,unique_domains,1394010,0,0.0,0
+User-Day,unique_upload_domains,1394010,0,0.0,0
+User-Day,logon_count,1394010,0,0.0,0
+User-Day,logoff_count,1394010,0,0.0,0
+User-Day,first_logon,1394010,881,0.0632,0
+User-Day,last_logoff,1394010,0,0.0,0
+Baseline,user,3995,0,0.0,0
+Baseline,baseline_period_start,3995,0,0.0,0
+Baseline,baseline_period_end,3995,0,0.0,0
+Baseline,baseline_workdays,3995,0,0.0,0
+Baseline,baseline_first_day,3995,0,0.0,0
+Baseline,baseline_last_day,3995,0,0.0,0
+Baseline,email_active_days,3995,0,0.0,0
+Baseline,email_active_rate,3995,0,0.0,0
+Baseline,email_count_mean_active,3995,1,0.025,0
+Baseline,email_count_p50,3995,1,0.025,0
+Baseline,email_count_p75,3995,1,0.025,0
+Baseline,email_count_p90,3995,1,0.025,0
+Baseline,email_count_p95,3995,1,0.025,0
+Baseline,email_count_mad,3995,1,0.025,0
+Baseline,email_bytes_mean_active,3995,1,0.025,0
+Baseline,email_bytes_p50,3995,1,0.025,0
+Baseline,email_bytes_p75,3995,1,0.025,0
+Baseline,email_bytes_p90,3995,1,0.025,0
+Baseline,email_bytes_p95,3995,1,0.025,0
+Baseline,email_bytes_mad,3995,1,0.025,0
+Baseline,usb_active_days,3995,0,0.0,0
+Baseline,usb_active_rate,3995,0,0.0,0
+Baseline,usb_copy_mean_active,3995,3212,80.4005,0
+Baseline,usb_copy_p50,3995,3212,80.4005,0
+Baseline,usb_copy_p75,3995,3212,80.4005,0
+Baseline,usb_copy_p90,3995,3212,80.4005,0
+Baseline,usb_copy_p95,3995,3212,80.4005,0
+Baseline,usb_copy_mad,3995,3212,80.4005,0
+Baseline,http_upload_active_days,3995,0,0.0,0
+Baseline,http_upload_active_rate,3995,0,0.0,0
+Baseline,http_upload_mean_active,3995,3380,84.6058,0
+Baseline,http_upload_p50,3995,3380,84.6058,0
+Baseline,http_upload_p75,3995,3380,84.6058,0
+Baseline,http_upload_p90,3995,3380,84.6058,0
+Baseline,http_upload_p95,3995,3380,84.6058,0
+Baseline,http_upload_mad,3995,3380,84.6058,0
+Behavior Features,user,387162,0,0.0,0
+Behavior Features,day,387162,0,0.0,0
+Behavior Features,day_of_week,387162,0,0.0,0
+Behavior Features,is_weekend,387162,0,0.0,0
+Behavior Features,email_event_count,387162,0,0.0,0
+Behavior Features,email_send_count,387162,0,0.0,0
+Behavior Features,email_view_count,387162,0,0.0,0
+Behavior Features,external_email_count,387162,0,0.0,0
+Behavior Features,internal_email_count,387162,0,0.0,0
+Behavior Features,total_sent_email_bytes,387162,0,0.0,0
+Behavior Features,external_email_bytes,387162,0,0.0,0
+Behavior Features,emails_with_attachments,387162,0,0.0,0
+Behavior Features,attachment_count,387162,0,0.0,0
+Behavior Features,unique_external_recipients,387162,0,0.0,0
+Behavior Features,unique_external_domains,387162,0,0.0,0
+Behavior Features,file_event_count,387162,0,0.0,0
+Behavior Features,file_copy_count,387162,0,0.0,0
+Behavior Features,file_open_count,387162,0,0.0,0
+Behavior Features,file_write_count,387162,0,0.0,0
+Behavior Features,file_delete_count,387162,0,0.0,0
+Behavior Features,usb_copy_count,387162,0,0.0,0
+Behavior Features,from_removable_count,387162,0,0.0,0
+Behavior Features,unique_usb_files,387162,0,0.0,0
+Behavior Features,unique_usb_extensions,387162,0,0.0,0
+Behavior Features,http_event_count,387162,0,0.0,0
+Behavior Features,www_visit_count,387162,0,0.0,0
+Behavior Features,www_download_count,387162,0,0.0,0
+Behavior Features,www_upload_count,387162,0,0.0,0
+Behavior Features,unique_domains,387162,0,0.0,0
+Behavior Features,unique_upload_domains,387162,0,0.0,0
+Behavior Features,logon_count,387162,0,0.0,0
+Behavior Features,logoff_count,387162,0,0.0,0
+Behavior Features,first_logon,387162,0,0.0,0
+Behavior Features,last_logoff,387162,0,0.0,0
+Behavior Features,baseline_workdays,387162,0,0.0,0
+Behavior Features,email_active_days,387162,0,0.0,0
+Behavior Features,email_active_rate,387162,0,0.0,0
+Behavior Features,email_count_p50,387162,0,0.0,0
+Behavior Features,email_count_p90,387162,0,0.0,0
+Behavior Features,email_count_p95,387162,0,0.0,0
+Behavior Features,email_count_mad,387162,0,0.0,0
+Behavior Features,email_bytes_p50,387162,0,0.0,0
+Behavior Features,email_bytes_p90,387162,0,0.0,0
+Behavior Features,email_bytes_p95,387162,0,0.0,0
+Behavior Features,email_bytes_mad,387162,0,0.0,0
+Behavior Features,usb_active_days,387162,0,0.0,0
+Behavior Features,usb_active_rate,387162,0,0.0,0
+Behavior Features,usb_copy_p50,387162,312211,80.6409,0
+Behavior Features,usb_copy_p90,387162,312211,80.6409,0
+Behavior Features,usb_copy_p95,387162,312211,80.6409,0
+Behavior Features,usb_copy_mad,387162,312211,80.6409,0
+Behavior Features,http_upload_active_days,387162,0,0.0,0
+Behavior Features,http_upload_active_rate,387162,0,0.0,0
+Behavior Features,http_upload_p50,387162,328257,84.7854,0
+Behavior Features,http_upload_p90,387162,328257,84.7854,0
+Behavior Features,http_upload_p95,387162,328257,84.7854,0
+Behavior Features,http_upload_mad,387162,328257,84.7854,0
+Behavior Features,email_active_today,387162,0,0.0,0
+Behavior Features,usb_active_today,387162,0,0.0,0
+Behavior Features,http_upload_active_today,387162,0,0.0,0
+Behavior Features,active_channel_count,387162,0,0.0,0
+Behavior Features,email_count_above_p95,387162,0,0.0,0
+Behavior Features,email_bytes_above_p95,387162,0,0.0,0
+Behavior Features,usb_copy_above_p95,387162,0,0.0,0
+Behavior Features,http_upload_above_p95,387162,0,0.0,0
+Behavior Features,email_count_to_p95_ratio,387162,0,0.0,0
+Behavior Features,email_bytes_to_p95_ratio,387162,0,0.0,0
+Behavior Features,usb_copy_to_p95_ratio,387162,312211,80.6409,0
+Behavior Features,http_upload_to_p95_ratio,387162,328257,84.7854,0
+Behavior Features,email_active_days_5wd,387162,0,0.0,0
+Behavior Features,email_active_days_10wd,387162,0,0.0,0
+Behavior Features,email_active_days_20wd,387162,0,0.0,0
+Behavior Features,usb_active_days_5wd,387162,0,0.0,0
+Behavior Features,usb_active_days_10wd,387162,0,0.0,0
+Behavior Features,usb_active_days_20wd,387162,0,0.0,0
+Behavior Features,http_active_days_5wd,387162,0,0.0,0
+Behavior Features,http_active_days_10wd,387162,0,0.0,0
+Behavior Features,http_active_days_20wd,387162,0,0.0,0
+Behavior Features,external_email_count_5wd,387162,0,0.0,0
+Behavior Features,usb_copy_count_5wd,387162,0,0.0,0
+Behavior Features,http_upload_count_5wd,387162,0,0.0,0
+Behavior Features,external_email_count_10wd,387162,0,0.0,0
+Behavior Features,usb_copy_count_10wd,387162,0,0.0,0
+Behavior Features,http_upload_count_10wd,387162,0,0.0,0
+Behavior Features,multi_channel_days_10wd,387162,0,0.0,0
+Host Eligibility,user,3995,0,0.0,0
+Host Eligibility,baseline_workdays,3995,0,0.0,0
+Host Eligibility,email_active_days,3995,0,0.0,0
+Host Eligibility,usb_active_days,3995,0,0.0,0
+Host Eligibility,http_upload_active_days,3995,0,0.0,0
+Host Eligibility,future_workdays,3995,0,0.0,0
+Host Eligibility,eligible_30,3995,0,0.0,0
+Host Eligibility,eligible_40,3995,0,0.0,0
+Host Eligibility,eligible_strict_50,3995,0,0.0,0

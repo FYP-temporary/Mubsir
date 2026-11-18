@@ -1,0 +1,16 @@
+window_workdays,forced_offdays,attackers,soft_target,shortfall,represented,weighted_offdays
+5,0,50,0,0,True,0
+10,1,50,20,0,True,50
+10,2,20,20,0,True,40
+20,2,40,15,0,True,80
+20,3,15,15,0,True,45
+20,4,15,15,0,True,60
+30,4,40,15,0,True,160
+30,5,15,15,0,True,75
+30,6,15,15,0,True,90
+40,6,40,15,0,True,240
+40,7,15,15,0,True,105
+40,8,15,15,0,True,120
+50,8,40,15,0,True,320
+50,9,15,15,0,True,135
+50,10,15,15,0,True,150

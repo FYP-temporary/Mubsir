@@ -1,0 +1,9 @@
+﻿field,changed_rows,total_increment,status
+email_event_count,6703,17791,PASS
+email_send_count,6703,17791,PASS
+external_email_count,6703,17791,PASS
+file_copy_count,1935,4920,PASS
+file_event_count,1935,4920,PASS
+http_event_count,1486,6296,PASS
+usb_copy_count,1935,4920,PASS
+www_upload_count,1486,6296,PASS

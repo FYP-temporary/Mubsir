@@ -1,0 +1,14 @@
+check,status,details
+Temporal Coverage,PASS,"No missing dates, out-of-range rows, or baseline feature rows."
+Baseline Period Boundaries,PASS,All baseline records use the official reference period.
+Workday Calendar Consistency,PASS,Weekend classifications and logon availability are valid.
+Behavior Feature Workdays,PASS,All feature records satisfy the official workday rule.
+Per-User Workday Counts,PASS,"Baseline, Future, and Feature workday counts agree."
+Channel Numerical Integrity,PASS,No invalid values in inspected channel measurements.
+Channel Logical Consistency,PASS,All ten channel relationship checks passed.
+Missing Keys and Infinite Values,PASS,No missing primary keys or infinite numeric values.
+Baseline and Feature Null Semantics,PASS,All 34 historical activity and null propagation checks passed.
+First Logon Null Semantics,PASS,No missing first_logon timestamps on positive-logon days.
+Primary Key Integrity,PASS,No duplicate or missing primary keys.
+Population Relationships,PASS,Dataset user populations follow expected relationships.
+Processed Source Reconciliation,PASS,All four source datasets match User-Day across 30 measurements.

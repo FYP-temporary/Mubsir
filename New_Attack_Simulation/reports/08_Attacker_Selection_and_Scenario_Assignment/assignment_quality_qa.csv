@@ -1,0 +1,14 @@
+check,status
+Exactly 400 unique attackers,PASS
+Unique scenario option IDs,PASS
+Exact dimension targets,PASS
+Extended-duration representation,PASS
+Zero five-day Forced Off-Days,PASS
+Duration-based Off-Day compliance,PASS
+Off-Day distribution reconciles to 400,PASS
+Off-Day totals reconcile,PASS
+Soft diversity shortfall reconciles,PASS
+Valid behavioral familiarity,PASS
+Three-channel population preserved,PASS
+Multi-channel representation checks,PASS
+Cross-dimensional totals reconcile,PASS

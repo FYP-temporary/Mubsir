@@ -1,0 +1,31 @@
+Duration,Requirement,Retained_windows,Window_coverage_pct,Users_with_a_window,Users_lost_vs_optional
+5,Optional / zero allowed,74244,100.0,995,0
+5,Require >= 1 multichannel day,61112,82.31,984,11
+5,Require >= 2 multichannel days,32307,43.51,899,96
+5,Require >= 3 multichannel days,15645,21.07,674,321
+5,Require >= 1 three-channel day,5571,7.5,239,756
+10,Optional / zero allowed,85888,100.0,993,0
+10,Require >= 1 multichannel day,74143,86.33,983,10
+10,Require >= 2 multichannel days,52996,61.7,932,61
+10,Require >= 3 multichannel days,35434,41.26,834,159
+10,Require >= 1 three-channel day,8645,10.07,239,754
+20,Optional / zero allowed,82914,100.0,992,0
+20,Require >= 1 multichannel day,76137,91.83,982,10
+20,Require >= 2 multichannel days,65772,79.33,950,42
+20,Require >= 3 multichannel days,54377,65.58,881,111
+20,Require >= 1 three-channel day,11677,14.08,239,753
+30,Optional / zero allowed,74133,100.0,988,0
+30,Require >= 1 multichannel day,70052,94.5,978,10
+30,Require >= 2 multichannel days,64497,87.0,956,32
+30,Require >= 3 multichannel days,57966,78.19,905,83
+30,Require >= 1 three-channel day,12534,16.91,239,749
+40,Optional / zero allowed,64581,100.0,983,0
+40,Require >= 1 multichannel day,61930,95.9,973,10
+40,Require >= 2 multichannel days,58700,90.89,956,27
+40,Require >= 3 multichannel days,54517,84.42,916,67
+40,Require >= 1 three-channel day,12303,19.05,238,745
+50,Optional / zero allowed,54870,100.0,982,0
+50,Require >= 1 multichannel day,53080,96.74,972,10
+50,Require >= 2 multichannel days,50956,92.87,958,24
+50,Require >= 3 multichannel days,48239,87.92,923,59
+50,Require >= 1 three-channel day,11238,20.48,238,744

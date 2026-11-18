@@ -1,0 +1,8 @@
+﻿check,status
+"Population, rows, keys and schema preserved",PASS
+Historical Baseline fully unchanged,PASS
+Only eight approved count fields modified,PASS
+All eight count fields reconcile with injection log,PASS
+Original Data Engineering relationships preserved,PASS
+Email/File aggregate residuals preserved,PASS
+Dependent correction log complete,PASS

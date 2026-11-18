@@ -1,0 +1,16 @@
+check,status
+400 unique attackers,PASS
+Unique approved scenario IDs,PASS
+Full Notebook 07 catalog provenance,PASS
+Notebook 05 structural window matching,PASS
+All structural eligibility flags valid,PASS
+Original daily windows complete,PASS
+Forced Off-Days independently match,PASS
+Active days independently match,PASS
+All selected channels naturally present,PASS
+Off-Day and active-day totals reconcile,PASS
+Approved duration Off-Day rules,PASS
+Exact assignment distributions,PASS
+Triple-eligible population allocation,PASS
+Approved switching evidence preserved,PASS
+Approved stealth metadata preserved,PASS

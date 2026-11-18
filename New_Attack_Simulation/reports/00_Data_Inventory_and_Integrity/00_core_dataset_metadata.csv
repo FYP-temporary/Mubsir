@@ -1,0 +1,5 @@
+dataset,filename,rows,columns,size_mb
+User-Day,user_day_r62_v1.parquet,1394010,34,23.507
+Baseline,user_baseline_r62_v1.parquet,3995,36,0.212
+Behavior Features,behavior_features_r62_v1.parquet,387162,85,9.711
+Host Eligibility,attack_host_eligibility_r62.parquet,3995,9,0.032

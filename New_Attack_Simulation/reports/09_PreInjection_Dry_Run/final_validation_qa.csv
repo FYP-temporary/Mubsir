@@ -1,0 +1,48 @@
+﻿section,check,status
+9.5.1 Synchronization Selection,400 unique attackers,PASS
+9.5.1 Synchronization Selection,Approved identities preserved,PASS
+9.5.1 Synchronization Selection,Approved rules and fallback priority,PASS
+9.5.1 Synchronization Selection,Deterministic selection reproducible,PASS
+9.5.1 Synchronization Selection,Five-day synchronization zero,PASS
+9.5.1 Synchronization Selection,Natural opportunity bounds,PASS
+9.5.1 Synchronization Selection,Triple synchronization only in E+U+H,PASS
+9.5.1 Synchronization Selection,Daily counts reconcile,PASS
+9.5.1 Synchronization Selection,All duration totals preserved,PASS
+9.5.1 Synchronization Selection,Fallback counts reconcile,PASS
+9.5.2 Daily Sequence Construction,Approved identities preserved,PASS
+9.5.2 Daily Sequence Construction,All approved daily rows preserved,PASS
+9.5.2 Daily Sequence Construction,Active-day counts preserved,PASS
+9.5.2 Daily Sequence Construction,Synchronization counts realized,PASS
+9.5.2 Daily Sequence Construction,Switching counts realized,PASS
+9.5.2 Daily Sequence Construction,Switching independently recomputed,PASS
+9.5.2 Daily Sequence Construction,Switching within approved feasible counts,PASS
+9.5.2 Daily Sequence Construction,All approved primary channels represented,PASS
+9.5.2 Daily Sequence Construction,Forced off-days contain no attack actions,PASS
+9.5.2 Daily Sequence Construction,Scheduled channels naturally available,PASS
+9.5.2 Daily Sequence Construction,Every active primary belongs to its scheduled set,PASS
+9.5.2 Daily Sequence Construction,Valid active channel cardinalities,PASS
+9.5.2 Daily Sequence Construction,Approved duration distribution preserved,PASS
+9.6 Independent Validation,400 approved attacker identities,PASS
+9.6 Independent Validation,Exact original daily window keys,PASS
+9.6 Independent Validation,Approved scenario attributes unchanged,PASS
+9.6 Independent Validation,Approved scenario identities unchanged,PASS
+9.6 Independent Validation,Window boundaries and workday indices valid,PASS
+9.6 Independent Validation,Original source workday eligibility,PASS
+9.6 Independent Validation,Natural channels match original event counts,PASS
+9.6 Independent Validation,Approved daily channel availability matches,PASS
+9.6 Independent Validation,Scheduled channels are naturally available,PASS
+9.6 Independent Validation,Valid Primary Channel membership,PASS
+9.6 Independent Validation,Forced off-day assignments and zero activity,PASS
+9.6 Independent Validation,Valid active channel cardinalities and labels,PASS
+9.6 Independent Validation,Active and forced off-day counts match targets,PASS
+9.6 Independent Validation,Two- and three-channel targets realized,PASS
+9.6 Independent Validation,Primary Channel coverage complete,PASS
+9.6 Independent Validation,Switching flags independently verified,PASS
+9.6 Independent Validation,Realized switches satisfy approved levels,PASS
+9.6 Independent Validation,Switch counts match feasibility evidence,PASS
+9.7 Export Preconditions,Approved attacker and scenario identities,PASS
+9.7 Export Preconditions,Complete unique daily schedule,PASS
+9.7 Export Preconditions,Active and forced off-day totals,PASS
+9.7 Export Preconditions,No attack actions on forced off-days,PASS
+9.7 Export Preconditions,Synchronization and switching totals,PASS
+9.7 Export Preconditions,Approved duration distribution,PASS

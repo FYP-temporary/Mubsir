@@ -1,0 +1,5 @@
+dataset,rows,columns,columns_with_missing,total_missing,total_infinite,missing_keys,status
+User-Day,1394010,34,1,881,0,0,REVIEW_NULL_SEMANTICS
+Baseline,3995,36,24,39564,0,0,REVIEW_NULL_SEMANTICS
+Behavior Features,387162,85,10,3202340,0,0,REVIEW_NULL_SEMANTICS
+Host Eligibility,3995,9,0,0,0,0,PASS

@@ -1,0 +1,36 @@
+﻿check,status
+Unique Notebook 08 approved assignment source,PASS
+Exactly 400 unique approved attackers,PASS
+Required assignment identifiers available,PASS
+Daily schedule User-Day keys unique,PASS
+Execution User-Day-Channel keys unique,PASS
+Every scheduled attacker has an approved assignment,PASS
+Approved assignment matches schedule: scenario_option_id,PASS
+Approved assignment matches schedule: channel_configuration,PASS
+Approved assignment matches schedule: switching_level,PASS
+Approved assignment matches schedule: stealth_level,PASS
+Approved assignment matches schedule: stealth_multiplier,PASS
+Approved assignment matches schedule: window_workdays,PASS
+Approved assignment matches schedule: window_start,PASS
+Approved assignment matches schedule: window_end,PASS
+Approved schedule population and day categories,PASS
+Active and forced off-days are mutually exclusive,PASS
+Every execution action matches a scheduled User-Day,PASS
+Every executed action occurs on an active day,PASS
+No executed action occurs on a forced off-day,PASS
+All executed channels are approved,PASS
+Executed channel masks exactly match the schedule,PASS
+All active days executed; all off-days have no execution,PASS
+Executed User-Day and channel-action totals,PASS
+Execution metadata matches schedule: scenario_option_id,PASS
+Execution metadata matches schedule: channel_configuration,PASS
+Execution metadata matches schedule: primary_channel,PASS
+Execution metadata matches schedule: scheduled_channel_set,PASS
+Execution metadata matches schedule: sync_type,PASS
+Execution metadata matches schedule: is_switch,PASS
+Execution metadata matches schedule: stealth_level,PASS
+Execution metadata matches schedule: stealth_multiplier,PASS
+"All executed increments positive; total is 29,007",PASS
+Evidence joins preserve exact source row counts,PASS
+Validated channel-level evidence has unique keys,PASS
+Validated daily evidence has unique keys,PASS

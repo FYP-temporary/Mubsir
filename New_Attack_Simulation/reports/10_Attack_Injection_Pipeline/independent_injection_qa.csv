@@ -1,0 +1,44 @@
+﻿check,status
+Full User-Day row count preserved,PASS
+"Exactly 4,000 users preserved",PASS
+Original 34-column schema and order preserved,PASS
+Original User-Day keys valid and unique,PASS
+Final User-Day keys valid and unique,PASS
+Every original User-Day key and row position preserved,PASS
+Original dataset date range preserved,PASS
+Original source Parquet exists,PASS
+Original source Parquet matches in-memory source,PASS
+Exactly 400 distinct approved attackers,PASS
+Approved schedule complete and uniquely keyed,PASS
+Every scheduled day within approved attack period,PASS
+Scheduled attackers exactly match approved attackers,PASS
+Every attacker uses approved Formula A,PASS
+Every attacker has the correct approved multiplier,PASS
+Every scheduled row matches its approved scenario,PASS
+Active/off-day status and masks are consistent,PASS
+"9,080 active and 1,670 forced off-days preserved",PASS
+All channel masks use approved EMAIL/USB/HTTP bits,PASS
+Scheduled channels respect observed availability,PASS
+Expected User-Day-Channel actions are unique,PASS
+"Exactly 10,124 authorized channel-actions",PASS
+Daily single/two/three-channel actions reconcile,PASS
+Historical user-channel reference keys are unique,PASS
+All expected actions have valid historical P95,PASS
+Independently calculated increments are positive,PASS
+Every expected action matches one original User-Day,PASS
+"Independent total equals 29,007 added attack events",PASS
+Section 10.3 injection plan exactly matches independent reconstruction,PASS
+Section 10.4 execution log exactly matches independent reconstruction,PASS
+Eight target and 26 non-targeted fields identified,PASS
+All eight target fields match exact expected values,PASS
+All 26 non-targeted columns exactly unchanged,PASS
+"Exactly 9,080 distinct targeted User-Day rows",PASS
+"No targeted baseline, benign, or forced off-day rows",PASS
+Every untouched User-Day identical across all 34 fields,PASS
+Entire historical Baseline unchanged across all 34 fields,PASS
+"All 3,600 benign users unchanged across all 34 fields",PASS
+"All 1,670 forced off-days unchanged across all 34 fields",PASS
+"Exactly 3,600 non-attacker users confirmed",PASS
+All five Data Engineering logical rules hold,PASS
+Email/File aggregate residuals exactly preserved,PASS
+Independent channel-level totals fully reconcile,PASS

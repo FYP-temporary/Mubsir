@@ -1,0 +1,11 @@
+period,rule,rows_checked,violations,missing_inputs,status
+Baseline,External Email <= Sent Email,998448,0,0,PASS
+Baseline,Email Partition,998448,0,0,PASS
+Baseline,USB Copy <= File Copy,998448,0,0,PASS
+Baseline,HTTP Event Partition,998448,0,0,PASS
+Baseline,Upload Domains <= Total Domains,998448,0,0,PASS
+Future,External Email <= Sent Email,395562,0,0,PASS
+Future,Email Partition,395562,0,0,PASS
+Future,USB Copy <= File Copy,395562,0,0,PASS
+Future,HTTP Event Partition,395562,0,0,PASS
+Future,Upload Domains <= Total Domains,395562,0,0,PASS

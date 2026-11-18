@@ -1,0 +1,27 @@
+{
+  "project": "MUBSIR",
+  "notebook": "06_Stealth_and_Injection_Count_Feasibility",
+  "formula_id": "A",
+  "formula_name": "Historical P95-Based",
+  "formula_expression": "max(1, ceil(m * historical_P95))",
+  "configuration": "Balanced",
+  "stealth_multipliers": {
+    "High": 0.25,
+    "Medium": 0.5,
+    "Low": 0.75
+  },
+  "channels": [
+    "EMAIL",
+    "USB",
+    "HTTP"
+  ],
+  "minimum_added_events": 1,
+  "baseline_mutable": false,
+  "selection_status": "selected_and_validated",
+  "validation_scope": "hypothetical active-channel observations",
+  "observations_validated": 100585,
+  "users_validated": 936,
+  "strict_separation_pct": 91.0106,
+  "all_equal_pct": 1.9387,
+  "created_utc": "2026-11-16T03:54:44.444342+00:00"
+}

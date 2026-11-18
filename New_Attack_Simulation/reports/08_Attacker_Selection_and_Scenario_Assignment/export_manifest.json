@@ -1,0 +1,50 @@
+{
+  "project": "Mubsir",
+  "dataset_version": "r6.2",
+  "notebook": "08_Attacker_Selection_and_Scenario_Assignment",
+  "created_utc": "2026-11-18T07:33:03.794915+00:00",
+  "assignment_status": "APPROVED",
+  "source_validation_status": "SOURCE_QA_PASS",
+  "attackers": 400,
+  "forced_offdays": 1670,
+  "source_qa_checks": 15,
+  "quality_qa_checks": 13,
+  "files": {
+    "approved_attacker_scenarios_r62.parquet": {
+      "size_bytes": 32302,
+      "sha256": "c5e51029e911b1bdbfbb94218993fe49d3565e83c9a84be66bdc880454a029c4"
+    },
+    "approved_attacker_scenarios_r62.csv": {
+      "size_bytes": 81791,
+      "sha256": "520f45c8cb73da99af811d6ace788876a3d810b83a1256ddd4b00d23276f9248"
+    },
+    "assignment_distribution_qa.csv": {
+      "size_bytes": 594,
+      "sha256": "6397e93b8f588a9bc6b5ae3920d26fb016e333188aac035163fccb19da634d0a"
+    },
+    "forced_offday_distribution.csv": {
+      "size_bytes": 428,
+      "sha256": "89114004834b8bad5bb3e4335441ab9b990fa4fa7420643ceb36984b382a2809"
+    },
+    "assignment_quality_qa.csv": {
+      "size_bytes": 504,
+      "sha256": "5600ce3a028fd9a4ed98199573cc29c754c3bb8a950043ce4e00791b3965cd62"
+    },
+    "independent_source_qa.csv": {
+      "size_bytes": 623,
+      "sha256": "6d03f63b1f77f1384bb0caa1665dc8b6d5729b7d2c2a31672477cd9625653968"
+    },
+    "independent_daily_validation.csv": {
+      "size_bytes": 22962,
+      "sha256": "889f5e082f66ab1d0552e21a52c674b8c18bb1cc7547a69cbddc3dd6c42eb49d"
+    },
+    "assignment_data_dictionary.csv": {
+      "size_bytes": 1787,
+      "sha256": "2aef29fbc0376eb1160c7d483b7b865b33378b86e13891921d82beb4350b2b9c"
+    },
+    "notebook_summary.md": {
+      "size_bytes": 1309,
+      "sha256": "9a44bb7bfd6e17e076e11584bd2de612d5a5f85bc3817126d9075b9944fb4a61"
+    }
+  }
+}

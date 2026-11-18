@@ -1,0 +1,4 @@
+check,rows
+Missing first_logon with positive logon_count,0
+Missing first_logon without positive logon_count,881
+Total missing first_logon,881

@@ -1,0 +1,5 @@
+dataset,rows,unique_users,primary_key,missing_keys,duplicate_keys,status
+User-Day,1394010,4000,"user, day",0,0,PASS
+Baseline,3995,3995,user,0,0,PASS
+Behavior Features,387162,3737,"user, day",0,0,PASS
+Host Eligibility,3995,3995,user,0,0,PASS

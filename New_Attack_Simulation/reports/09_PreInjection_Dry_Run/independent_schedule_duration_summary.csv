@@ -1,0 +1,7 @@
+﻿window_workdays,attackers,active_days,forced_offdays,single_channel_days,two_channel_days,three_channel_days,primary_switches
+5,50,250,0,250,0,0,97
+10,70,610,90,546,64,0,217
+20,70,1215,185,1079,136,0,443
+30,70,1775,325,1565,210,0,622
+40,70,2335,465,2067,249,19,799
+50,70,2895,605,2566,311,18,938

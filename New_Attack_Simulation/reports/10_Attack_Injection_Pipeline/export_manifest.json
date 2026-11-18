@@ -1,0 +1,124 @@
+{
+  "notebook": "10_Attack_Injection_Pipeline",
+  "exported_at_utc": "2026-11-18T11:53:08.754076+00:00",
+  "status": "INDEPENDENT_VALIDATION_APPROVED",
+  "source": {
+    "filename": "user_day_r62_v1.parquet",
+    "sha256": "bd988e53112cd5a4b328eb6fde5ada78d2962d5b9303575e5917dc1a64724ef7"
+  },
+  "population": {
+    "users": 4000,
+    "user_day_rows": 1394010,
+    "columns": 34,
+    "attackers": 400
+  },
+  "injection": {
+    "active_user_days": 9080,
+    "channel_actions": 10124,
+    "additional_events": 29007,
+    "formula": "A",
+    "modified_count_fields": 8
+  },
+  "validation": {
+    "count_consistency_passed": 7,
+    "independent_checks_passed": 43
+  },
+  "artifacts": {
+    "user_day_injected_counts_r62.parquet": {
+      "format": "parquet",
+      "rows": 1394010,
+      "columns": 34,
+      "size_bytes": 33495920,
+      "sha256": "1f8cf3b2c64ff20420ac636b991af2dcb4b898df247f54f7976602c7ea312d8a"
+    },
+    "daily_injection_plan_r62.parquet": {
+      "format": "parquet",
+      "rows": 10124,
+      "columns": 19,
+      "size_bytes": 77172,
+      "sha256": "293c4d058c7e4a939fefb33bc8ea63a40508c29e52e5d235fec6ee9041bb9eae"
+    },
+    "injection_execution_log_r62.parquet": {
+      "format": "parquet",
+      "rows": 10124,
+      "columns": 18,
+      "size_bytes": 72551,
+      "sha256": "5185d83154ff46bed67ec523773134dbd60dad07b0a2129abb3665c0e956e00b"
+    },
+    "count_consistency_log_r62.parquet": {
+      "format": "parquet",
+      "rows": 18762,
+      "columns": 7,
+      "size_bytes": 55270,
+      "sha256": "a25b3e1072bf712e3d95acfdda596c9d17702a588d85fc87d492915315002698"
+    },
+    "independent_expected_actions_r62.parquet": {
+      "format": "parquet",
+      "rows": 10124,
+      "columns": 11,
+      "size_bytes": 53655,
+      "sha256": "0a27a0384018231375ba06be1327c5d903eebd2199817f6a0f2da7cd2e8f6256"
+    },
+    "daily_injection_planning_qa.csv": {
+      "format": "csv",
+      "rows": 5,
+      "columns": 2,
+      "size_bytes": 251,
+      "sha256": "58941ad5cda2ed818e7a972b18b47941dfff75ec483997b56097f2140da2b026"
+    },
+    "injection_execution_qa.csv": {
+      "format": "csv",
+      "rows": 6,
+      "columns": 2,
+      "size_bytes": 302,
+      "sha256": "c335922e1b54446d0cc2cf4caebb2e9a3289e862af1f821c94e6c7d778c13c38"
+    },
+    "count_consistency_qa.csv": {
+      "format": "csv",
+      "rows": 7,
+      "columns": 2,
+      "size_bytes": 360,
+      "sha256": "6b0b538e29b9368a9b26631b556ad2e4346f624fd62bfadf6c1bf83aea83cdb2"
+    },
+    "independent_injection_qa.csv": {
+      "format": "csv",
+      "rows": 43,
+      "columns": 2,
+      "size_bytes": 2364,
+      "sha256": "a206ce95c88d67e5e0c20d165156bfb7385b08b443a98081bd1f02dd91066526"
+    },
+    "count_field_reconciliation.csv": {
+      "format": "csv",
+      "rows": 8,
+      "columns": 4,
+      "size_bytes": 315,
+      "sha256": "376d09c3e93aa72cfc03e339f8aa4c01a32a65c00225fc9293f78c0a7c6b45ee"
+    },
+    "independent_field_reconciliation.csv": {
+      "format": "csv",
+      "rows": 8,
+      "columns": 6,
+      "size_bytes": 424,
+      "sha256": "ea3ed1ab41681fc3a97e667fad85f1e2374eda4e6eab10abd2790814c566b2e6"
+    },
+    "independent_channel_reconciliation.csv": {
+      "format": "csv",
+      "rows": 3,
+      "columns": 4,
+      "size_bytes": 130,
+      "sha256": "b048f6dd8b726e566a6103db87f0499ae7421dade4766f8332af1587f7d0eb88"
+    },
+    "execution_channel_summary.csv": {
+      "format": "csv",
+      "rows": 3,
+      "columns": 6,
+      "size_bytes": 180,
+      "sha256": "8328ade2d925fed427f50c3de7217d025a08f66495cea842b72190b9af6ad766"
+    },
+    "notebook_summary.md": {
+      "format": "markdown",
+      "size_bytes": 1756,
+      "sha256": "5cc1e0360a26db6a060b69e71822bb8defc26b5397532f8c3249e361aa599e19"
+    }
+  }
+}

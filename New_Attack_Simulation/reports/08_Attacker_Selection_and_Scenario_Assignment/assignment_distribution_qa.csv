@@ -1,0 +1,17 @@
+dimension,category,expected,actual,status
+window_workdays,5,50,50,PASS
+window_workdays,10,70,70,PASS
+window_workdays,20,70,70,PASS
+window_workdays,30,70,70,PASS
+window_workdays,40,70,70,PASS
+window_workdays,50,70,70,PASS
+channel_configuration,E+U,117,117,PASS
+channel_configuration,E+H,117,117,PASS
+channel_configuration,U+H,27,27,PASS
+channel_configuration,E+U+H,139,139,PASS
+switching_level,Low,133,133,PASS
+switching_level,Medium,134,134,PASS
+switching_level,High,133,133,PASS
+stealth_level,Low,133,133,PASS
+stealth_level,Medium,133,133,PASS
+stealth_level,High,134,134,PASS

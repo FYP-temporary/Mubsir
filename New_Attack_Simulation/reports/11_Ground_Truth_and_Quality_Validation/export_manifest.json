@@ -1,0 +1,95 @@
+{
+  "notebook": "11_Ground_Truth_and_Quality_Validation",
+  "exported_at_utc": "2026-11-18T12:33:54.849483+00:00",
+  "status": "INDEPENDENT_VALIDATION_APPROVED",
+  "ground_truth_datasets": {
+    "user_day": {
+      "filename": "ground_truth_user_days_r62.parquet",
+      "rows": 9080,
+      "columns": 42
+    },
+    "channel_day": {
+      "filename": "ground_truth_channel_days_r62.parquet",
+      "rows": 10124,
+      "columns": 27
+    }
+  },
+  "population": {
+    "approved_attackers": 400,
+    "attacked_user_days": 9080,
+    "forced_offdays_excluded": 1670,
+    "channel_actions": 10124,
+    "injected_events": 29007
+  },
+  "validation": {
+    "scenario_execution": 35,
+    "channel_ground_truth": 20,
+    "user_day_ground_truth": 27,
+    "independent_ground_truth": 58
+  },
+  "contains_target_y": false,
+  "contains_behavioral_features": false,
+  "source_sha256": {
+    "notebook08_assignments": "c5e51029e911b1bdbfbb94218993fe49d3565e83c9a84be66bdc880454a029c4",
+    "notebook09_schedule": "7ee03b4446d162ef7ef33851f6d5401f29ad641e7f12aa3b0e5d7c75e1a3ab18",
+    "notebook10_user_day": "1f8cf3b2c64ff20420ac636b991af2dcb4b898df247f54f7976602c7ea312d8a",
+    "notebook10_execution_log": "5185d83154ff46bed67ec523773134dbd60dad07b0a2129abb3665c0e956e00b",
+    "notebook10_manifest": "f31cbca40762db845a8275292214fb82c33abcac26d8ba54fc097764fb818fe6"
+  },
+  "artifacts": {
+    "ground_truth_user_days_r62.parquet": {
+      "format": "parquet",
+      "rows": 9080,
+      "columns": 42,
+      "size_bytes": 105257,
+      "sha256": "ae0f3a1529c6a886e9c616ccb07bd88fa0f869152ab26ffdb1a32043550ab558"
+    },
+    "ground_truth_channel_days_r62.parquet": {
+      "format": "parquet",
+      "rows": 10124,
+      "columns": 27,
+      "size_bytes": 91309,
+      "sha256": "5ffd18dfcb97ea283bad8a5087f9b8f7b5e457f28b7c91639407bbd13a7b2073"
+    },
+    "ground_truth_data_dictionary.csv": {
+      "format": "csv",
+      "rows": 69,
+      "columns": 7,
+      "size_bytes": 13028,
+      "sha256": "8362d8d7e4023f20bb197bdd17bbad657537f31f5a46c20d4d185078ee6ad3c3"
+    },
+    "scenario_execution_qa.csv": {
+      "format": "csv",
+      "rows": 35,
+      "columns": 2,
+      "size_bytes": 1960,
+      "sha256": "f1149182edb3a7bbe9c7a0c17541f4c34e98484bb2d843c9005c81927885c1d7"
+    },
+    "channel_ground_truth_qa.csv": {
+      "format": "csv",
+      "rows": 20,
+      "columns": 2,
+      "size_bytes": 1041,
+      "sha256": "372de254b5c5ea16a31b864f3a41ffee0c4729c9398bd621e836630389acb362"
+    },
+    "user_day_ground_truth_qa.csv": {
+      "format": "csv",
+      "rows": 27,
+      "columns": 2,
+      "size_bytes": 1465,
+      "sha256": "a0cc2e7dd02b5b6839111807976a7ca753c9435cd9eae1074735eab8928f9f9b"
+    },
+    "independent_ground_truth_qa.csv": {
+      "format": "csv",
+      "rows": 58,
+      "columns": 2,
+      "size_bytes": 3387,
+      "sha256": "49863251dfb4689850e964a9c4dcc0b035404ee59badcc25f73323725aa9e8c7"
+    },
+    "notebook_summary.md": {
+      "format": "markdown",
+      "size_bytes": 1774,
+      "sha256": "b067592b6b3e439d78a9c4da1e92143d68de6678b3e30acb5fbc8d5fbb81330b"
+    }
+  }
+}

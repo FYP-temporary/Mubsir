@@ -1,0 +1,189 @@
+﻿file,field,dtype,description
+daily_attack_schedule_r62.parquet,user,string,User identifier
+daily_attack_schedule_r62.parquet,day,datetime64[s],Calendar date of the scheduled workday
+daily_attack_schedule_r62.parquet,is_weekend,int32,"Supporting source, scenario, or validation field"
+daily_attack_schedule_r62.parquet,logon_count,float64,"Supporting source, scenario, or validation field"
+daily_attack_schedule_r62.parquet,external_email_count,float64,"Supporting source, scenario, or validation field"
+daily_attack_schedule_r62.parquet,usb_copy_count,float64,"Supporting source, scenario, or validation field"
+daily_attack_schedule_r62.parquet,www_upload_count,float64,"Supporting source, scenario, or validation field"
+daily_attack_schedule_r62.parquet,scenario_option_id,uint32,Approved scenario identifier
+daily_attack_schedule_r62.parquet,window_workdays,int64,Approved attack duration in workdays
+daily_attack_schedule_r62.parquet,window_start,datetime64[ms],Approved attack window start
+daily_attack_schedule_r62.parquet,window_end,datetime64[ms],Approved attack window end
+daily_attack_schedule_r62.parquet,channel_configuration,category,Approved attack channel configuration
+daily_attack_schedule_r62.parquet,switching_level,category,Approved primary-channel switching level
+daily_attack_schedule_r62.parquet,stealth_level,category,Approved stealth category
+daily_attack_schedule_r62.parquet,stealth_multiplier,float64,"Supporting source, scenario, or validation field"
+daily_attack_schedule_r62.parquet,forced_offdays,int64,Approved number of forced off-days
+daily_attack_schedule_r62.parquet,proposed_active_days,int64,"Supporting source, scenario, or validation field"
+daily_attack_schedule_r62.parquet,set_switch_bitmask,uint64,"Supporting source, scenario, or validation field"
+daily_attack_schedule_r62.parquet,workday_index,int64,Position within the approved workday window
+daily_attack_schedule_r62.parquet,natural_E,bool,"Supporting source, scenario, or validation field"
+daily_attack_schedule_r62.parquet,natural_U,bool,"Supporting source, scenario, or validation field"
+daily_attack_schedule_r62.parquet,natural_H,bool,"Supporting source, scenario, or validation field"
+daily_attack_schedule_r62.parquet,natural_channel_mask,int64,Naturally active channels from source user-day counts
+daily_attack_schedule_r62.parquet,natural_channel_set,str,"Supporting source, scenario, or validation field"
+daily_attack_schedule_r62.parquet,natural_channel_count,int64,"Supporting source, scenario, or validation field"
+daily_attack_schedule_r62.parquet,is_forced_offday,bool,Whether injection is prohibited on this day
+daily_attack_schedule_r62.parquet,is_active_day,bool,Whether this is an attack-active workday
+daily_attack_schedule_r62.parquet,day_status,str,"Supporting source, scenario, or validation field"
+daily_attack_schedule_r62.parquet,injection_allowed,bool,"Supporting source, scenario, or validation field"
+daily_attack_schedule_r62.parquet,approved_channel_mask,category,"Supporting source, scenario, or validation field"
+daily_attack_schedule_r62.parquet,available_channel_mask,int64,"Naturally active approved channels; E=1, U=2, H=4"
+daily_attack_schedule_r62.parquet,available_channel_set,str,Readable naturally available approved channels
+daily_attack_schedule_r62.parquet,available_channel_count,int64,"Supporting source, scenario, or validation field"
+daily_attack_schedule_r62.parquet,has_approved_channel,bool,"Supporting source, scenario, or validation field"
+daily_attack_schedule_r62.parquet,active_without_approved_channel,bool,"Supporting source, scenario, or validation field"
+daily_attack_schedule_r62.parquet,potential_two_channel_day,bool,"Supporting source, scenario, or validation field"
+daily_attack_schedule_r62.parquet,potential_three_channel_day,bool,"Supporting source, scenario, or validation field"
+daily_attack_schedule_r62.parquet,potential_exactly_two_day,bool,"Supporting source, scenario, or validation field"
+daily_attack_schedule_r62.parquet,active_day_index,int64,Sequential index across active days only; 0 on off-days
+daily_attack_schedule_r62.parquet,primary_channel_mask,int64,"Selected primary channel; E=1, U=2, H=4; 0=none"
+daily_attack_schedule_r62.parquet,scheduled_channel_mask,int64,"Planned channel set using E=1, U=2, H=4"
+daily_attack_schedule_r62.parquet,is_switch,bool,Primary channel changed since previous active day
+daily_attack_schedule_r62.parquet,primary_channel,str,Readable selected primary channel
+daily_attack_schedule_r62.parquet,scheduled_channel_set,str,Readable planned channel set
+daily_attack_schedule_r62.parquet,scheduled_channel_count,int64,Number of distinct planned channels on this day
+daily_attack_schedule_r62.parquet,sync_type,str,"FORCED_OFFDAY, SINGLE, TWO_CHANNEL, or THREE_CHANNEL"
+daily_attack_schedule_r62.csv,user,string,User identifier
+daily_attack_schedule_r62.csv,day,datetime64[s],Calendar date of the scheduled workday
+daily_attack_schedule_r62.csv,is_weekend,int32,"Supporting source, scenario, or validation field"
+daily_attack_schedule_r62.csv,logon_count,float64,"Supporting source, scenario, or validation field"
+daily_attack_schedule_r62.csv,external_email_count,float64,"Supporting source, scenario, or validation field"
+daily_attack_schedule_r62.csv,usb_copy_count,float64,"Supporting source, scenario, or validation field"
+daily_attack_schedule_r62.csv,www_upload_count,float64,"Supporting source, scenario, or validation field"
+daily_attack_schedule_r62.csv,scenario_option_id,uint32,Approved scenario identifier
+daily_attack_schedule_r62.csv,window_workdays,int64,Approved attack duration in workdays
+daily_attack_schedule_r62.csv,window_start,datetime64[ms],Approved attack window start
+daily_attack_schedule_r62.csv,window_end,datetime64[ms],Approved attack window end
+daily_attack_schedule_r62.csv,channel_configuration,category,Approved attack channel configuration
+daily_attack_schedule_r62.csv,switching_level,category,Approved primary-channel switching level
+daily_attack_schedule_r62.csv,stealth_level,category,Approved stealth category
+daily_attack_schedule_r62.csv,stealth_multiplier,float64,"Supporting source, scenario, or validation field"
+daily_attack_schedule_r62.csv,forced_offdays,int64,Approved number of forced off-days
+daily_attack_schedule_r62.csv,proposed_active_days,int64,"Supporting source, scenario, or validation field"
+daily_attack_schedule_r62.csv,set_switch_bitmask,uint64,"Supporting source, scenario, or validation field"
+daily_attack_schedule_r62.csv,workday_index,int64,Position within the approved workday window
+daily_attack_schedule_r62.csv,natural_E,bool,"Supporting source, scenario, or validation field"
+daily_attack_schedule_r62.csv,natural_U,bool,"Supporting source, scenario, or validation field"
+daily_attack_schedule_r62.csv,natural_H,bool,"Supporting source, scenario, or validation field"
+daily_attack_schedule_r62.csv,natural_channel_mask,int64,Naturally active channels from source user-day counts
+daily_attack_schedule_r62.csv,natural_channel_set,str,"Supporting source, scenario, or validation field"
+daily_attack_schedule_r62.csv,natural_channel_count,int64,"Supporting source, scenario, or validation field"
+daily_attack_schedule_r62.csv,is_forced_offday,bool,Whether injection is prohibited on this day
+daily_attack_schedule_r62.csv,is_active_day,bool,Whether this is an attack-active workday
+daily_attack_schedule_r62.csv,day_status,str,"Supporting source, scenario, or validation field"
+daily_attack_schedule_r62.csv,injection_allowed,bool,"Supporting source, scenario, or validation field"
+daily_attack_schedule_r62.csv,approved_channel_mask,category,"Supporting source, scenario, or validation field"
+daily_attack_schedule_r62.csv,available_channel_mask,int64,"Naturally active approved channels; E=1, U=2, H=4"
+daily_attack_schedule_r62.csv,available_channel_set,str,Readable naturally available approved channels
+daily_attack_schedule_r62.csv,available_channel_count,int64,"Supporting source, scenario, or validation field"
+daily_attack_schedule_r62.csv,has_approved_channel,bool,"Supporting source, scenario, or validation field"
+daily_attack_schedule_r62.csv,active_without_approved_channel,bool,"Supporting source, scenario, or validation field"
+daily_attack_schedule_r62.csv,potential_two_channel_day,bool,"Supporting source, scenario, or validation field"
+daily_attack_schedule_r62.csv,potential_three_channel_day,bool,"Supporting source, scenario, or validation field"
+daily_attack_schedule_r62.csv,potential_exactly_two_day,bool,"Supporting source, scenario, or validation field"
+daily_attack_schedule_r62.csv,active_day_index,int64,Sequential index across active days only; 0 on off-days
+daily_attack_schedule_r62.csv,primary_channel_mask,int64,"Selected primary channel; E=1, U=2, H=4; 0=none"
+daily_attack_schedule_r62.csv,scheduled_channel_mask,int64,"Planned channel set using E=1, U=2, H=4"
+daily_attack_schedule_r62.csv,is_switch,bool,Primary channel changed since previous active day
+daily_attack_schedule_r62.csv,primary_channel,str,Readable selected primary channel
+daily_attack_schedule_r62.csv,scheduled_channel_set,str,Readable planned channel set
+daily_attack_schedule_r62.csv,scheduled_channel_count,int64,Number of distinct planned channels on this day
+daily_attack_schedule_r62.csv,sync_type,str,"FORCED_OFFDAY, SINGLE, TWO_CHANNEL, or THREE_CHANNEL"
+selected_sync_targets_r62.parquet,user,string,User identifier
+selected_sync_targets_r62.parquet,scenario_option_id,int64,Approved scenario identifier
+selected_sync_targets_r62.parquet,window_workdays,int64,Approved attack duration in workdays
+selected_sync_targets_r62.parquet,channel_configuration,str,Approved attack channel configuration
+selected_sync_targets_r62.parquet,switching_level,str,Approved primary-channel switching level
+selected_sync_targets_r62.parquet,stealth_level,str,Approved stealth category
+selected_sync_targets_r62.parquet,active_days,int64,"Supporting source, scenario, or validation field"
+selected_sync_targets_r62.parquet,forced_offdays,int64,Approved number of forced off-days
+selected_sync_targets_r62.parquet,target_2ch_days,int64,Selected exactly-two-channel synchronization days
+selected_sync_targets_r62.parquet,target_3ch_days,int64,Selected three-channel synchronization days
+selected_sync_targets_r62.parquet,total_sync_days,int64,"Supporting source, scenario, or validation field"
+selected_sync_targets_r62.parquet,single_channel_days,int64,"Supporting source, scenario, or validation field"
+selected_sync_targets_r62.parquet,attainable_switch_mask,int64,Bitmask of jointly feasible approved switch counts
+selected_sync_targets_r62.parquet,natural_two_plus_days,int64,"Supporting source, scenario, or validation field"
+selected_sync_targets_r62.parquet,natural_three_days,int64,"Supporting source, scenario, or validation field"
+selected_sync_targets_r62.parquet,rule_status,str,"Full rule, two-channel fallback, or zero assignment"
+selected_sync_targets_r62.parquet,fallback_reason,str,Reason for permitted synchronization fallback
+selected_sync_targets_r62.parquet,eligible_option_count,int64,"Supporting source, scenario, or validation field"
+selected_sync_targets_r62.parquet,full_feasible_option_count,int64,"Supporting source, scenario, or validation field"
+selected_sync_targets_r62.parquet,two_only_feasible_option_count,int64,"Supporting source, scenario, or validation field"
+selected_sync_targets_r62.parquet,selection_seed,int64,Seed used for reproducible synchronization selection
+selected_sync_targets_r62.parquet,selected_pattern,str,"Supporting source, scenario, or validation field"
+selected_sync_targets_r62.parquet,has_sync,bool,"Supporting source, scenario, or validation field"
+selected_sync_targets_r62.parquet,has_triple,bool,"Supporting source, scenario, or validation field"
+selected_sync_targets_r62.parquet,selection_method,str,Deterministic synchronization selection method
+selected_sync_targets_r62.parquet,selection_status,str,"Supporting source, scenario, or validation field"
+independent_schedule_user_audit.csv,user,string,User identifier
+independent_schedule_user_audit.csv,window_rows,int64,"Supporting source, scenario, or validation field"
+independent_schedule_user_audit.csv,first_day,datetime64[s],"Supporting source, scenario, or validation field"
+independent_schedule_user_audit.csv,last_day,datetime64[s],"Supporting source, scenario, or validation field"
+independent_schedule_user_audit.csv,active_days,int64,"Supporting source, scenario, or validation field"
+independent_schedule_user_audit.csv,forced_offdays,int64,Approved number of forced off-days
+independent_schedule_user_audit.csv,single_channel_days,int64,"Supporting source, scenario, or validation field"
+independent_schedule_user_audit.csv,two_channel_days,int64,"Supporting source, scenario, or validation field"
+independent_schedule_user_audit.csv,three_channel_days,int64,"Supporting source, scenario, or validation field"
+independent_schedule_user_audit.csv,switches,int64,"Supporting source, scenario, or validation field"
+independent_schedule_user_audit.csv,primary_coverage_mask,int64,"Supporting source, scenario, or validation field"
+independent_schedule_user_audit.csv,target_scenario_option_id,int64,"Supporting source, scenario, or validation field"
+independent_schedule_user_audit.csv,target_window_workdays,int64,"Supporting source, scenario, or validation field"
+independent_schedule_user_audit.csv,target_active_days,int64,"Supporting source, scenario, or validation field"
+independent_schedule_user_audit.csv,target_forced_offdays,int64,"Supporting source, scenario, or validation field"
+independent_schedule_user_audit.csv,target_2ch_days,int64,Selected exactly-two-channel synchronization days
+independent_schedule_user_audit.csv,target_3ch_days,int64,Selected three-channel synchronization days
+independent_schedule_user_audit.csv,attainable_switch_mask,int64,Bitmask of jointly feasible approved switch counts
+independent_schedule_user_audit.csv,scenario_option_id,uint32,Approved scenario identifier
+independent_schedule_user_audit.csv,window_workdays,int64,Approved attack duration in workdays
+independent_schedule_user_audit.csv,channel_configuration,category,Approved attack channel configuration
+independent_schedule_user_audit.csv,switching_level,category,Approved primary-channel switching level
+independent_schedule_user_audit.csv,window_start,datetime64[ms],Approved attack window start
+independent_schedule_user_audit.csv,window_end,datetime64[ms],Approved attack window end
+independent_schedule_user_audit.csv,forced_offdays_approved,int64,"Supporting source, scenario, or validation field"
+independent_schedule_user_audit.csv,proposed_active_days,int64,"Supporting source, scenario, or validation field"
+independent_schedule_user_audit.csv,switching_level_valid,bool,"Supporting source, scenario, or validation field"
+independent_schedule_user_audit.csv,attainable_switch_valid,bool,"Supporting source, scenario, or validation field"
+independent_schedule_duration_summary.csv,window_workdays,int64,Approved attack duration in workdays
+independent_schedule_duration_summary.csv,attackers,Int64,"Supporting source, scenario, or validation field"
+independent_schedule_duration_summary.csv,active_days,int64,"Supporting source, scenario, or validation field"
+independent_schedule_duration_summary.csv,forced_offdays,int64,Approved number of forced off-days
+independent_schedule_duration_summary.csv,single_channel_days,int64,"Supporting source, scenario, or validation field"
+independent_schedule_duration_summary.csv,two_channel_days,int64,"Supporting source, scenario, or validation field"
+independent_schedule_duration_summary.csv,three_channel_days,int64,"Supporting source, scenario, or validation field"
+independent_schedule_duration_summary.csv,primary_switches,int64,"Supporting source, scenario, or validation field"
+synchronization_configuration_distribution.csv,window_workdays,int64,Approved attack duration in workdays
+synchronization_configuration_distribution.csv,target_2ch_days,int64,Selected exactly-two-channel synchronization days
+synchronization_configuration_distribution.csv,target_3ch_days,int64,Selected three-channel synchronization days
+synchronization_configuration_distribution.csv,rule_status,str,"Full rule, two-channel fallback, or zero assignment"
+synchronization_configuration_distribution.csv,attackers,int64,"Supporting source, scenario, or validation field"
+synchronization_exceptions.csv,user,str,User identifier
+synchronization_exceptions.csv,scenario_option_id,int64,Approved scenario identifier
+synchronization_exceptions.csv,window_workdays,int64,Approved attack duration in workdays
+synchronization_exceptions.csv,channel_configuration,str,Approved attack channel configuration
+synchronization_exceptions.csv,switching_level,str,Approved primary-channel switching level
+synchronization_exceptions.csv,stealth_level,str,Approved stealth category
+synchronization_exceptions.csv,active_days,int64,"Supporting source, scenario, or validation field"
+synchronization_exceptions.csv,forced_offdays,int64,Approved number of forced off-days
+synchronization_exceptions.csv,target_2ch_days,int64,Selected exactly-two-channel synchronization days
+synchronization_exceptions.csv,target_3ch_days,int64,Selected three-channel synchronization days
+synchronization_exceptions.csv,total_sync_days,int64,"Supporting source, scenario, or validation field"
+synchronization_exceptions.csv,single_channel_days,int64,"Supporting source, scenario, or validation field"
+synchronization_exceptions.csv,attainable_switch_mask,int64,Bitmask of jointly feasible approved switch counts
+synchronization_exceptions.csv,natural_two_plus_days,int64,"Supporting source, scenario, or validation field"
+synchronization_exceptions.csv,natural_three_days,int64,"Supporting source, scenario, or validation field"
+synchronization_exceptions.csv,rule_status,str,"Full rule, two-channel fallback, or zero assignment"
+synchronization_exceptions.csv,fallback_reason,str,Reason for permitted synchronization fallback
+synchronization_exceptions.csv,eligible_option_count,int64,"Supporting source, scenario, or validation field"
+synchronization_exceptions.csv,full_feasible_option_count,int64,"Supporting source, scenario, or validation field"
+synchronization_exceptions.csv,two_only_feasible_option_count,int64,"Supporting source, scenario, or validation field"
+synchronization_exceptions.csv,selection_seed,int64,Seed used for reproducible synchronization selection
+synchronization_exceptions.csv,selected_pattern,str,"Supporting source, scenario, or validation field"
+synchronization_exceptions.csv,has_sync,bool,"Supporting source, scenario, or validation field"
+synchronization_exceptions.csv,has_triple,bool,"Supporting source, scenario, or validation field"
+synchronization_exceptions.csv,selection_method,str,Deterministic synchronization selection method
+synchronization_exceptions.csv,selection_status,str,"Supporting source, scenario, or validation field"
+final_validation_qa.csv,section,str,"Supporting source, scenario, or validation field"
+final_validation_qa.csv,check,str,"Supporting source, scenario, or validation field"
+final_validation_qa.csv,status,str,"Supporting source, scenario, or validation field"

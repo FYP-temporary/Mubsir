@@ -1,0 +1,49 @@
+{
+  "project": "MUBSIR",
+  "dataset_version": "CERT r6.2",
+  "notebook": "12 — Feature Engineering and Validation",
+  "export_time_utc": "2026-11-18T19:35:26.479512+00:00",
+  "dataset": {
+    "rows": 387162,
+    "columns": 143,
+    "users": 3737,
+    "positive_user_days": 9080,
+    "negative_user_days": 378082,
+    "positive_users": 400,
+    "granularity": "Eligible User-Day",
+    "target_column": "y"
+  },
+  "methodology": {
+    "rolling_policy": "Partial eligible-workday windows from 2011",
+    "historical_baseline": "Fixed historical 2010 baseline",
+    "ground_truth": "Verified synthetic User-Day injection"
+  },
+  "files": [
+    {
+      "role": "dataset",
+      "filename": "behavior_features_r62_ml_final_new.parquet",
+      "size_bytes": 21788560,
+      "sha256": "446047aa1276f154e845e92c01bfd4fe2bf8cfc7fc97e782cde27309b38559ce"
+    },
+    {
+      "role": "dictionary",
+      "filename": "feature_dictionary_r62_final.csv",
+      "size_bytes": 81288,
+      "sha256": "442708d3f68beee95481011fcf5e30b22d7cb9f8beff09a1d98fd3351e934067"
+    },
+    {
+      "role": "methodology",
+      "filename": "feature_methodology_and_decisions.md",
+      "size_bytes": 7785,
+      "sha256": "52fa079df13799c10172b4d8ba6fdef3750b6e16638aab3dc0fa6b583f54f8ac"
+    },
+    {
+      "role": "qa_report",
+      "filename": "final_feature_qa_report.md",
+      "size_bytes": 3903,
+      "sha256": "0492cd81cafe0417afb1e3a72ce940415104c5faddb74607a54ca20a0d1af7df"
+    }
+  ],
+  "checksum_algorithm": "SHA-256",
+  "note": "Checksums cover the four primary artifacts. The manifest itself does not contain its own hash."
+}

@@ -1,0 +1,59 @@
+﻿check,status
+Expected Ground Truth and execution populations,PASS
+Exactly 400 approved attackers at both levels,PASS
+Channel-Day Ground Truth keys are valid and unique,PASS
+User-Day Ground Truth keys are valid and unique,PASS
+All original execution-log values match Channel-Day GT,PASS
+Channel-level before/add/after values are consistent,PASS
+All executed channels have valid channel bits,PASS
+"Independent reconstruction has exactly 9,080 unique days",PASS
+User-Day Ground Truth matches every executed attack day,PASS
+Exact independent User-Day reconciliation: executed_channel_count,PASS
+Exact independent User-Day reconciliation: total_injected_events,PASS
+Exact independent User-Day reconciliation: executed_channel_mask,PASS
+Exact independent User-Day reconciliation: email_injected_events,PASS
+Exact independent User-Day reconciliation: usb_injected_events,PASS
+Exact independent User-Day reconciliation: http_injected_events,PASS
+Independent 1/2/3-channel day distribution,PASS
+"Daily channel counts sum to 10,124 actions",PASS
+"Independent daily totals sum to 29,007 events",PASS
+"Approved schedule contains exactly 9,080 active days",PASS
+All User-Day GT records match active scheduled days,PASS
+Daily schedule annotation matches: scenario_option_id,PASS
+Daily schedule annotation matches: window_workdays,PASS
+Daily schedule annotation matches: window_start,PASS
+Daily schedule annotation matches: window_end,PASS
+Daily schedule annotation matches: channel_configuration,PASS
+Daily schedule annotation matches: switching_level,PASS
+Daily schedule annotation matches: stealth_level,PASS
+Daily schedule annotation matches: stealth_multiplier,PASS
+Daily schedule annotation matches: forced_offdays,PASS
+Daily schedule annotation matches: workday_index,PASS
+Daily schedule annotation matches: active_day_index,PASS
+Daily schedule annotation matches: primary_channel,PASS
+Daily schedule annotation matches: primary_channel_mask,PASS
+Daily schedule annotation matches: scheduled_channel_set,PASS
+Daily schedule annotation matches: scheduled_channel_mask,PASS
+Daily schedule annotation matches: scheduled_channel_count,PASS
+Daily schedule annotation matches: is_switch,PASS
+Daily schedule annotation matches: sync_type,PASS
+Ground Truth users match all approved assignments,PASS
+Every attack day has an approved attacker assignment,PASS
+Approved assignment matches: scenario_option_id,PASS
+Approved assignment matches: channel_configuration,PASS
+Approved assignment matches: switching_level,PASS
+Approved assignment matches: stealth_level,PASS
+Approved assignment matches: stealth_multiplier,PASS
+Approved assignment matches: window_workdays,PASS
+Approved assignment matches: window_start,PASS
+Approved assignment matches: window_end,PASS
+All 23 approved assignment fields are preserved,PASS
+Execution records reference the correct count fields,PASS
+Every execution action maps to the injected User-Day,PASS
+All final injected channel counts match execution evidence,PASS
+"All 1,670 forced off-days are excluded",PASS
+Only actually executed active attack days are included,PASS
+Both Ground Truth datasets exclude classification target y,PASS
+Final injected User-Day retains the complete population,PASS
+Channel-level execution and Ground Truth totals match,PASS
+"Both Ground Truth levels reconcile to 29,007 events",PASS

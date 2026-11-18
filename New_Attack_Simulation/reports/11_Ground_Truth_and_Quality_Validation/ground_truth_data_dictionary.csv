@@ -1,0 +1,70 @@
+﻿dataset,position,column,dtype,nullable,description,provenance
+ground_truth_user_days_r62.parquet,1,user,string,False,Unique user identifier.,Notebook 08 — Approved Assignments; Notebook 09 — Daily Schedule; Notebook 10 — Execution Log
+ground_truth_user_days_r62.parquet,2,day,datetime64[ms],False,Calendar date of the executed attack.,Notebook 09 — Daily Schedule; Notebook 10 — Execution Log
+ground_truth_user_days_r62.parquet,3,scenario_option_id,uint32,False,Identifier of the approved attacker scenario.,Notebook 08 — Approved Assignments; Notebook 09 — Daily Schedule; Notebook 10 — Execution Log
+ground_truth_user_days_r62.parquet,4,window_workdays,int64,False,Number of scheduled workdays in the attack window.,Notebook 08 — Approved Assignments; Notebook 09 — Daily Schedule
+ground_truth_user_days_r62.parquet,5,window_start,datetime64[ms],False,Start date of the approved attack window.,Notebook 08 — Approved Assignments; Notebook 09 — Daily Schedule
+ground_truth_user_days_r62.parquet,6,window_end,datetime64[ms],False,End date of the approved attack window.,Notebook 08 — Approved Assignments; Notebook 09 — Daily Schedule
+ground_truth_user_days_r62.parquet,7,channel_configuration,category,False,Approved channel configuration assigned to the attacker.,Notebook 08 — Approved Assignments; Notebook 09 — Daily Schedule; Notebook 10 — Execution Log
+ground_truth_user_days_r62.parquet,8,switching_level,category,False,Approved scenario-level channel-switching setting.,Notebook 08 — Approved Assignments; Notebook 09 — Daily Schedule
+ground_truth_user_days_r62.parquet,9,stealth_level,category,False,Approved stealth category used for count injection.,Notebook 08 — Approved Assignments; Notebook 09 — Daily Schedule; Notebook 10 — Execution Log
+ground_truth_user_days_r62.parquet,10,stealth_multiplier,float64,False,Multiplier applied to the historical P95 in injection Formula A.,Notebook 08 — Approved Assignments; Notebook 09 — Daily Schedule; Notebook 10 — Execution Log
+ground_truth_user_days_r62.parquet,11,forced_offdays,int64,False,Approved count of forced off-days in the attack window.,Notebook 08 — Approved Assignments; Notebook 09 — Daily Schedule
+ground_truth_user_days_r62.parquet,12,workday_index,int64,False,Position of the date within the scheduled workday sequence.,Notebook 09 — Daily Schedule; Notebook 10 — Execution Log
+ground_truth_user_days_r62.parquet,13,active_day_index,int64,False,Position of the date within active injection days.,Notebook 09 — Daily Schedule
+ground_truth_user_days_r62.parquet,14,primary_channel,str,False,Primary channel selected by the approved daily schedule.,Notebook 09 — Daily Schedule; Notebook 10 — Execution Log
+ground_truth_user_days_r62.parquet,15,primary_channel_mask,int64,False,Bitmask representing the scheduled primary channel.,Notebook 09 — Daily Schedule
+ground_truth_user_days_r62.parquet,16,scheduled_channel_set,str,False,Channels scheduled for injection on the date.,Notebook 09 — Daily Schedule; Notebook 10 — Execution Log
+ground_truth_user_days_r62.parquet,17,scheduled_channel_mask,int64,False,"Bitmask of scheduled injection channels; EMAIL=1, USB=2, HTTP=4.",Notebook 09 — Daily Schedule
+ground_truth_user_days_r62.parquet,18,scheduled_channel_count,int64,False,Number of channels scheduled for the attack day.,Notebook 09 — Daily Schedule
+ground_truth_user_days_r62.parquet,19,is_switch,bool,False,Approved schedule indicator of a primary-channel switch.,Notebook 09 — Daily Schedule; Notebook 10 — Execution Log
+ground_truth_user_days_r62.parquet,20,sync_type,str,False,Approved same-day channel synchronization category.,Notebook 09 — Daily Schedule; Notebook 10 — Execution Log
+ground_truth_user_days_r62.parquet,21,is_active_day,bool,False,Whether the scheduled date is an active injection day.,Notebook 09 — Daily Schedule
+ground_truth_user_days_r62.parquet,22,is_forced_offday,bool,False,Whether the scheduled date is a forced off-day.,Notebook 09 — Daily Schedule
+ground_truth_user_days_r62.parquet,23,executed_channel_count,int64,False,Number of channels actually injected on the attack day.,Notebook 11 — Derived from Execution
+ground_truth_user_days_r62.parquet,24,total_injected_events,int64,False,Sum of attack-event increments across all channels on the User-Day.,Notebook 11 — Derived from Execution
+ground_truth_user_days_r62.parquet,25,executed_channel_mask,int64,False,"Bitmask of actually injected channels; EMAIL=1, USB=2, HTTP=4.",Notebook 11 — Derived from Execution
+ground_truth_user_days_r62.parquet,26,email_injected_events,int64,False,Attack-event increments injected via EMAIL on the date.,Notebook 11 — Derived from Execution
+ground_truth_user_days_r62.parquet,27,usb_injected_events,int64,False,Attack-event increments injected via USB on the date.,Notebook 11 — Derived from Execution
+ground_truth_user_days_r62.parquet,28,http_injected_events,int64,False,Attack-event increments injected via HTTP on the date.,Notebook 11 — Derived from Execution
+ground_truth_user_days_r62.parquet,29,injected_channels,str,False,Readable set of channels actually injected on the date.,Notebook 11 — Derived from Execution
+ground_truth_user_days_r62.parquet,30,max_abs_recurrence_gap_pp,float64,False,Additional approved scenario-assignment attribute imported from Notebook 08; refer to its assignment definition.,Notebook 08 — Approved Assignments
+ground_truth_user_days_r62.parquet,31,max_positive_recurrence_increase_pp,float64,False,Additional approved scenario-assignment attribute imported from Notebook 08; refer to its assignment definition.,Notebook 08 — Approved Assignments
+ground_truth_user_days_r62.parquet,32,all_selected_channels_have_reference,bool,False,Additional approved scenario-assignment attribute imported from Notebook 08; refer to its assignment definition.,Notebook 08 — Approved Assignments
+ground_truth_user_days_r62.parquet,33,channel_count,int64,False,Additional approved scenario-assignment attribute imported from Notebook 08; refer to its assignment definition.,Notebook 08 — Approved Assignments
+ground_truth_user_days_r62.parquet,34,formula_id,category,False,Identifier of the approved count-injection formula.,Notebook 08 — Approved Assignments; Notebook 10 — Execution Log
+ground_truth_user_days_r62.parquet,35,multiplier_configuration,category,False,Additional approved scenario-assignment attribute imported from Notebook 08; refer to its assignment definition.,Notebook 08 — Approved Assignments
+ground_truth_user_days_r62.parquet,36,proposed_active_days,int64,False,Additional approved scenario-assignment attribute imported from Notebook 08; refer to its assignment definition.,Notebook 08 — Approved Assignments; Notebook 09 — Daily Schedule
+ground_truth_user_days_r62.parquet,37,set_switch_bitmask,uint64,False,Additional approved scenario-assignment attribute imported from Notebook 08; refer to its assignment definition.,Notebook 08 — Approved Assignments; Notebook 09 — Daily Schedule
+ground_truth_user_days_r62.parquet,38,proof_source,category,False,Additional approved scenario-assignment attribute imported from Notebook 08; refer to its assignment definition.,Notebook 08 — Approved Assignments
+ground_truth_user_days_r62.parquet,39,scenario_type_id,uint16,False,Additional approved scenario-assignment attribute imported from Notebook 08; refer to its assignment definition.,Notebook 08 — Approved Assignments
+ground_truth_user_days_r62.parquet,40,catalog_status,category,False,Additional approved scenario-assignment attribute imported from Notebook 08; refer to its assignment definition.,Notebook 08 — Approved Assignments
+ground_truth_user_days_r62.parquet,41,source_validation_status,str,False,Additional approved scenario-assignment attribute imported from Notebook 08; refer to its assignment definition.,Notebook 08 — Approved Assignments
+ground_truth_user_days_r62.parquet,42,assignment_status,str,False,Additional approved scenario-assignment attribute imported from Notebook 08; refer to its assignment definition.,Notebook 08 — Approved Assignments
+ground_truth_channel_days_r62.parquet,1,user,string,False,Unique user identifier.,Notebook 08 — Approved Assignments; Notebook 09 — Daily Schedule; Notebook 10 — Execution Log
+ground_truth_channel_days_r62.parquet,2,day,datetime64[ms],False,Calendar date of the executed attack.,Notebook 09 — Daily Schedule; Notebook 10 — Execution Log
+ground_truth_channel_days_r62.parquet,3,scenario_option_id,uint32,False,Identifier of the approved attacker scenario.,Notebook 08 — Approved Assignments; Notebook 09 — Daily Schedule; Notebook 10 — Execution Log
+ground_truth_channel_days_r62.parquet,4,workday_index,int64,False,Position of the date within the scheduled workday sequence.,Notebook 09 — Daily Schedule; Notebook 10 — Execution Log
+ground_truth_channel_days_r62.parquet,5,channel,str,False,"Channel on which the injection was executed: EMAIL, USB, or HTTP.",Notebook 10 — Execution Log
+ground_truth_channel_days_r62.parquet,6,source_count_field,str,False,User-Day event-count column targeted by the injection.,Notebook 10 — Execution Log
+ground_truth_channel_days_r62.parquet,7,channel_configuration,category,False,Approved channel configuration assigned to the attacker.,Notebook 08 — Approved Assignments; Notebook 09 — Daily Schedule; Notebook 10 — Execution Log
+ground_truth_channel_days_r62.parquet,8,primary_channel,str,False,Primary channel selected by the approved daily schedule.,Notebook 09 — Daily Schedule; Notebook 10 — Execution Log
+ground_truth_channel_days_r62.parquet,9,scheduled_channel_set,str,False,Channels scheduled for injection on the date.,Notebook 09 — Daily Schedule; Notebook 10 — Execution Log
+ground_truth_channel_days_r62.parquet,10,sync_type,str,False,Approved same-day channel synchronization category.,Notebook 09 — Daily Schedule; Notebook 10 — Execution Log
+ground_truth_channel_days_r62.parquet,11,is_switch,bool,False,Approved schedule indicator of a primary-channel switch.,Notebook 09 — Daily Schedule; Notebook 10 — Execution Log
+ground_truth_channel_days_r62.parquet,12,formula_id,category,False,Identifier of the approved count-injection formula.,Notebook 08 — Approved Assignments; Notebook 10 — Execution Log
+ground_truth_channel_days_r62.parquet,13,stealth_level,category,False,Approved stealth category used for count injection.,Notebook 08 — Approved Assignments; Notebook 09 — Daily Schedule; Notebook 10 — Execution Log
+ground_truth_channel_days_r62.parquet,14,stealth_multiplier,float64,False,Multiplier applied to the historical P95 in injection Formula A.,Notebook 08 — Approved Assignments; Notebook 09 — Daily Schedule; Notebook 10 — Execution Log
+ground_truth_channel_days_r62.parquet,15,baseline_p95,float64,False,Precomputed historical user-channel P95 used by Formula A.,Notebook 10 — Execution Log
+ground_truth_channel_days_r62.parquet,16,count_before,int64,False,Observed channel event count before injection.,Notebook 10 — Execution Log
+ground_truth_channel_days_r62.parquet,17,count_added,int64,False,Number of attack events added to the channel.,Notebook 10 — Execution Log
+ground_truth_channel_days_r62.parquet,18,count_after,int64,False,Channel event count after injection.,Notebook 10 — Execution Log
+ground_truth_channel_days_r62.parquet,19,active_day_index,int64,False,Position of the date within active injection days.,Notebook 09 — Daily Schedule
+ground_truth_channel_days_r62.parquet,20,window_workdays,int64,False,Number of scheduled workdays in the attack window.,Notebook 08 — Approved Assignments; Notebook 09 — Daily Schedule
+ground_truth_channel_days_r62.parquet,21,window_start,datetime64[ms],False,Start date of the approved attack window.,Notebook 08 — Approved Assignments; Notebook 09 — Daily Schedule
+ground_truth_channel_days_r62.parquet,22,window_end,datetime64[ms],False,End date of the approved attack window.,Notebook 08 — Approved Assignments; Notebook 09 — Daily Schedule
+ground_truth_channel_days_r62.parquet,23,switching_level,category,False,Approved scenario-level channel-switching setting.,Notebook 08 — Approved Assignments; Notebook 09 — Daily Schedule
+ground_truth_channel_days_r62.parquet,24,forced_offdays,int64,False,Approved count of forced off-days in the attack window.,Notebook 08 — Approved Assignments; Notebook 09 — Daily Schedule
+ground_truth_channel_days_r62.parquet,25,scheduled_channel_mask,int64,False,"Bitmask of scheduled injection channels; EMAIL=1, USB=2, HTTP=4.",Notebook 09 — Daily Schedule
+ground_truth_channel_days_r62.parquet,26,is_active_day,bool,False,Whether the scheduled date is an active injection day.,Notebook 09 — Daily Schedule
+ground_truth_channel_days_r62.parquet,27,is_forced_offday,bool,False,Whether the scheduled date is a forced off-day.,Notebook 09 — Daily Schedule

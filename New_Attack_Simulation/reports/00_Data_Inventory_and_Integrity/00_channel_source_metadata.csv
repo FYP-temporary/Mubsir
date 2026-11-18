@@ -1,0 +1,5 @@
+dataset,filename,rows,columns,size_mb,has_user_key,has_day_key
+Email Daily,email_daily_r62.parquet,1381557,13,11.872,True,True
+USB Daily,usb_daily_r62.parquet,308647,11,1.016,True,True
+HTTP Daily,http_daily_r62.parquet,1391239,8,1.597,True,True
+Logon Daily,logon_daily_r62.parquet,1394010,6,9.102,True,True

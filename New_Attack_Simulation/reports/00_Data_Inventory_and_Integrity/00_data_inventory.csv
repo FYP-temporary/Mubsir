@@ -1,0 +1,15 @@
+category,filename,relative_path,format,size_mb
+raw,README.md,raw\README.md,.md,0.001
+processed,email_daily_r62.parquet,processed\email_daily_r62.parquet,.parquet,11.872
+processed,ground_truth_events_r62.parquet,processed\ground_truth_events_r62.parquet,.parquet,0.022
+processed,ground_truth_users_r62.parquet,processed\ground_truth_users_r62.parquet,.parquet,0.002
+processed,http_daily_r62.parquet,processed\http_daily_r62.parquet,.parquet,1.597
+processed,logon_daily_r62.parquet,processed\logon_daily_r62.parquet,.parquet,9.102
+processed,usb_daily_r62.parquet,processed\usb_daily_r62.parquet,.parquet,1.016
+processed,user_day_r62_v1.parquet,processed\user_day_r62_v1.parquet,.parquet,23.507
+features,attack_host_eligibility_r62.parquet,features\attack_host_eligibility_r62.parquet,.parquet,0.032
+features,behavior_features_r62_v1.parquet,features\behavior_features_r62_v1.parquet,.parquet,9.711
+features,behavior_features_r62_v1.xlsx,features\behavior_features_r62_v1.xlsx,.xlsx,0.002
+features,malicious_pre_attack_baseline_r62.parquet,features\malicious_pre_attack_baseline_r62.parquet,.parquet,0.006
+features,user_baseline_r62_v1.csv,features\user_baseline_r62_v1.csv,.csv,0.885
+features,user_baseline_r62_v1.parquet,features\user_baseline_r62_v1.parquet,.parquet,0.212

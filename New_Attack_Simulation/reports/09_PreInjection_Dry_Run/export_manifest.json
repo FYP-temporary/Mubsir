@@ -1,0 +1,100 @@
+{
+  "notebook": "09_PreInjection_Dry_Run",
+  "dataset_version": "r6.2",
+  "export_type": "PRE_INJECTION_DRY_RUN",
+  "created_at_utc": "2026-11-18T10:02:16.692971+00:00",
+  "validation_status": "PASS",
+  "approved_attackers": 400,
+  "window_user_days": 10750,
+  "active_user_days": 9080,
+  "forced_offdays": 1670,
+  "two_channel_days": 970,
+  "three_channel_days": 37,
+  "primary_switches": 3116,
+  "qa_passes": 47,
+  "attack_events_injected": false,
+  "source_files_modified": false,
+  "manifest_self_hashed": false,
+  "artifacts": [
+    {
+      "filename": "daily_attack_schedule_r62.parquet",
+      "format": "parquet",
+      "rows": 10750,
+      "columns": 46,
+      "size_bytes": 130023,
+      "sha256": "7ee03b4446d162ef7ef33851f6d5401f29ad641e7f12aa3b0e5d7c75e1a3ab18"
+    },
+    {
+      "filename": "daily_attack_schedule_r62.csv",
+      "format": "csv",
+      "rows": 10750,
+      "columns": 46,
+      "size_bytes": 2353528,
+      "sha256": "e9a79329cdfd05eaf4aa641e68b20d94d67e3ab8b6adddb0a3ff04866f1f77c3"
+    },
+    {
+      "filename": "selected_sync_targets_r62.parquet",
+      "format": "parquet",
+      "rows": 400,
+      "columns": 26,
+      "size_bytes": 26796,
+      "sha256": "c15863650c291cbe33b944b432e34ccec382a4cc5059361a7f46dd858eb5ea2e"
+    },
+    {
+      "filename": "independent_schedule_user_audit.csv",
+      "format": "csv",
+      "rows": 400,
+      "columns": 28,
+      "size_bytes": 52579,
+      "sha256": "6c1a1d5d4716dd6e0ad2851c9b89dc9753d0063c5cfa7bf09dad6c8acbed47b9"
+    },
+    {
+      "filename": "independent_schedule_duration_summary.csv",
+      "format": "csv",
+      "rows": 6,
+      "columns": 8,
+      "size_bytes": 306,
+      "sha256": "2b80c0c6e22b43d84bcdc440f6db480dd0cef05d4c09416fb5664d6849a57b7d"
+    },
+    {
+      "filename": "synchronization_configuration_distribution.csv",
+      "format": "csv",
+      "rows": 15,
+      "columns": 5,
+      "size_bytes": 422,
+      "sha256": "5989832d020d781cd39dcbac5356607b4c36a2e7e013437e9034a9515f3afd43"
+    },
+    {
+      "filename": "synchronization_exceptions.csv",
+      "format": "csv",
+      "rows": 115,
+      "columns": 26,
+      "size_bytes": 22924,
+      "sha256": "44fd3d4e25fd09adabcc5d4fdbfde83c584e011341d08ae56f8c84dee22f8cd5"
+    },
+    {
+      "filename": "final_validation_qa.csv",
+      "format": "csv",
+      "rows": 47,
+      "columns": 3,
+      "size_bytes": 3413,
+      "sha256": "979659c7ebc12917d68865113d519c49a2d9adc060de7670bea70f1c164cdcd5"
+    },
+    {
+      "filename": "dry_run_data_dictionary.csv",
+      "format": "csv",
+      "rows": 188,
+      "columns": 4,
+      "size_bytes": 19440,
+      "sha256": "0faa7e549282bb21ab8304c3e6f97607916c526f528c6b856850ef81360c2958"
+    },
+    {
+      "filename": "notebook_summary.md",
+      "format": "md",
+      "rows": null,
+      "columns": null,
+      "size_bytes": 2221,
+      "sha256": "80529d6c835b3482ec2ef0d0340e8a81aa37a67fb99075075c83042709661998"
+    }
+  ]
+}

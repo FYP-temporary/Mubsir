@@ -1,0 +1,6 @@
+﻿check,status
+Exact scheduled User-Day-Channel actions,PASS
+All actions within approved attack period,PASS
+All planned increments are positive integers,PASS
+All increments follow approved Formula A,PASS
+All planned final counts reconcile,PASS

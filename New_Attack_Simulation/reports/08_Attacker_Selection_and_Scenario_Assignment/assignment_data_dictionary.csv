@@ -1,0 +1,24 @@
+column,dtype,description
+user,object,Unique user identifier.
+scenario_option_id,uint32,Unique identifier of the approved scenario option.
+max_abs_recurrence_gap_pp,float64,"Maximum absolute channel recurrence gap relative to the historical reference, in pp."
+max_positive_recurrence_increase_pp,float64,"Maximum positive recurrence increase, in pp."
+all_selected_channels_have_reference,bool,Whether selected channels have historical references.
+window_workdays,int64,Number of eligible workdays in the attack window.
+window_start,datetime64[ms],Start date of the approved attack window.
+window_end,datetime64[ms],End date of the approved attack window.
+channel_configuration,category,"Approved Email, USB and/or HTTP channel set."
+channel_count,int64,Number of channels in the assigned configuration.
+switching_level,category,"Approved Low, Medium or High switching level."
+stealth_level,category,"Approved Low, Medium or High stealth level."
+stealth_multiplier,float64,Multiplier used for the approved stealth level.
+formula_id,category,Identifier of the approved injection-count formula.
+multiplier_configuration,category,Approved stealth multiplier configuration.
+proposed_active_days,int64,Attack workdays remaining after Forced Off-Days.
+forced_offdays,int64,Eligible workdays with no natural activity in the three considered channels; injection prohibited.
+set_switch_bitmask,uint64,Approved channel-switching feasibility evidence.
+proof_source,category,Source of the switching feasibility evidence.
+scenario_type_id,uint16,Identifier of the approved scenario type.
+catalog_status,category,Original scenario catalog approval status.
+source_validation_status,str,Independent source-validation status.
+assignment_status,str,Final assignment approval status.

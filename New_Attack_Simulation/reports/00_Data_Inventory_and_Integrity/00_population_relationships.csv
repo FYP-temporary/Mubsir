@@ -1,0 +1,5 @@
+check,count,expected,status
+Baseline vs Host population difference,0,0,PASS
+Baseline users absent from User-Day,0,0,PASS
+Feature users absent from Baseline,0,0,PASS
+Feature users absent from User-Day,0,0,PASS

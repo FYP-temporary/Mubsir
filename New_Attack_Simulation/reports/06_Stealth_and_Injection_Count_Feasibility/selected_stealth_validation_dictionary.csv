@@ -1,0 +1,13 @@
+column,dtype,description,source
+channel,str,"Target activity channel: EMAIL, USB, or HTTP.",selected_stealth_validation.csv
+level,str,"Selected stealth level: High, Medium, or Low.",selected_stealth_validation.csv
+observations,int64,Number of evaluated active User-Day-Channel observations.,selected_stealth_validation.csv
+users,int64,Number of distinct users represented in this channel.,selected_stealth_validation.csv
+multiplier,float64,Selected multiplier applied to historical P95.,selected_stealth_validation.csv
+median_added,float64,Median number of additional events per observation.,selected_stealth_validation.csv
+p95_added,float64,95th percentile of additional event counts.,selected_stealth_validation.csv
+strict_separation_pct,float64,Percentage of observations satisfying High < Medium < Low injection counts.,selected_stealth_validation.csv
+all_equal_pct,float64,Percentage of observations where all three stealth levels have identical counts.,selected_stealth_validation.csv
+strict_N1_pct,float64,Strict separation percentage for observations with one natural event.,selected_stealth_validation.csv
+new_P95_pct,float64,Percentage of observations newly exceeding historical P95 after hypothetical injection.,selected_stealth_validation.csv
+final_P95_pct,float64,"Percentage of observations exceeding historical P95 after hypothetical injection, including pre-existing exceedances.",selected_stealth_validation.csv

@@ -1,0 +1,43 @@
+﻿record_type,file,artifact_type,column,dtype,description
+ARTIFACT,feasible_scenario_catalog.parquet,Parquet,,,Complete validated user-window-channel-switching-stealth scenario option catalog for Notebook 08.
+COLUMN,feasible_scenario_catalog.parquet,Parquet,scenario_option_id,uint32,Unique identifier for one user-window scenario option.
+COLUMN,feasible_scenario_catalog.parquet,Parquet,user,str,Original CERT r6.2 user identifier.
+COLUMN,feasible_scenario_catalog.parquet,Parquet,window_workdays,int64,Attack duration measured in eligible workdays.
+COLUMN,feasible_scenario_catalog.parquet,Parquet,window_start,datetime64[ms],Start date of the approved user-specific attack window.
+COLUMN,feasible_scenario_catalog.parquet,Parquet,window_end,datetime64[ms],End date of the approved user-specific attack window.
+COLUMN,feasible_scenario_catalog.parquet,Parquet,channel_configuration,category,"Selected channel set: E+U, E+H, U+H, or E+U+H."
+COLUMN,feasible_scenario_catalog.parquet,Parquet,channel_count,int64,Number of selected attack channels: two or three.
+COLUMN,feasible_scenario_catalog.parquet,Parquet,switching_level,category,"Approved switching intensity: Low, Medium, or High."
+COLUMN,feasible_scenario_catalog.parquet,Parquet,stealth_level,category,"Approved injection stealth level: High, Medium, or Low."
+COLUMN,feasible_scenario_catalog.parquet,Parquet,stealth_multiplier,float64,Approved Balanced multiplier associated with the stealth level.
+COLUMN,feasible_scenario_catalog.parquet,Parquet,formula_id,category,Approved historical P95-based injection-count formula identifier: A.
+COLUMN,feasible_scenario_catalog.parquet,Parquet,multiplier_configuration,category,Approved multiplier configuration: Balanced.
+COLUMN,feasible_scenario_catalog.parquet,Parquet,proposed_active_days,int64,Number of proposed attack-active days inherited from the approved structural window.
+COLUMN,feasible_scenario_catalog.parquet,Parquet,forced_offdays,int64,Number of forced non-injection days in the approved window.
+COLUMN,feasible_scenario_catalog.parquet,Parquet,set_switch_bitmask,uint64,Bitset of attainable exact switch counts for the selected channel set. Bit k indicates k switches.
+COLUMN,feasible_scenario_catalog.parquet,Parquet,proof_source,category,Source of the exact selected-channel switching feasibility proof.
+COLUMN,feasible_scenario_catalog.parquet,Parquet,scenario_type_id,uint16,Identifier of a supported duration-channel-switching-stealth scenario type.
+COLUMN,feasible_scenario_catalog.parquet,Parquet,catalog_status,category,Current scenario-catalog status; daily attack assignment has not been finalized.
+ARTIFACT,scenario_types.parquet,Parquet,,,Reference definitions for the 213 supported scenario types.
+COLUMN,scenario_types.parquet,Parquet,scenario_type_id,uint16,Identifier of a supported duration-channel-switching-stealth scenario type.
+COLUMN,scenario_types.parquet,Parquet,window_workdays,int64,Attack duration measured in eligible workdays.
+COLUMN,scenario_types.parquet,Parquet,channel_configuration,category,"Selected channel set: E+U, E+H, U+H, or E+U+H."
+COLUMN,scenario_types.parquet,Parquet,switching_level,category,"Approved switching intensity: Low, Medium, or High."
+COLUMN,scenario_types.parquet,Parquet,stealth_level,category,"Approved injection stealth level: High, Medium, or Low."
+ARTIFACT,scenario_diversity_coverage.csv,CSV,,,Scenario-type diversity coverage including distinct supporting users and available user-window options.
+COLUMN,scenario_diversity_coverage.csv,CSV,scenario_type_id,uint16,Identifier of a supported duration-channel-switching-stealth scenario type.
+COLUMN,scenario_diversity_coverage.csv,CSV,window_workdays,int64,Attack duration measured in eligible workdays.
+COLUMN,scenario_diversity_coverage.csv,CSV,channel_configuration,category,"Selected channel set: E+U, E+H, U+H, or E+U+H."
+COLUMN,scenario_diversity_coverage.csv,CSV,switching_level,category,"Approved switching intensity: Low, Medium, or High."
+COLUMN,scenario_diversity_coverage.csv,CSV,stealth_level,category,"Approved injection stealth level: High, Medium, or Low."
+COLUMN,scenario_diversity_coverage.csv,CSV,available_options,int64,Number of available user-window scenario alternatives supporting a scenario type.
+COLUMN,scenario_diversity_coverage.csv,CSV,supporting_users,int64,Number of distinct users capable of supporting a scenario type.
+ARTIFACT,scenario_catalog_qa.csv,CSV,,,Detailed results of the 33 previously approved catalog integrity and traceability checks.
+COLUMN,scenario_catalog_qa.csv,CSV,Check,str,Name of the catalog integrity or traceability validation.
+COLUMN,scenario_catalog_qa.csv,CSV,Status,str,"Recorded validation outcome, such as PASS or FAIL."
+COLUMN,scenario_catalog_qa.csv,CSV,Details,str,Explanation or supporting details for the validation result.
+ARTIFACT,scenario_catalog_qa_report.md,Markdown,,,"Narrative report documenting the catalog QA scope, results, limitations, and approval decision."
+ARTIFACT,scenario_diversity_report.md,Markdown,,,"Scenario availability, diversity analysis, rare scenario types, visualization findings, and Notebook 08 implications."
+ARTIFACT,scenario_catalog_dictionary.csv,CSV,,,"Comprehensive dictionary of Notebook 07 deliverables, report artifacts, and structured data columns."
+ARTIFACT,Section 7.6 — Jupyter Visualizations,Notebook Figures,,,"Five in-notebook visualizations: duration/channel coverage, two-channel versus three-channel support, user-support distribution, rare scenario types, and switching-level coverage. These figures are not exported as image files."
+ARTIFACT,notebook_summary.md,Markdown,,,"Final Notebook 07 documentation summarizing approved inputs, scenario construction, switching and stealth rules, QA, diversity findings, deliverables, limitations, and Notebook 08 handoff."

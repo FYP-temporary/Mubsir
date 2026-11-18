@@ -1,0 +1,28 @@
+﻿check,status
+Channel-Day source keys are unique,PASS
+Schedule User-Day source keys are unique,PASS
+Approved assignment user keys are unique,PASS
+"Exactly 9,080 attacked User-Days across 400 attackers",PASS
+Daily channel increments sum to the daily total,PASS
+Every attacked day has identified injected channels,PASS
+All required User-Day schedule fields are present,PASS
+Executed days exactly match scheduled active days,PASS
+Approved scenario identifier is available,PASS
+All overlapping assignment dimensions match,PASS
+All approved assignment dimensions are retained,PASS
+Executed and scheduled channel masks match exactly,PASS
+Executed and scheduled channel counts match exactly,PASS
+Every attacked day uses one to three channels,PASS
+"Single-, two-, and three-channel days match approval",PASS
+Only active attack days are included,PASS
+Execution evidence matches daily scenario_option_id,PASS
+Execution evidence matches daily primary_channel,PASS
+Execution evidence matches daily scheduled_channel_set,PASS
+Execution evidence matches daily is_switch,PASS
+Execution evidence matches daily sync_type,PASS
+Final User-Day Ground Truth population is exact,PASS
+Final User-Day keys are unique and non-null,PASS
+Ground Truth users exactly match approved attackers,PASS
+"Final User-Day totals equal 29,007 injected events",PASS
+User-Day channel counts reconcile with Channel-Day GT,PASS
+No model classification target y is included,PASS
