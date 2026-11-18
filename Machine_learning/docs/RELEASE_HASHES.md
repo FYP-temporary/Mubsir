@@ -70,7 +70,7 @@ The verification and the derived feature tables were produced from exactly these
 ## 6. Feature-generation reference (`docs/FEATURE_GENERATION_CONTRACT.md`)
 | File | SHA-256 | Bytes |
 |---|---|---|
-| `docs/FEATURE_GENERATION_CONTRACT.md` | `d5e7812eb09e62b9cc328226591535c000f2618e7e26b9b293b13e550b8a6014` | 10,827 |
+| `docs/FEATURE_GENERATION_CONTRACT.md` | `bfa5d1df12437b17aee6ec5370f6bd25d7abb5c1bd9c6de2f5c50943fa786c2b` | 9,891 |
 | `docs/golden_feature_cases.json` | `4bbedb846404298fcef66181bf40d27b9e84f4316061a6e05fb3170c5d049359` | 7,788 |
 | `pipeline/verify_feature_contract.py` | `988ecfefbb590428d5e3063281ad719eebc39f774cbf887d4ab13323a85f806f` | 6,983 |
 
